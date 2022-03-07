@@ -1,6 +1,6 @@
 const Canvas = require("canvas")
 const Discord = require("discord.js")
-const background = "https://i.imgur.com/zvWTUVu.jpg"
+const background = "https://htmlcolorcodes.com/assets/images/html-color-codes-color-tutorials.jpg"
 
 const dim = {
     height: 675,
@@ -51,7 +51,7 @@ const generateImage = async (member) => {
 
     // draw in the username
     ctx.font = "60px Roboto"
-    ctx.fillText(username + discrim, dim.width/2, dim.height - dim.margin - 125)
+    ctx.fillText(username + "#" + discrim, dim.width/2, dim.height - dim.margin - 125)
 
     // draw in to the server
     ctx.font = "40px Roboto"

@@ -9,6 +9,7 @@
   "author": "William Shaw",
   "license": "ISC",
   "dependencies": {
+    "canvas": "^2.9.0",
     "discord.js": "^13.6.0",
     "dotenv": "^16.0.0"
   }
