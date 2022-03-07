@@ -1,0 +1,15 @@
+{
+  "name": "biscuit-bot-v2",
+  "version": "0.0.1",
+  "description": "The New Discord Bot made for the Biscuit Mafia Server ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "William Shaw",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^13.6.0",
+    "dotenv": "^16.0.0"
+  }
+}
