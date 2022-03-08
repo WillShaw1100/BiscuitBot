@@ -4,7 +4,7 @@ const { owners } = require("../index.js")
 module.exports = {
     name: "messageCreate",
     run: async function runAll(bot, message){
-        const {client, prefix} = bot
+        const {client, prefix, owners} = bot
         if(!message.guild) return
 
         if(message.author.bot) return

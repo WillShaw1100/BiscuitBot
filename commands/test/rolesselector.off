@@ -1,0 +1,30 @@
+const { MessageActionRow, MessageButton, MessageEmbed } = require("discord.js")
+
+module.exports = {
+    name: "rolesselector",
+    category: "test",
+    devOnly: true,
+    run: async ({client, message, args}) => {
+        message.channel.send({
+            embeds: [
+                new MessageEmbed().setTitle("Select Gaming Role").setDescription("Select roles from the buttons below").setColor("BLUE")
+            ],
+            components: [
+                new MessageActionRow().addComponents([
+                    new MessageButton().setCustomId("role-877144609153777694").setStyle("PRIMARY").setLabel("PartyGames"),
+                    new MessageButton().setCustomId("role-540601114412843009").setStyle("PRIMARY").setLabel("Garry's Mod"),
+                    new MessageButton().setCustomId("role-829326426733936670").setStyle("PRIMARY").setLabel("Valeyard 802 RP"),
+                    new MessageButton().setCustomId("role-699635411714310174").setStyle("PRIMARY").setLabel("Arma 3"),
+                    new MessageButton().setCustomId("role-540600429675806740").setStyle("PRIMARY").setLabel("Starmade"),
+                    new MessageButton().setCustomId("role-757578326909911100").setStyle("PRIMARY").setLabel("AmongUs"),
+                    new MessageButton().setCustomId("role-551782067252363264").setStyle("PRIMARY").setLabel("Minecraft"),
+                    new MessageButton().setCustomId("role-511915827562414080").setStyle("PRIMARY").setLabel("Pulsar"),
+                    new MessageButton().setCustomId("role-551778604514803713").setStyle("PRIMARY").setLabel("Giveaways"),
+                    new MessageButton().setCustomId("role-551024580911693824").setStyle("PRIMARY").setLabel("Space Engineer's"),
+                    new MessageButton().setCustomId("role-608624267696930816").setStyle("PRIMARY").setLabel("Left4Dead"),
+                    new MessageButton().setCustomId("role-549249913159024650").setStyle("PRIMARY").setLabel("Star Trek Online")
+                ])
+            ]
+        })
+    }
+}

@@ -25,7 +25,7 @@ client.loadCommands(bot, false)
 client.loadSlashCommands(bot, false)
 
 client.on("interactionCreate", (interaction) => {
-    if(!interaction.isCommand()) return
+    if(interaction.isCommand()) {
     if(!interaction.inGuild()) return interaction.reply("This Command can only be used in a server")
 
     const slashcmd = client.slashcommands.get(interaction.commandName)
@@ -36,7 +36,60 @@ client.on("interactionCreate", (interaction) => {
         return interaction.reply("You do not have permission for this command")
 
     slashcmd.run(client, interaction)
+    
+
+    const {client} = bot
+	if (!interaction.inGuild()) return interaction.reply("This command can only be used in a guild")
+
+	//const slashcmd = client.slashcommands.get(interaction.commandName)
+
+	if (!slashcmd) return
+
+	// check permissions
+	if (slashcmd.perms && !interaction.member.permissions.has(slashcmd.perms))
+		return interaction.reply("You do not have permission to use this command")
+
+	slashcmd.run(client, interaction)
+}
+else if(interaction.isSelectMenu()){
+	const {client} = bot
+	if(!interaction.inGuild()) return interaction.reply("This command can only be used in a guild")
+	if (!interaction.isSelectMenu() || interaction.customId !== 'auto_roles') {
+		return
+	}
+	try{
+	interaction.deferReply({ephermal: true, allowedMentions: {
+        roles: []
+    }}
+    )
+    
+    //let guild = await client.guilds.fetch(interaction.guild_id)
+    //let member = guild.members.cache.get(interaction.member.user.id);
+
+    const roleId = interaction.values[0];
+    console.log(roleId)
+	//const role = interaction.guild.cache.get(roleId)
+	const memberRoles = interaction.member.roles;
+    console.log(memberRoles)
+
+	const hasRole = memberRoles.cache.has(roleId)
+    console.log(hasRole)
+	if(hasRole){
+		interaction.member.roles.remove(roleId);
+		interaction.channel.send(`<@&${roleId}> has been removed`)
+	}else {
+		interaction.member.roles.add(roleId)
+		interaction.channel.send(`<@&${roleId}> has been added`)
+	}
+}catch(err){
+	if (err){
+        console.error(err)
+        return interaction.reply('Failed to perform this command')
+    }
+}
+}
 })
+
 
 module.exports = bot
 

@@ -1,6 +1,5 @@
 const Discord = require('discord.js');
 //const packageJSON = require("./package.json");
-const generateImage = require("./generateImage")
 
 require('dotenv').config();
 
