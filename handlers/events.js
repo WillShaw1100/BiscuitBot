@@ -41,6 +41,8 @@ function initEvents(bot){
 
     client.on("ready", () => {
         triggerEventHandler(bot, "ready")
+        var stat = 'The Biscuit Mafia'
+        client.user.setActivity(stat, {type: "WATCHING"});
     })
 
     client.on("messageCreate", (message) =>{

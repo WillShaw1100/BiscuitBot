@@ -25,6 +25,7 @@ client.loadCommands(bot, false)
 client.loadSlashCommands(bot, false)
 
 client.on("interactionCreate", (interaction) => {
+    const {client} = bot
     if(interaction.isCommand()) {
     if(!interaction.inGuild()) return interaction.reply("This Command can only be used in a server")
 
@@ -38,7 +39,7 @@ client.on("interactionCreate", (interaction) => {
     slashcmd.run(client, interaction)
     
 
-    const {client} = bot
+    
 	if (!interaction.inGuild()) return interaction.reply("This command can only be used in a guild")
 
 	//const slashcmd = client.slashcommands.get(interaction.commandName)
@@ -49,7 +50,7 @@ client.on("interactionCreate", (interaction) => {
 	if (slashcmd.perms && !interaction.member.permissions.has(slashcmd.perms))
 		return interaction.reply("You do not have permission to use this command")
 
-	slashcmd.run(client, interaction)
+	//slashcmd.run(client, interaction)
 }
 else if(interaction.isSelectMenu()){
 	const {client} = bot
@@ -67,13 +68,9 @@ else if(interaction.isSelectMenu()){
     //let member = guild.members.cache.get(interaction.member.user.id);
 
     const roleId = interaction.values[0];
-    console.log(roleId)
 	//const role = interaction.guild.cache.get(roleId)
 	const memberRoles = interaction.member.roles;
-    console.log(memberRoles)
-
 	const hasRole = memberRoles.cache.has(roleId)
-    console.log(hasRole)
 	if(hasRole){
 		interaction.member.roles.remove(roleId);
 		interaction.channel.send(`<@&${roleId}> has been removed`)

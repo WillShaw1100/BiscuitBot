@@ -14,6 +14,11 @@ const run = async (client, interaction) => {
     let reason = interaction.options.getString("reason") || "No reason given"
 
     if (!member) return interaction.reply("Invalid member")
+    if(member.user.id === client.user.id)return interaction.reply("You can't timeout this person.")
+    const roleId = "523834204610494475" //Staff Role
+	const memberRoles = member.roles;
+	const isStaff = memberRoles.cache.has(roleId)
+    if(isStaff)return interaction.reply("You can't timeout this person.")
 
     try {
         await member.timeout(duration, reason)
@@ -29,6 +34,7 @@ const run = async (client, interaction) => {
 
 module.exports = {
     name: "timeout",
+    category: "Staff",
     description: "Timeout a member",
     perm: "MODERATE_MEMBERS",
     options: [
