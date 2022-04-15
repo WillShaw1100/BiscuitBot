@@ -4,6 +4,7 @@ const run = async (client, interaction) => {
     const msgID = (interaction.options.getString('message_id'))
     const channel = (interaction.options.getChannel('channel'))
     const role = (interaction.options.getRole('role'))
+    const userEmoji = (interaction.options.getString('emoji'))
     if(!channel || channel.type !== 'GUILD_TEXT')
         return interaction.reply('Please tag a text channel')
     if(!role)
@@ -33,7 +34,7 @@ const run = async (client, interaction) => {
     }
 
     const option =[{
-        label: role.name,
+        label: `${userEmoji} ${role.name}`,
         value: role.id
     }]
 
@@ -50,14 +51,13 @@ const run = async (client, interaction) => {
             })
             }
         }
-
         menu.addOptions(option)
         menu.setMaxValues(menu.options.length)
     }else{
         row.addComponents(
             new MessageSelectMenu()
             .setCustomId('auto_roles')
-            .setMinValues(0)
+            .setMinValues(1)
             .setMaxValues(1)
             .setPlaceholder('Select Your Roles...')
             .addOptions(option)
@@ -88,9 +88,10 @@ module.exports = {
     category: 'Configuration',
     description: "Add a role to the auto role message",
     perm: "ADMINISTRATOR",
+    devOnly: true,
     minArgs: 3,
-    maxArgs: 3,
-    expectedArgs: '<channel> <message_id> <role>',
+    maxArgs: 4,
+    expectedArgs: '<channel> <message_id> <role> <emoji>',
     options: [
         {
             name: "channel", description: "The channel to send the message to",
@@ -104,6 +105,11 @@ module.exports = {
         {
             name: "role", description: "The role to add",
             type: "ROLE",
+            required: true
+        },
+        {
+            name: "emoji", description: "Any emojis to add",
+            type: "STRING",
             required: true
         }
     ],
