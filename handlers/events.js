@@ -48,4 +48,14 @@ function initEvents(bot){
     client.on("messageCreate", (message) =>{
         triggerEventHandler(bot, "messageCreate", message)
     })
+    
+    client.on('guildMemberAdd', member => {
+        let eventFile = require(`../events/guildMemberAdd.js`);
+        eventFile.run(client, member);
+    })
+
+    client.on('guildMemberLeave', member => {
+        let eventFile = require(`../events/guildMemberLeave.js`);
+        eventFile.run(client, member);
+})
 }
