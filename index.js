@@ -1,9 +1,16 @@
 const Discord = require('discord.js');
+const express = require('express');
+const fs = require('fs');
+const app = express()
+const os = require("os")
 //const packageJSON = require("./package.json");
-
 require('dotenv').config();
 
-const client = new Discord.Client({ intents: ["GUILDS", "GUILD_MESSAGES", "GUILD_MEMBERS"] });
+const client = new Discord.Client({ intents: ["GUILDS", "GUILD_MESSAGES", "GUILD_MEMBERS", "GUILD_PRESENCES"] });
+
+app.enable("trust proxy") //if the ip is ::1 it means localhost
+app.set("etag", false) //disable cache
+app.use(express.static(__dirname + "/website"))
 
 let bot = {
     client,
@@ -52,6 +59,7 @@ client.on("interactionCreate", async (interaction) => {
 	slashcmd.run(client, interaction)
 }
 
+//Role menu
 if(interaction.isSelectMenu()){
 	const {client} = bot
 	if(!interaction.inGuild()) return interaction.reply("This command can only be used in a guild")
@@ -108,7 +116,57 @@ module.exports = bot
 
 // const version = packageJSON.version;
 
+/////////////////////////////////////////////////////////
 
+//dashboard:
+
+//Logs ip and site visit
+app.use((req, res, next) => {
+    console.log(`-${req.method}: ${req.url} ${res.statusCode} ( by: ${req.ip})`)
+    next()
+})
+
+
+
+app.get("/", async (req, res) => {
+
+    const ram = os.totalmem() / 1000
+    const cores = os.cpus().length
+    const cpuModel = os.cpus()[0].model
+
+
+    let file = fs.readFileSync("./dashboard/html/index.html", {encoding: "utf8"})
+    file = file.replace("$$ram$$", ram)
+    file = file.replace("$$cores$$", cores)
+    file = file.replace("$$cpu$$", cpuModel)
+    
+    res.send(file)
+    //res.sendFile('./dashboard/html/index.html', { root: __dirname })
+})
+
+app.get("/suggestions.html", async (req, res) => {
+
+    res.sendFile('./dashboard/html/suggestions.html', { root: __dirname })
+})
+app.get("/stats.html", async (req, res) => {
+
+
+    const guilds = client.guilds.cache.size
+    const users = client.users.cache.size
+    const channels = client.channels.cache.size
+
+
+    let file = fs.readFileSync("./dashboard/html/stats.html", {encoding: "utf8"})
+
+    file = file.replace("$$guilds$$", guilds)
+    file = file.replace("$$users$$", users)
+    file = file.replace("$$channels$$", channels)
+    
+    res.send(file)
+
+    //res.sendFile('./dashboard/html/stats.html', { root: __dirname })
+})
 
 
 client.login(process.env.DISCORD_TOKEN);
+app.listen(process.env.PORT || 90, () => console.log(`Listening on Port ${process.env.PORT || 90}`));
