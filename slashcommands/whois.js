@@ -11,12 +11,17 @@ const run = async (client, interaction) => {
         const memberemb = interaction.guild.members.fetch(person);
         Promise.resolve(memberemb).then(function (info) {
 
-        const status = "*PlaceHolder"
+            if(!person.presence){
+                userStatus = "offline"
+                userGame = "None"
+            }else{
+                userStatus = person.presence.status
+                userGame = `${person.presence.game ? person.presence.game.name : 'None'}`
+            }
        // const status = person.presence.status;
 
         //const joined = person.joinedAt;
         //const roles = person.roles.map(r => `${r}`).join(' | '), true)
-        const roles = "PlaceHolder"
         // User variables
     //const created= "PlaceHolder"
         const embed = new MessageEmbed()
@@ -25,9 +30,9 @@ const run = async (client, interaction) => {
           .addField(`${person.user.tag}`, `${person}`, true)
           .addField("ID:", `${person.id}`, true)
           .addField("Nickname:", `${person.nickname ? `${person.nickname}` : 'None'}`, true)
-          .addField("Status:", `${person.presence.status}`, true)
+          .addField("Status:", userStatus, true)
           // always shows offline in status
-          .addField("Game:", `${person.presence.game ? person.presence.game.name : 'None'}`, true)
+          .addField("Game:", userGame, true)
           //idk if it shows games correctly
           .addField("Joined The Server On:", `${moment(person.joinedAt).format('DD-MM-YYYY')}`, true)
           .addField("Account Created On:", `${moment(person.user.createdAt).format('DD-MM-YYYY')}`, true)
