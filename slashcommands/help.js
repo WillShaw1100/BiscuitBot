@@ -53,7 +53,7 @@ const run = async (client, interaction) => {
                         return {
                             label: cmd.directory,
                             value: cmd.directory.toLowerCase(),
-                            description: `Commands from the ${cmd.directory} category`,
+                            description: `Commands from the ${cmd.directory} category.`,
                             emoji: emojis[cmd.directory.toLowerCase()] || null,
                         };
                     })
