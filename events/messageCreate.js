@@ -11,6 +11,7 @@ module.exports = {
 
         if(!message.content.startsWith(prefix)) return
 
+        
         const args = message.content.slice(prefix.length).trim().split(/ +/g)
         const cmdstr = args.shift().toLowerCase()
 
