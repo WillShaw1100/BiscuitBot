@@ -1,0 +1,46 @@
+const { Channel, Message, MessageEmbed } = require("discord.js")
+const moment = require('moment');
+//const { formatDate } = require("../functions");
+
+
+const run = async (client, interaction) => {
+    try{
+        let guild = client.guilds.cache.get('589411374657175572')
+        const members = guild.members.fetch().then(fetchedMembers => {
+        const first = fetchedMembers.filter((m) => !m.user.bot).sort((a, b) => b.user.createdAt - a.user.createdAt).first();
+        console.log(first)
+        
+        //const member = members.cache.filter((m) => !m.user.bot).sort((a, b) => b.user.createdAt - a.user.createdAt).first();
+      const embed = new MessageEmbed()
+        .setTitle(`The youngest member in ${interaction.guild.name}`)
+        .setColor(`RANDOM`)
+        //.addField(`Date format: DD/MM/YYYY`)
+        .setDescription(`${first.user.tag} \n\n ${moment(first.user.createdAt).format('LT')} ${moment(first.user.createdAt).format('LL')} [${moment(first.user.createdAt).fromNow()}]`
+        
+        );
+        
+        interaction.reply({ embeds: [embed] });
+    })
+
+    }catch(err){
+    if (err){
+        console.error(err)
+        return interaction.reply('Failed to perform this command')
+    }
+
+}
+}
+
+
+module.exports = {
+    name: "youngest",
+    category: 'General',
+    description: "The youngest account on the Server.",
+    perm: "",
+    minArgs: 0,
+    expectedArgs: '',
+    options: [
+
+    ],
+    run
+}
