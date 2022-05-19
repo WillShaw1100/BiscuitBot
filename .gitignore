@@ -1,0 +1,5 @@
+.env
+package-lock.json
+node_modules/
+Biscuit_Private KEY.ppk
+Biscuit_Public KEY
