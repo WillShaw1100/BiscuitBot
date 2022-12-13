@@ -168,5 +168,5 @@ app.get("/stats.html", async (req, res) => {
 })
 
 
-client.login(process.env.DISCORD_TOKEN);
+client.login(process.env.DISCORD_TOKEN);//process.env.TEST_BOT_TOKEN);
 app.listen(process.env.PORT || 90, () => console.log(`Listening on Port ${process.env.PORT || 90}`));

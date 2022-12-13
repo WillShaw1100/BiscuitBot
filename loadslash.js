@@ -10,7 +10,7 @@ let bot = {
     prefix: process.env.PREFIX,
     owners: ["206068051295076352"]
 }
-const guildID = "470229266072731679"
+const guildID = "470229266072731679" //test bot: "589411374657175572" 
 
 client.slashcommands = new Discord.Collection()
 
