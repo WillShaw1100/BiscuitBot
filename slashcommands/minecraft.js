@@ -8,10 +8,11 @@ const run = async (client, interaction) => {
         const statusEmbed = new MessageEmbed()
         .setTitle("Game Server Status")
         .setDescription("Details the status of the creative minecraft server.")
-        .addField("Minecraft Creative: ", `IP: 149.86.27.51 \n\nPing: ${data.ping}`)
+        .addField("Minecraft Creative: ", `IP: 149.86.27.51 \n\nPing: ${data.ping}ms`)
         .addField("Version: ", `${data.version.name}`, true)
         .addField("Players Online: ", `${data.players.online}`, true)
-        .addField("Mods (If data avaialable):", `Type: ${data.modinfo.type} \n\nMod List: \n${data.modinfo.modList}`)
+        // Mod list is weird and unpredicatble (doesn't exist)
+        //.addField("Mods (If data avaialable):", `Type: ${data.modinfo.type} \n\nMod List: \n${data.modinfo.modList.toString()}`)
         
 
 
