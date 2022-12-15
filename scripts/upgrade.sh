@@ -19,8 +19,7 @@ else
 fi
 
 cd $bot_dir
-echo 'Fetching updates from GitHub'
-git fetch $github_repo
+echo 'Getting updates from GitHub'
 git pull $github_repo
 echo 'Installing node packages'
 npm install
