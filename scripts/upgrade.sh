@@ -1,8 +1,11 @@
 #!/bin/bash
 # exit if there's an arror
-set -e
-# sets the directory variable to the scripts dir
+github_repo="https://github.com/WillShaw1100/BiscuitBot"
 script_dir="$(dirname "$0")"
+
+set -e
+
+# finds the index.js directory
 if test -f $script_dir/index.js; then
     # if the bot is in the same dir
     bot_dir="$script_dir"
@@ -17,6 +20,7 @@ fi
 
 cd $bot_dir
 echo 'Fetching updates from GitHub'
-git pull https://github.com/WillShaw1100/BiscuitBot
+git fetch $github_repo
+git pull $github_repo
 echo 'Installing node packages'
 npm install
