@@ -17,6 +17,6 @@ fi
 
 cd $bot_dir
 echo 'Fetching updates from GitHub'
-git fetch https://github.com/WillShaw1100/BiscuitBot
+git pull https://github.com/WillShaw1100/BiscuitBot
 echo 'Installing node packages'
 npm install
