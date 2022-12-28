@@ -1,12 +1,17 @@
-const Discord = require('discord.js');
+const Discord = require("discord.js");
 const express = require('express');
 const fs = require('fs');
-const app = express()
-const os = require("os")
+const os = require("os");
+const logs = require("discord-logs");
 //const packageJSON = require("./package.json");
 require('dotenv').config();
 
-const client = new Discord.Client({ intents: ["GUILDS", "GUILD_MESSAGES", "GUILD_MEMBERS", "GUILD_PRESENCES"] });
+const app = express();
+
+const client = new Discord.Client({ 
+    intents: [Object.keys(Discord.GatewayIntentBits)],
+    partials: [Object.keys(Discord.Partials)],
+});
 
 app.enable("trust proxy") //if the ip is ::1 it means localhost
 app.set("etag", false) //disable cache
@@ -20,15 +25,18 @@ let bot = {
 client.commands = new Discord.Collection()
 client.events = new Discord.Collection()
 client.slashcommands = new Discord.Collection()
+//client.logs = new Discord.Collection()
 
 client.loadEvents = (bot, reload) => require("./handlers/events")(bot, reload)
 client.loadCommands = (bot, reload) => require("./handlers/commands")(bot, reload)
 client.loadSlashCommands= (bot, reload) => require("./handlers/slashcommands")(bot, reload)
+client.loadLogs = (bot, reload) => require("./handlers/handleLogs")(bot, reload);
 
 
 client.loadEvents(bot, false)
 client.loadCommands(bot, false)
 client.loadSlashCommands(bot, false)
+client.loadLogs(bot, false)
 
 client.on("interactionCreate", async (interaction) => {
     const {client} = bot
@@ -60,10 +68,10 @@ client.on("interactionCreate", async (interaction) => {
 }
 
 //Role menu
-if(interaction.isSelectMenu()){
+if(interaction.isStringSelectMenu()){
 	const {client} = bot
 	if(!interaction.inGuild()) return interaction.reply("This command can only be used in a guild")
-	if (!interaction.isSelectMenu() || interaction.customId !== 'auto_roles') {
+	if (!interaction.isStringSelectMenu() || interaction.customId !== 'auto_roles') {
 		return
 	}
 	try{
@@ -167,6 +175,9 @@ app.get("/stats.html", async (req, res) => {
     //res.sendFile('./dashboard/html/stats.html', { root: __dirname })
 })
 
+logs(client, {
+    debug: true
+});
 
-client.login(process.env.DISCORD_TOKEN);//process.env.TEST_BOT_TOKEN);
+client.login(process.env.TEST_BOT_TOKEN);//process.env.TEST_BOT_TOKEN);DISCORD_TOKEN
 app.listen(process.env.PORT || 8080, () => console.log(`Listening on Port ${process.env.PORT || 8080}`));

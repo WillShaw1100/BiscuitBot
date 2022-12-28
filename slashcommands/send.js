@@ -1,9 +1,11 @@
-const { Channel, Message } = require("discord.js")
+const { Channel, Message, ChannelType } = require("discord.js")
 
 const run = async (client, interaction) => {
     const args = (interaction.options.getString('text'))
     const channel = (interaction.options.getChannel('channel'))
-    if(!channel || channel.type !== 'GUILD_TEXT')
+    if(!channel)
+        return interaction.reply('Please tag a text channel')
+    if(!channel.type == 'GUILD_TEXT')
         return interaction.reply('Please tag a text channel')
     try{
         channel.send(args)
@@ -16,12 +18,12 @@ const run = async (client, interaction) => {
         console.error(err)
         return interaction.reply('Failed to perform this command')
     }
-
 }
 }
 
 module.exports = {
     name: "send",
+    type: 1,
     category: 'Configuration',
     description: "Sends a message",
     perm: "ADMINISTRATOR",
@@ -30,11 +32,11 @@ module.exports = {
     options: [
         {
             name: "channel", description: "The channel to send the message to",
-            type: "CHANNEL", required: true
+            type: 7, required: true
         },
         {
             name: "text", description: "The text to send",
-            type: "STRING",
+            type: 3,
             required: true
         }
     ],

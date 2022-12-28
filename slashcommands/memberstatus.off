@@ -1,4 +1,4 @@
-    const { Channel, Message, MessageEmbed } = require("discord.js")
+    const { Channel, Message, EmbedBuilder } = require("discord.js")
     const moment = require('moment');
     const filterLevels = {
       DISABLED: 'Off',
@@ -22,7 +22,7 @@ try{
         const channels = mainguild.channels.cache;
         const emojis = mainguild.emojis.cache;
         
-        const embed = new MessageEmbed()
+        const embed = new EmbedBuilder()
             .setDescription(`**Server Info**`)
             .setColor('BLACK')
             .setThumbnail(mainguild.iconURL({ dynamic: true }))
@@ -65,6 +65,7 @@ try{
 
 module.exports = {
     name: "memberstatus",
+    type: 1,
     category: 'Configuration',
     description: "Display some stats about the server",
     perm: "ADMINISTRATOR",

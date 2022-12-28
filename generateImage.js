@@ -57,7 +57,7 @@ const generateImage = async (member) => {
     ctx.font = "40px Roboto"
     ctx.fillText("to the server", dim.width / 2, dim.height - dim.margin - 50)
 
-    const attachment = new Discord.MessageAttachment(canvas.toBuffer(), "welcome.png")
+    const attachment = new Discord.AttachmentBuilder(canvas.toBuffer(), "welcome.png")
     return attachment
 }
 

@@ -1,4 +1,4 @@
-const { MessageActionRow, MessageButton, MessageEmbed } = require("discord.js")
+const { ActionRowBuilder, MessageButton, EmbedBuilder } = require("discord.js")
 
 module.exports = {
     name: "rolesselector",
@@ -7,10 +7,10 @@ module.exports = {
     run: async ({client, message, args}) => {
         message.channel.send({
             embeds: [
-                new MessageEmbed().setTitle("Select Gaming Role").setDescription("Select roles from the buttons below").setColor("BLUE")
+                new EmbedBuilder().setTitle("Select Gaming Role").setDescription("Select roles from the buttons below").setColor("BLUE")
             ],
             components: [
-                new MessageActionRow().addComponents([
+                new ActionRowBuilder().addComponents([
                     new MessageButton().setCustomId("role-877144609153777694").setStyle("PRIMARY").setLabel("PartyGames"),
                     new MessageButton().setCustomId("role-540601114412843009").setStyle("PRIMARY").setLabel("Garry's Mod"),
                     new MessageButton().setCustomId("role-829326426733936670").setStyle("PRIMARY").setLabel("Valeyard 802 RP"),

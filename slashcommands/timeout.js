@@ -34,25 +34,26 @@ const run = async (client, interaction) => {
 
 module.exports = {
     name: "timeout",
+    type: 1,
     category: "Staff",
     description: "Timeout a member",
     perm: "MODERATE_MEMBERS",
     options: [
         {
             name: "user", description: "The user to timeout",
-            type: "USER", required: true
+            type: 6, required: true
         },
         {
             name: "duration",
             description: "The duration of the timeout",
-            type: "NUMBER",
+            type: 10,
             choices: durations,
             require: true
         },
         {
             name: "reason",
             description: "reason for punishment",
-            type: "STRING",
+            type: 3,
             required: false
         }
     ],

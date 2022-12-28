@@ -3,7 +3,7 @@
 	run: async (bot, interaction) => {
 		if (interaction.isCommand()) handleSlashCommand(bot, interaction)
 		else if (interaction.isButton()) handleButton(bot, interaction)
-		else if (interaction.isSelectMenu()) return console.log(interaction) //handleSelectMenu(bot, interaction)
+		else if (interaction.isStringSelectMenu()) return console.log(interaction) //handleSelectMenu(bot, interaction)
 	},
 }
 
@@ -37,7 +37,7 @@ const handleSlashCommand = (bot, interaction) => {
 const handleSelectMenu = (bot,interaction) => {
 	const {client} = bot
 	if(!interaction.inGuild()) return interaction.reply("This command can only be used in a guild")
-	if (!interaction.isSelectMenu() || interaction.customId !== 'auto_roles') {
+	if (!interaction.isStringSelectMenu() || interaction.customId !== 'auto_roles') {
 		return
 	}
 	try{

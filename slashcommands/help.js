@@ -2,9 +2,10 @@ const {
     Client, 
     Message, 
     Channel, 
-    MessageEmbed, 
-    MessageActionRow, 
-    MessageSelectMenu 
+    EmbedBuilder, 
+    ActionRowBuilder, 
+    StringSelectMenuBuilder,
+    ComponentType
 } = require("discord.js")
 const { readdirSync } = require("fs");
 
@@ -38,13 +39,13 @@ const run = async (client, interaction) => {
         };
         });
 
-        const embed = new MessageEmbed().setDescription(
+        const embed = new EmbedBuilder().setDescription(
             "Please choose a category in the dropdown menu"
         );
         
         const components = (state) => [
-            new MessageActionRow().addComponents(
-                new MessageSelectMenu()
+            new ActionRowBuilder().addComponents(
+                new StringSelectMenuBuilder()
                 .setCustomId("help-menu")
                 .setPlaceholder("Please select a category")
                 .setDisabled(state)
@@ -69,7 +70,7 @@ const run = async (client, interaction) => {
 
         const collector = interaction.channel.createMessageComponentCollector( { 
             filter, 
-            componentType: 'SELECT_MENU', 
+            componentType: ComponentType.SELECT_MENU, 
             //time: 5000,
      });
      collector.on('collect', (interaction) => {
@@ -77,7 +78,7 @@ const run = async (client, interaction) => {
          const specificCategory = categories.find(
              x => x.directory.toLowerCase() === directory
         );
-        const categoryEmbed = new MessageEmbed()
+        const categoryEmbed = new EmbedBuilder()
         .setTitle(`${formatString(directory)} Commands`)
         .setDescription("Here is the list of commands")
         .addFields(
@@ -106,6 +107,7 @@ const run = async (client, interaction) => {
 
 module.exports = {
     name: "help",
+    type: 1,
     category: 'General',
     description: "List the commands",
     perm: "",
