@@ -375,6 +375,7 @@ function events(bot){
         })
     
         // VC Mute
+       /*
         client.on("voiceChannelMute", (member, muteType) => {
     
             const embed = new EmbedBuilder()
@@ -470,7 +471,8 @@ function events(bot){
             return send_log(bot, member.guild.id, embed);;
     
         });
-    
+    */
+   
         // Role Created
         client.on("roleCreate", (role) => {
     
