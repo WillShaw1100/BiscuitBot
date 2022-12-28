@@ -1,4 +1,4 @@
-const { Channel, Message, ChannelType } = require("discord.js")
+const { Channel, Message, ChannelType, PermissionsBitField} = require("discord.js")
 
 const run = async (client, interaction) => {
     const args = (interaction.options.getString('text'))
@@ -26,7 +26,7 @@ module.exports = {
     type: 1,
     category: 'Configuration',
     description: "Sends a message",
-    perm: "ADMINISTRATOR",
+    perm: PermissionsBitField.Flags.Administrator,
     minArgs: 2,
     expectedArgs: '<channel> <text>',
     options: [

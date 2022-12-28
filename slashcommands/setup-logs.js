@@ -1,4 +1,4 @@
-const { Channel, Message, EmbedBuilder, ChannelType } = require("discord.js")
+const { Channel, Message, EmbedBuilder, ChannelType, PermissionsBitField} = require("discord.js")
 const logSchema = require("../models/logSchema");
 
 const run = async (client, interaction) => {
@@ -50,7 +50,7 @@ module.exports = {
     type: 1,
     category: 'Configuration',
     description: "Set up your logging channel for the audit logs.",
-    perm: "ADMINISTRATOR",
+    perm: PermissionsBitField.Flags.Administrator,
     minArgs: 1,
     expectedArgs: '<channel>',
     options: [

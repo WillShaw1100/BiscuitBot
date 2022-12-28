@@ -1,4 +1,4 @@
-const { Channel, Message, ActionRowBuilder, MessageSelectOptionData, StringSelectMenuBuilder } = require("discord.js")
+const { Channel, Message, ActionRowBuilder, MessageSelectOptionData, StringSelectMenuBuilder , PermissionsBitField} = require("discord.js")
 
 const run = async (client, interaction) => {
     const msgID = (interaction.options.getString('message_id'))
@@ -88,7 +88,7 @@ module.exports = {
     type: 1,
     category: 'Configuration',
     description: "Add a role to the auto role message",
-    perm: "ADMINISTRATOR",
+    perm: PermissionsBitField.Flags.Administrator,
     devOnly: true,
     minArgs: 3,
     maxArgs: 4,
