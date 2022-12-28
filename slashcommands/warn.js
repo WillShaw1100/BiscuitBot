@@ -1,4 +1,4 @@
-const { Channel, Message, MessageEmbed } = require("discord.js")
+const { Channel, Message, EmbedBuilder } = require("discord.js")
 
 const run = async (client, interaction) => {
 
@@ -18,18 +18,20 @@ const run = async (client, interaction) => {
     if(isStaff)return interaction.reply("You can't warn this person.")
 
     try {
-        const warnembed = new MessageEmbed()
+        const warnembed = new EmbedBuilder()
           .setTitle(`Staff Command Executed!`)
-          .setThumbnail(client.user.displayAvatarURL)
-          .setColor("PURPLE")
-          .addField(`Action:`, `**Warn**`)
-          .addField(`User:`, `${member.user.tag}`)
-          .addField(`User Nickname:`, `${member.user.displayName}`, true)
-          .addField(`User ID:`, `${member.user.id}`, true)
-          .addField(`Moderator:`, `${interaction.member.user.tag}`)
-          .addField(`Moderator Nickname:`, `${interaction.member.displayName}`, true)
-          .addField(`Moderator ID:`, `${interaction.member.user.id}`, true)
-          .addField(`Reason:`, `${reason}`)
+          .setThumbnail(client.user.displayAvatarURL())
+          .setColor("Purple")
+          .addFields([
+            {name: 'Action:', value: '**Warn**' },
+            {name: 'User:', value: `${member.user.tag}` },
+            {name: 'User Nickname:', value: `${member.user.displayName}` },
+            {name: 'User ID:', value: `${member.user.id}` },
+            {name: 'Moderator:', value: `${interaction.member.user.tag}` },
+            {name: 'Moderator Nickname:', value: `${interaction.member.displayName}` },
+            {name: 'Moderator ID:', value: `${interaction.member.user.id}` },
+            {name: 'Reason:', value: `${reason}` },
+          ])
           .setTimestamp(new Date());
     
         if(modlog) modlog.send({ embeds: [warnembed] });
@@ -47,18 +49,19 @@ const run = async (client, interaction) => {
 
 module.exports = {
     name: "warn",
+    type: 1,
     category: "Staff",
     description: "Warn a User",
     perm: "BAN_MEMBERS",
     options: [
         {
             name: "user", description: "The user to warn",
-            type: "USER", required: true
+            type: 6, required: true
         },
         {
             name: "reason",
             description: "reason for the warn",
-            type: "STRING",
+            type: 3,
             required: true
         }
     ],

@@ -31,6 +31,7 @@ const run = async (client, interaction) => {
 
 module.exports = {
     name: "rps",
+    type: 1,
     category: 'Fun',
     description: "Play Rock, Paper, Scissors",
     perm: "",
@@ -39,7 +40,7 @@ module.exports = {
     options: [
         {
             name: "text", description: "Rock, Paper or Scissors?",
-            type: "STRING",
+            type: 3,
             required: true
         }
     ],

@@ -1,4 +1,4 @@
-const { Channel, Message, MessageEmbed } = require("discord.js")
+const { Channel, Message, EmbedBuilder } = require("discord.js")
 
 const run = async (client, interaction) => {
 
@@ -26,6 +26,7 @@ const run = async (client, interaction) => {
 
 module.exports = {
     name: "suggest",
+    type: 1,
     category: "General",
     description: "Suggest a feature",
     perm: "",
@@ -33,7 +34,7 @@ module.exports = {
         {
             name: "feature",
             description: "What feature would you like to suggest?",
-            type: "STRING",
+            type: 3,
             required: true
         }
     ],

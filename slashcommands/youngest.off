@@ -1,4 +1,4 @@
-const { Channel, Message, MessageEmbed } = require("discord.js")
+const { Channel, Message, EmbedBuilder } = require("discord.js")
 const moment = require('moment');
 //const { formatDate } = require("../functions");
 
@@ -11,7 +11,7 @@ const run = async (client, interaction) => {
         console.log(first)
         
         //const member = members.cache.filter((m) => !m.user.bot).sort((a, b) => b.user.createdAt - a.user.createdAt).first();
-      const embed = new MessageEmbed()
+      const embed = new EmbedBuilder()
         .setTitle(`The youngest member in ${interaction.guild.name}`)
         .setColor(`RANDOM`)
         //.addField(`Date format: DD/MM/YYYY`)
@@ -34,6 +34,7 @@ const run = async (client, interaction) => {
 
 module.exports = {
     name: "youngest",
+    type: 1,
     category: 'General',
     description: "The youngest account on the Server.",
     perm: "",

@@ -3,7 +3,10 @@ const Discord = require('discord.js');
 
 require('dotenv').config();
 
-const client = new Discord.Client({ intents: ["GUILDS", "GUILD_MESSAGES", "GUILD_MEMBERS"] });
+const client = new Discord.Client({ 
+    intents: [Object.keys(Discord.GatewayIntentBits)],
+    partials: [Object.keys(Discord.Partials)],
+});
 
 let bot = {
     client,

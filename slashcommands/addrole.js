@@ -1,4 +1,4 @@
-const { Channel, Message, MessageActionRow, MessageSelectOptionData, MessageSelectMenu } = require("discord.js")
+const { Channel, Message, ActionRowBuilder, MessageSelectOptionData, StringSelectMenuBuilder } = require("discord.js")
 
 const run = async (client, interaction) => {
     const msgID = (interaction.options.getString('message_id'))
@@ -30,7 +30,7 @@ const run = async (client, interaction) => {
 
     let row = targetMessage.components[0]
     if(!row){
-        row = new MessageActionRow()
+        row = new ActionRowBuilder()
     }
 
     const option =[{
@@ -55,7 +55,7 @@ const run = async (client, interaction) => {
         menu.setMaxValues(menu.options.length)
     }else{
         row.addComponents(
-            new MessageSelectMenu()
+            new StringSelectMenuBuilder()
             .setCustomId('auto_roles')
             .setMinValues(1)
             .setMaxValues(1)
@@ -85,6 +85,7 @@ const run = async (client, interaction) => {
 
 module.exports = {
     name: "addrole",
+    type: 1,
     category: 'Configuration',
     description: "Add a role to the auto role message",
     perm: "ADMINISTRATOR",
@@ -95,21 +96,21 @@ module.exports = {
     options: [
         {
             name: "channel", description: "The channel to send the message to",
-            type: "CHANNEL", required: true
+            type: 7, required: true
         },
         {
             name: "message_id", description: "The message ID",
-            type: "STRING",
+            type: 3,
             required: true
         },
         {
             name: "role", description: "The role to add",
-            type: "ROLE",
+            type: 8,
             required: true
         },
         {
             name: "emoji", description: "Any emojis to add",
-            type: "STRING",
+            type: 3,
             required: true
         }
     ],

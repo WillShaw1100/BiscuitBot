@@ -1,4 +1,4 @@
-const { Channel, Message, MessageAttachment } = require("discord.js")
+const { Channel, Message, AttachmentBuilder } = require("discord.js")
 
 const srando_imgs = [
     'https://i.giphy.com/media/3XlEk2RxPS1m8/giphy.gif',
@@ -41,6 +41,7 @@ const run = async (client, interaction) => {
 
 module.exports = {
     name: "slap",
+    type: 1,
     category: 'Fun',
     description: "Slap a person",
     perm: "",
@@ -49,11 +50,11 @@ module.exports = {
     options: [
         {
             name: "person", description: "The person to slap",
-            type: "USER", required: true
+            type: 6, required: true
         },
         {
             name: "text", description: "Why did you slap them?",
-            type: "STRING",
+            type: 3,
             required: false
         }
     ],

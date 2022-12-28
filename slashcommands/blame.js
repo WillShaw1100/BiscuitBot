@@ -15,6 +15,7 @@ const run = async (client, interaction) => {
 
 module.exports = {
     name: "blame",
+    type: 1,
     category: 'Fun',
     description: "Blame Mitch",
     perm: "",
