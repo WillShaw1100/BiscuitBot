@@ -1,4 +1,4 @@
-const { Channel, Message, EmbedBuilder } = require("discord.js")
+const { Channel, Message, EmbedBuilder, PermissionsBitField } = require("discord.js")
 
 const run = async (client, interaction) => {
 
@@ -63,7 +63,7 @@ module.exports = {
     type: 1,
     category: "Staff",
     description: "Bans a member",
-    perm: "BAN_MEMBERS",
+    perm: PermissionsBitField.Flags.BanMembers,
     options: [
         {
             name: "user", description: "The user to ban",

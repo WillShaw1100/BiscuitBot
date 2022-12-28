@@ -1,3 +1,5 @@
+const {PermissionsBitField} = require("discord.js")
+
 const durations = [
 	{ name: "60 seconds", value: 60 * 1000 },
 	{ name: "5 minutes", value: 5 * 60 * 1000 },
@@ -37,7 +39,7 @@ module.exports = {
     type: 1,
     category: "Staff",
     description: "Timeout a member",
-    perm: "MODERATE_MEMBERS",
+    perm: PermissionsBitField.Flags.ModerateMembers,
     options: [
         {
             name: "user", description: "The user to timeout",
