@@ -8,12 +8,11 @@ const run = async (client, interaction) => {
     const platform = options.getString("platform");
 
     const memeEmbed = new EmbedBuilder();
-
+    try{
     async function redditMeme() {
         await fetch('https://www.reddit.com/r/memes/random/.json').then(async res => {
             let meme = await res.json();
 
-            console.log(meme);
 
             let title = meme[0].data.children[0].data.title;
             let url = meme[0].data.children[0].data.url;
@@ -24,22 +23,22 @@ const run = async (client, interaction) => {
     }
 
     async function giphyMeme() {
-        await fetch('https://api.giphy.com/v1/gifs/random?api_key=lYBciWOvaOhVPNzGy4J8mUXNpC53YNbz&tag=&rating=g').then(async res => {
+        await fetch('https://api.giphy.com/v1/gifs/random?api_key=lYBciWOvaOhVPNzGy4J8mUXNpC53YNbz&tag=meme&rating=g').then(async res => {
             let meme = await res.json();
 
             let title = meme.data.title;
             let url = meme.data.images.original.url;
             let link = meme.data.url;
-            let author = meme.data.user.display_name;
-            let pf = meme.data.user.avatar_url;
+
+            
 
             return interaction.reply({
-                embeds: [memeEmbed.setTitle(`${title}`).setImage(`${url}`).setURL(link).setColor("Random").setFooter({ text: author, iconURL: pf })],
+                embeds: [memeEmbed.setTitle(`${title}`).setImage(`${url}`).setURL(link).setColor("Random")],
             });
         });
     }
 
-    try{
+    
         if (platform === "reddit") {
             redditMeme();
         }
@@ -78,7 +77,7 @@ module.exports = {
             choices: [
                 {
                     name: "Reddit",
-                    value: "redit"
+                    value: "reddit"
                 },
                 {
                     name: "Giphy",
