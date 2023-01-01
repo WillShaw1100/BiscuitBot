@@ -10,6 +10,7 @@ module.exports = {
         if (mongoose.connect) {
             console.log("MongoDB connection succesful.")
         }
-        console.log("Logged in as " + bot.client.user.tag)
+        bot.client.user.setPresence({ activities: [{ name: `Serving ${bot.client.guilds.cache.size} servers` }], status: 'online' });
+        console.log("Logged in as " + bot.client.user.tag + "\nServing " + bot.client.guilds.cache.size +" Servers")
     }
 }

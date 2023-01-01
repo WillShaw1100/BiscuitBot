@@ -33,8 +33,8 @@ const run = async (client, interaction) => {
             {name: 'Nickname:', value: `${person.nickname ? `${person.nickname}` : 'None'}` },
             {name: 'Status:', value: userStatus },
             {name: 'Game:', value: userGame },
-            {name: 'Joined The Server On::', value: `${moment(person.joinedAt).format('DD-MM-YYYY')}` },
-            {name: 'Account Created On::', value: `${moment(person.user.createdAt).format('DD-MM-YYYY')}` },
+            {name: 'Joined The Server On:', value: `${moment(person.joinedAt).format('DD-MM-YYYY')}` },
+            {name: 'Account Created On:', value: `${moment(person.user.createdAt).format('DD-MM-YYYY')}` },
             {name: 'Roles:', value: info.roles.cache ? info.roles.cache.map(roles => `${roles}`).join(', ') : "None" }
           ])
           .setTimestamp(); //Timestamp the footer

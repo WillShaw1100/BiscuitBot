@@ -33,4 +33,4 @@ client.on("ready", async () => {
 
 
 
-client.login(process.env.TEST_BOT_TOKEN);
+client.login(process.env.TEST_DISCORD_TOKEN);
