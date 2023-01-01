@@ -23,7 +23,15 @@ To run this project, you will need to add the following environment variables to
 
 `PREFIX`
 
+`PORT`
+
+`MONGODB`
 
 ## License
 
 [GPL-3](https://choosealicense.com/licenses/gpl-3.0/)
+
+#### Disclaimer:
+This project was created to support my ( [@WillShaw1100](https://github.com/WillShaw1100)'s ) development of knowledge regarding JavaScript & NodeJS along with a few other libraries. 
+Some of this work has been taken from other developers and implemented in this project.
+Any issues, please get in touch.
