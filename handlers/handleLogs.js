@@ -291,7 +291,7 @@ function events(bot){
         })
     
         // Avatar Updated
-        client.on("userAvatarUpdate", (user, oldAvatarURL, newAvatarURL) => {
+/*         client.on("userAvatarUpdate", (user, oldAvatarURL, newAvatarURL) => {
     
             const embed = new EmbedBuilder()
                 .setTitle('Avatar Updated')
@@ -312,10 +312,10 @@ function events(bot){
     
             return send_log(bot, user.guild.id, embed);
     
-        })
+        }) */
     
         // Discriminator Updated
-        client.on("userDiscriminatorUpdate", (user, oldDiscriminator, newDiscriminator) => {
+/*         client.on("userDiscriminatorUpdate", (user, oldDiscriminator, newDiscriminator) => {
     
             const embed = new EmbedBuilder()
                 .setTitle('Discriminator Updated')
@@ -324,10 +324,10 @@ function events(bot){
     
             return send_log(bot, user.guild.id, embed);
     
-        })
+        }) */
     
         // Flags Updated
-        client.on("userFlagsUpdate", (user, oldFlags, newFlags) => {
+/*         client.on("userFlagsUpdate", (user, oldFlags, newFlags) => {
     
             const embed = new EmbedBuilder()
                 .setTitle('Flags Updated')
@@ -336,7 +336,7 @@ function events(bot){
     
             return send_log(bot, user.guild.id, embed);
     
-        })
+        }) */
     
         // Joined VC
         client.on("voiceChannelJoin", (member, channel) => {
