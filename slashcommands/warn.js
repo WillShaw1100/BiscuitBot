@@ -11,11 +11,17 @@ const run = async (client, interaction) => {
     let reason = interaction.options.getString("reason") || "No reason given"
 
     if (!member) return interaction.reply("Invalid member")
-    if(member.user.id === client.user.id)return interaction.reply("You can't warn this person.")
+    if(member.user.id === client.user.id)return interaction.reply({
+        content: "You can't warn this person.",
+        ephemeral: true
+    })
     const roleId = "523834204610494475" //Staff Role
 	const memberRoles = member.roles;
 	const isStaff = memberRoles.cache.has(roleId)
-    if(isStaff)return interaction.reply("You can't warn this person.")
+    if(isStaff)return interaction.reply({
+        content: "You can't warn this person.",
+        ephemeral: true
+    })
 
     try {
         const warnembed = new EmbedBuilder()
@@ -42,7 +48,10 @@ const run = async (client, interaction) => {
     catch(err){
         if (err){
             console.error(err)
-            return interaction.reply(`Failed to warn ${member.user.tag}`)
+            return interaction.reply({
+                content: `Failed to warn ${member.user.tag}`,
+                ephemeral: true
+            })
         }
     }
 }

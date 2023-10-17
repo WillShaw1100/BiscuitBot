@@ -47,7 +47,10 @@ const run = async (client, interaction) => {
 
     }catch(err){
     if (err){
-        return interaction.reply('Failed to perform this command')
+        return interaction.reply({
+            content: 'Failed to perform this command',
+            ephemeral: true
+        })
     }
 
 }

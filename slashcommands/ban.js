@@ -10,11 +10,11 @@ const run = async (client, interaction) => {
     let reason = interaction.options.getString("reason") || "No reason given"
 
     if (!member) return interaction.reply("Invalid member")
-    if(member.user.id === client.user.id)return interaction.reply("You can't ban this person.")
+    if(member.user.id === client.user.id)return interaction.reply({content: "You can't ban this person.", ephemeral: true})
     const roleId = "523834204610494475" //Staff Role
 	const memberRoles = member.roles;
 	const isStaff = memberRoles.cache.has(roleId)
-    if(isStaff)return interaction.reply("You can't ban this person.")
+    if(isStaff)return interaction.reply({content: "You can't ban this person.", ephemeral: true})
 
     try {
         await interaction.guild.bans.create(member, {
@@ -53,7 +53,7 @@ const run = async (client, interaction) => {
     catch(err){
         if (err){
             console.error(err)
-            return interaction.reply(`Failed to ban ${member.user.tag}`)
+            return interaction.reply({content: `Failed to ban ${member.user.tag}`, ephemeral: true})
         }
     }
 }
