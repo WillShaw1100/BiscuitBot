@@ -16,7 +16,10 @@ const run = async (client, interaction) => {
     }catch(err){
     if (err){
         console.error(err)
-        return interaction.reply('Failed to perform this command')
+        return interaction.reply({
+            content:'Failed to perform this command',
+            ephemeral: true
+        })
     }
 }
 }
@@ -24,7 +27,7 @@ const run = async (client, interaction) => {
 module.exports = {
     name: "send",
     type: 1,
-    category: 'Configuration',
+    category: 'Staff',
     description: "Sends a message",
     perm: PermissionsBitField.Flags.Administrator,
     minArgs: 2,

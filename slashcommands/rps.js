@@ -6,7 +6,10 @@ const run = async (client, interaction) => {
     const args = (interaction.options.getString('text')).toLowerCase();
     const arr = args.split(" ", 2);
     let guess = arr[0]
-    if(!replies.includes(guess)) return interaction.reply('Please select Rock, Paper or Scissors')
+    if(!replies.includes(guess)) return interaction.reply({
+        content: 'Please select Rock, Paper or Scissors',
+        ephemeral: true
+    })
     try{
         if (replies[result] === guess) {
             return interaction.reply('It\'s a tie! We had the same choice.');
@@ -23,7 +26,10 @@ const run = async (client, interaction) => {
     }catch(err){
     if (err){
         console.error(err)
-        return interaction.reply('Failed to perform this command')
+        return interaction.reply({
+            content: 'Failed to perform this command',
+            ephemeral: true
+        })
     }
 
 }

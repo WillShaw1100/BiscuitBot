@@ -19,7 +19,10 @@ const run = async (client, interaction) => {
     catch(err){
         if (err){
             console.error(err)
-            return interaction.reply(`Something went wrong, if this continues please get in touch with the Staff.`)
+            return interaction.reply({
+                content: `Something went wrong, if this continues please get in touch with the Staff.`,
+                ephemeral: true
+            })
         }
     }
 }
