@@ -16,8 +16,7 @@ const av = {
 
 const generateImage = async (member) => {
     let username = member.user.username
-    let discrim = member.user.discriminator
-    let avatarURL = member.user.displayAvatarURL({format: "png", dynamic: false, size: av.size})
+    let avatarURL = member.user?.displayAvatarURL({extension: "png", dynamic: false, size: av.size})
 
     const canvas = Canvas.createCanvas(dim.width, dim.height)
     const ctx = canvas.getContext("2d")
@@ -46,15 +45,15 @@ const generateImage = async (member) => {
     ctx.textAlign = "center"
 
     // draw in Welcome
-    ctx.font = "50px Roboto"
+    ctx.font = "50px Sans"
     ctx.fillText("Welcome", dim.width/2, dim.margin + 70)
 
     // draw in the username
-    ctx.font = "60px Roboto"
-    ctx.fillText(username + "#" + discrim, dim.width/2, dim.height - dim.margin - 125)
+    ctx.font = "60px Sans"
+    ctx.fillText(username, dim.width/2, dim.height - dim.margin - 125)
 
     // draw in to the server
-    ctx.font = "40px Roboto"
+    ctx.font = "40px Sans"
     ctx.fillText("to the server", dim.width / 2, dim.height - dim.margin - 50)
 
     const attachment = new Discord.AttachmentBuilder(canvas.toBuffer(), "welcome.png")
