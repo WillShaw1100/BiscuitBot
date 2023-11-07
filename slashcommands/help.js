@@ -14,7 +14,8 @@ const run = async (client, interaction) => {
     try{
         const emojis = {
             configuration: '⚙️',
-            staff: '🛠️',
+            moderation: '🛠️',
+            events: '📆',
             general: '👋',
             fun: '🎈'
 

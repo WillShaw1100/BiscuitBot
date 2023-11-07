@@ -27,7 +27,7 @@ const run = async (client, interaction) => {
 module.exports = {
     name: "send",
     type: 1,
-    category: 'Staff',
+    category: 'Configuration',
     description: "Sends a message",
     perm: PermissionsBitField.Flags.Administrator,
     minArgs: 2,

@@ -46,7 +46,7 @@ const run = async (client, interaction) => {
 module.exports = {
     name: "timeout",
     type: 1,
-    category: "Staff",
+    category: "Moderation",
     description: "Timeout a member",
     perm: PermissionsBitField.Flags.ModerateMembers,
     options: [

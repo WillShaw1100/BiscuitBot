@@ -50,9 +50,9 @@ const run = async (client, interaction) => {
 module.exports = {
     name: "clear",
     type: 1,
-    category: "Staff",
+    category: "Moderation",
     description: "Clear a specific amount of messages from a target or channel. (Slash Commands count)",
-    perm: PermissionsBitField.Flags.ManageMessages,
+    perm: PermissionsBitField.Flags.BanMembers,
     options: [
         {
             name: "amount", description: "Amount of messages to clear.",
