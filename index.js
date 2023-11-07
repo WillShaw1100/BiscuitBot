@@ -9,7 +9,7 @@ require('dotenv').config();
 const app = express();
 
 const client = new Discord.Client({ 
-    intents: [Object.keys(Discord.GatewayIntentBits)],
+    intents: 3276799,//[Object.keys(Discord.GatewayIntentBits)],
     partials: [Object.keys(Discord.Partials)],
 });
 

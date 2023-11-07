@@ -59,7 +59,7 @@ const run = async (client, interaction) => {
 module.exports = {
     name: "warn",
     type: 1,
-    category: "Staff",
+    category: "Moderation",
     description: "Warn a User",
     perm: PermissionsBitField.Flags.BanMembers,
     options: [

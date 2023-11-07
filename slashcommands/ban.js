@@ -61,7 +61,7 @@ const run = async (client, interaction) => {
 module.exports = {
     name: "ban",
     type: 1,
-    category: "Staff",
+    category: "Moderation",
     description: "Bans a member",
     perm: PermissionsBitField.Flags.BanMembers,
     options: [
