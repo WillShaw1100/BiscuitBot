@@ -9,7 +9,7 @@ require('dotenv').config();
 const app = express();
 
 const client = new Discord.Client({ 
-    intents: [Object.keys(Discord.GatewayIntentBits)],
+    intents: 3276799,//[Object.keys(Discord.GatewayIntentBits)],
     partials: [Object.keys(Discord.Partials)],
 });
 
@@ -179,5 +179,5 @@ logs(client, {
     debug: true
 });
 
-client.login(process.env.DISCORD_TOKEN);//process.env.TEST_BOT_TOKEN);DISCORD_TOKEN
+client.login(process.env.TEST_DISCORD_TOKEN);//process.env.TEST_BOT_TOKEN);DISCORD_TOKEN
 app.listen(process.env.PORT || 8080, () => console.log(`Listening on Port ${process.env.PORT || 8080}`));
