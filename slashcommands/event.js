@@ -54,7 +54,7 @@ const run = async (client, interaction) => {
     const guildID = interaction.guild.id.toString()
     const guild = await client.guilds.fetch(guildID);
 
-    const whatsOnChannel = guild.channels.cache.get('1171168027946012743') //channel to additionally send message to. 1169266267677528114
+    const whatsOnChannel = guild.channels.cache.get('1169266267677528114') //channel to additionally send message to.
 
     if (!guild)
       return console.log('Guild not found');
