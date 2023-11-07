@@ -48,7 +48,7 @@ client.on("interactionCreate", async (interaction) => {
     if(!slashcmd) return interaction.reply("Invalid Slash Command")
 
     if(slashcmd.perm && !interaction.member.permissions.has(slashcmd.perm))
-        return interaction.reply("You do not have permission for this command")
+        return interaction.reply({content: "You do not have permission for this command", ephemeral: true})
 
    // slashcmd.run(client, interaction)
     
@@ -62,7 +62,7 @@ client.on("interactionCreate", async (interaction) => {
 
 	// check permissions
 	if (slashcmd.perms && !interaction.member.permissions.has(slashcmd.perms))
-		return interaction.reply("You do not have permission to use this command")
+		return interaction.reply({content: "You do not have permission for this command", ephemeral: true})
 
 	slashcmd.run(client, interaction)
 }

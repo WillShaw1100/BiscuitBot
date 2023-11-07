@@ -24,7 +24,7 @@ module.exports = {
             return message.reply("This command is only available to the Bot Developer")
         }
         if (command.permissions && member.permissions.missing(command.permissions).length !== 0){
-            return message.reply("You do not have permission to perform this command.")
+            return message.reply({content: "You do not have permission for this command", ephemeral: true})
         }
 
         try {
