@@ -22,7 +22,17 @@ const run = async (client, interaction) => {
 
     const currentTime = new Date().toISOString();
 
+    //google calendar format
 
+    const googleStartDateTime = moment(combinedDateTime).format('YYYYMMDDTHHmm00Z');
+    const googleCreateEndDateTime = moment(combinedDateTime).add(3, 'hours');
+    const googleEndDateTime = moment(googleCreateEndDateTime).format('YYYYMMDDTHHmm00Z');
+
+    const googleTitle = eventTitle.replace(/ /g, '+');
+    const googleDecription = eventDescription.replace(/ /g, '+');
+    
+    //create google event link
+    const googleEvent = `https://calendar.google.com/calendar/u/0/r/eventedit?text=${googleTitle}&dates=${googleStartDateTime}/${googleEndDateTime}&details=${googleDecription}`;
 
 
   try {
@@ -76,7 +86,7 @@ const run = async (client, interaction) => {
 
     if(whatsOnChannel){
         await whatsOnChannel.send(
-            `***${eventTitle} - ${eventDate} ${eventTime}*** \nIn ${eventChannel} \n\n${eventDescription} \n\n[Join Event](https://discord.com/events/${guildID}/${createdEvent.id}) \n\nHost: ${interaction.user.username}\nEvent ID: ||${createdEvent.id}||`
+            `***${eventTitle} - ${eventDate} ${eventTime}*** \nIn ${eventChannel} \n\n${eventDescription} \n\n[Join Event](https://discord.com/events/${guildID}/${createdEvent.id})\n\n[Add to Google](${googleEvent})\n\nHost: ${interaction.user.username}\nEvent ID: ||${createdEvent.id}||`
             );
         }
 
@@ -86,7 +96,7 @@ const run = async (client, interaction) => {
     
             if (foundNotifyChannel) {
                 // Send a notification message to the notify channel
-                let channelMessage = `***${eventTitle} - ${eventDate} ${eventTime}***\nIn ${eventChannel}\n\n${eventDescription}\n[Join Event](https://discord.com/events/${guildID}/${createdEvent.id})\n\nHost: ${interaction.user.username}\nEvent ID: ||${createdEvent.id}||`
+                let channelMessage = `***${eventTitle} - ${eventDate} ${eventTime}***\nIn ${eventChannel}\n\n${eventDescription}\n[Join Event](https://discord.com/events/${guildID}/${createdEvent.id})\n\n[Add to Google](${googleEvent})\n\nHost: ${interaction.user.username}\nEvent ID: ||${createdEvent.id}||`
                 if(role){
                     channelMessage += `\nNotify: <@&${role.id}>`
                 }
