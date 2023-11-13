@@ -3,7 +3,7 @@ const { Channel, Message, EmbedBuilder } = require("discord.js")
 
 
 const run = async (client, interaction) => {
-    const bot_version = "2.5";
+    const bot_version = "2.5a";
     const bot_owner = "williamshaw";
     const server_count = client.guilds.cache.size;
 

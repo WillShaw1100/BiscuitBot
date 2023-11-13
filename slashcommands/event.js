@@ -6,9 +6,11 @@ const run = async (client, interaction) => {
     const eventDate = (interaction.options.getString('date'))
     const eventTime = (interaction.options.getString('time'))
     const eventChannel = (interaction.options.getChannel('channel'))
-    let role = (interaction.options.getRole('role'))
     const eventDescription = (interaction.options.getString('description'))
+    //optional
+    let role = (interaction.options.getRole('role'))
     const eventNotifyChannel = (interaction.options.getChannel('notifychannel'))
+    const eventRequirements = (interaction.options.getString('requirements'))
 
     const dateMoment = moment(eventDate, 'DD/MM/YYYY', true);
     const timeMoment = moment(eventTime, 'HH:mm', true);
@@ -36,6 +38,7 @@ const run = async (client, interaction) => {
 
 
   try {
+    //error checking
     if (combinedDateTime <= currentTime) {
         interaction.reply({content: 'The event start time is in the past or right now. Please choose a future time.',
         ephemeral: true});
@@ -61,10 +64,30 @@ const run = async (client, interaction) => {
         })
     }
 
+    if (eventTitle.length > 99) {
+        return interaction.reply({
+            content: 'Event title cannot be more than 99 characters.',
+            ephemeral: true
+        });
+    }
+    if (eventDescription.length > 600) {
+        return interaction.reply({
+            content: 'Event description cannot be more than 600 characters.',
+            ephemeral: true
+        });
+    }
+
+    if (eventRequirements.length > 150) {
+        return interaction.reply({
+            content: 'Event requirements cannot be more than 150 characters.',
+            ephemeral: true
+        });
+    }
+
     const guildID = interaction.guild.id.toString()
     const guild = await client.guilds.fetch(guildID);
 
-    const whatsOnChannel = guild.channels.cache.get('1169266267677528114') //channel to additionally send message to.
+    const whatsOnChannel = guild.channels.cache.get('1171168027946012743') //channel to additionally send message to.
 
     if (!guild)
       return console.log('Guild not found');
@@ -82,12 +105,18 @@ const run = async (client, interaction) => {
         reason: 'Automated Event Creation - Biscuit Bot'
     })
 
-    
+    //taylor message
+    let channelMessage = `***${eventTitle} - ${eventDate} ${eventTime}***\nIn ${eventChannel}\n\n${eventDescription}`;
+
+    // Add event requirements if they are supplied
+    if (eventRequirements) {
+        channelMessage += `\n\n**Event Requirements:**\n ${eventRequirements}`;
+    }
+
+    channelMessage += `\n\n[Join Event](https://discord.com/events/${guildID}/${createdEvent.id})\n\n[Add to Google](${googleEvent})\n\nHost: ${interaction.user.username}\nEvent ID: ||${createdEvent.id}||`
 
     if(whatsOnChannel){
-        await whatsOnChannel.send(
-            `***${eventTitle} - ${eventDate} ${eventTime}*** \nIn ${eventChannel} \n\n${eventDescription} \n\n[Join Event](https://discord.com/events/${guildID}/${createdEvent.id})\n\n[Add to Google](${googleEvent})\n\nHost: ${interaction.user.username}\nEvent ID: ||${createdEvent.id}||`
-            );
+        await whatsOnChannel.send(channelMessage);
         }
 
         if (eventNotifyChannel) {
@@ -96,7 +125,6 @@ const run = async (client, interaction) => {
     
             if (foundNotifyChannel) {
                 // Send a notification message to the notify channel
-                let channelMessage = `***${eventTitle} - ${eventDate} ${eventTime}***\nIn ${eventChannel}\n\n${eventDescription}\n[Join Event](https://discord.com/events/${guildID}/${createdEvent.id})\n\n[Add to Google](${googleEvent})\n\nHost: ${interaction.user.username}\nEvent ID: ||${createdEvent.id}||`
                 if(role){
                     channelMessage += `\nNotify: <@&${role.id}>`
                 }
@@ -161,6 +189,12 @@ module.exports = {
         "name": "description",
         "description": "event description",
         "required": true
+    },
+    {
+        "type": 3,
+        "name": "requirements",
+        "description": "requirements, comma seperated",
+        "required": false
     },
     {
         "type": 8,
