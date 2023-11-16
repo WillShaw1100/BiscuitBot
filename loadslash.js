@@ -13,7 +13,7 @@ let bot = {
     prefix: process.env.PREFIX,
     owners: ["206068051295076352"]
 }
-const guildID = "589411374657175572" //Your Guild ID here
+const guildID = "470229266072731679" //Your Guild ID here
 
 client.slashcommands = new Discord.Collection()
 
@@ -33,4 +33,4 @@ client.on("ready", async () => {
 
 
 
-client.login(process.env.DISCORD_TOKEN);
+client.login(process.env.NODE_ENV === 'dev' ? process.env.TEST_DISCORD_TOKEN : process.env.DISCORD_TOKEN);

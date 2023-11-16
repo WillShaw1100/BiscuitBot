@@ -91,4 +91,4 @@ logs(client, {
     debug: true
 });
 
-client.login(process.env.TEST_DISCORD_TOKEN)
+client.login(process.env.NODE_ENV === 'dev' ? process.env.TEST_DISCORD_TOKEN : process.env.DISCORD_TOKEN);
