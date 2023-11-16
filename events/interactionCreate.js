@@ -1,66 +1,50 @@
-/* module.exports = {
-	name: "interactionCreate",
+module.exports = {
+    name: "interactionCreate",
 	run: async (bot, interaction) => {
-		if (interaction.isCommand()) handleSlashCommand(bot, interaction)
-		else if (interaction.isButton()) handleButton(bot, interaction)
-		else if (interaction.isStringSelectMenu()) return console.log(interaction) //handleSelectMenu(bot, interaction)
-	},
-}
+		
+    if(interaction.isCommand()) {
+    if(!interaction.inGuild()) return interaction.reply("This Command can only be used in a server")
+    const slashcmd = bot.slashcommands.get(interaction.commandName)
 
-const handleButton = (bot, interaction) => {
-	const {client} = bot 
+    if(!slashcmd) return interaction.reply("Invalid Slash Command")
 
-	// "name-param1-param2-...."
-	const [name, ...params] = interaction.customId.split("-")
-	
-	const button = client.buttons.get(name)
+    if(slashcmd.perm && !interaction.member.permissions.has(slashcmd.perm))
+        return interaction.reply({content: "You do not have permission for this command", ephemeral: true})
 
-	if (!button) return 
-	button.run(client, interaction, params)
-}
+    
 
-const handleSlashCommand = (bot, interaction) => {
-	const {client} = bot
+    
 	if (!interaction.inGuild()) return interaction.reply("This command can only be used in a guild")
 
-	const slashcmd = client.slashcommands.get(interaction.commandName)
 
 	if (!slashcmd) return
 
 	// check permissions
 	if (slashcmd.perms && !interaction.member.permissions.has(slashcmd.perms))
-		return interaction.reply("You do not have permission to use this command")
+		return interaction.reply({content: "You do not have permission for this command", ephemeral: true})
 
-	slashcmd.run(client, interaction)
-}
-
-const handleSelectMenu = (bot,interaction) => {
-	const {client} = bot
-	if(!interaction.inGuild()) return interaction.reply("This command can only be used in a guild")
-	if (!interaction.isStringSelectMenu() || interaction.customId !== 'auto_roles') {
-		return
+	slashcmd.run(bot, interaction)
 	}
-	try{
-	interaction.deferReply({ephermal: true})
-	const roleId = interaction.values[0];
-	const role = interaction.guild.cache.get(roleId)
-	const memberRoles = interaction.member.roles;
-
-	const hasRole = memberRoles.cache.has(roleId)
-
-	if(hasRole){
-		memberRoles.remove(roleId);
-		interaction.followup(`${role.name} has been removed`)
-	}else {
-		memberRoles.add(roleId)
-		interaction.followup(`${role.name} has been added`)
+	if(interaction.isButton()) {
+		try{
+			await interaction.deferReply({ephemeral: true});
+			const role = interaction.guild.roles.cache.get(interaction.customId);
+			if(!role){
+				interaction.editReply('No role found.')
+				return;
+			}
+			
+			const hasRole = interaction.member.roles.cache.has(role.id);
+			if(hasRole){
+				await interaction.member.roles.remove(role);
+				await interaction.editReply(`The role ${role} has been removed`);
+				return;
+			}
+			await interaction.member.roles.add(role);
+			await interaction.editReply(`The role ${role} has been added`);
+		}catch (e) {
+			console.log(e);
+		}
 	}
-}catch(err){
-	if (err){
-        console.error(err)
-        return interaction.reply('Failed to perform this command')
-    }
 }
 }
-
- */
