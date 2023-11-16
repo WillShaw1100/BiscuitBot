@@ -21,11 +21,13 @@ To run this project, you will need to add the following environment variables to
 
 `DISCORD_TOKEN`
 
+`TEST_DISCORD_TOKEN` - if you wish to use a seperate token/bot for devlopment.
+
 `PREFIX`
 
-`PORT`
-
 `MONGODB`
+
+`NODE_ENV` - set this to 'dev' to use the `TEST_DISCORD_TOKEN`
 
 ## License
 
