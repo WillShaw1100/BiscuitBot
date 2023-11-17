@@ -27,6 +27,7 @@ module.exports = {
 	}
 	if(interaction.isButton()) {
 		try{
+			if(!interaction.inGuild()) return interaction.reply("This can only be used in a server")
 			await interaction.deferReply({ephemeral: true});
 			const role = interaction.guild.roles.cache.get(interaction.customId);
 			if(!role){
@@ -43,6 +44,21 @@ module.exports = {
 			await interaction.member.roles.add(role);
 			await interaction.editReply(`The role ${role} has been added`);
 		}catch (e) {
+			console.log(e);
+		}
+	}
+	if(interaction.isUserContextMenuCommand()) {
+		try{
+			if(!interaction.inGuild()) return interaction.reply("This can only be used in a server");
+			await interaction.deferReply({ ephemeral: true });
+			const command = bot.contextcommands.get(interaction.commandName);
+			if(command)command.run(bot, interaction);
+
+			//const userId = interaction.targetId;
+			//const channelId = interaction.channelId;
+
+			//await interaction.reply('Context menu command executed!');
+		}catch (e){
 			console.log(e);
 		}
 	}

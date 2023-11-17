@@ -17,17 +17,20 @@ let bot = {
     owners: ["206068051295076352"]
 }
 client.slashcommands = new Discord.Collection();
+client.contextcommands = new Discord.Collection();
 client.commands = new Discord.Collection()
 client.events = new Discord.Collection()
 client.logs = new Discord.Collection()
 
 client.loadCommands = (bot, reload) => require("./handlers/commands")(bot, reload)
 client.loadSlashCommands= (bot, reload) => require("./handlers/slashcommands")(bot, reload)
+client.loadContextCommands= (bot, reload) => require("./handlers/contextCommands")(bot, reload)
 client.loadLogs = (bot, reload) => require("./handlers/handleLogs")(bot, reload);
 client.loadEvents = (bot, reload) => require("./handlers/events")(bot, reload)
 
 client.loadCommands(bot, false)
 client.loadSlashCommands(bot, false)
+client.loadContextCommands(bot, false)
 client.loadLogs(bot, false)
 client.loadEvents(bot, false)
 
