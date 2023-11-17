@@ -1,5 +1,6 @@
 const { PermissionsBitField, EmbedBuilder, GuildScheduledEventManager, GuildScheduledEventPrivacyLevel, GuildScheduledEventEntityType } = require("discord.js");
 const moment = require('moment');
+const eventChannelMainSchema = require("../models/eventChannelSchema");
 
 const run = async (client, interaction) => {
     const eventTitle = (interaction.options.getString('title'))
@@ -24,6 +25,7 @@ const run = async (client, interaction) => {
 
     const currentTime = new Date().toISOString();
 
+    let eventMainChannel = null
     //google calendar format
 
     const googleStartDateTime = moment(combinedDateTime).format('YYYYMMDDTHHmm00Z');
@@ -76,22 +78,30 @@ const run = async (client, interaction) => {
             ephemeral: true
         });
     }
-
-    if (eventRequirements.length > 150) {
-        return interaction.reply({
-            content: 'Event requirements cannot be more than 150 characters.',
-            ephemeral: true
-        });
+    if (eventRequirements) {
+        if (eventRequirements.length > 150) {
+            return interaction.reply({
+                content: 'Event requirements cannot be more than 150 characters.',
+                ephemeral: true
+            });
+        }
     }
 
     const guildID = interaction.guild.id.toString()
     const guild = await client.guilds.fetch(guildID);
 
-    const whatsOnChannel = guild.channels.cache.get('1169266267677528114') //channel to additionally send message to.
+    //get_Event_MASTER_Notifcation_Channel
+    eventChannelMainSchema.findOne({ Guild: guildID }, async (err, data) => {
+        if(!data) return;
+        let channel = data.Channel;
+
+        eventMainChannel = interaction.guild.channels.cache.get(data.Channel);
+    });
 
     if (!guild)
       return console.log('Guild not found');
 
+      //create event
     const eventManager = new GuildScheduledEventManager(guild)
 
     const createdEvent = await eventManager.create({
@@ -115,10 +125,13 @@ const run = async (client, interaction) => {
 
     channelMessage += `\n\n[Join Event](https://discord.com/events/${guildID}/${createdEvent.id})\n\n[Add to Google](${googleEvent})\n\nHost: ${interaction.user.username}\nEvent ID: ||${createdEvent.id}||`
 
-    if(whatsOnChannel){
-        await whatsOnChannel.send(channelMessage);
+    if(eventMainChannel == null){
+        return interaction.reply({
+            content: `Event Created, but No event channel exists, please ask an Administrator to set this up to start sending event messages.`,
+            ephemeral: true
+        })
         }
-
+        await eventMainChannel.send(channelMessage);
         if (eventNotifyChannel) {
             // Find the notify channel by ID
             const foundNotifyChannel = interaction.guild.channels.cache.get(eventNotifyChannel.id);
@@ -134,7 +147,6 @@ const run = async (client, interaction) => {
             }
         }
        
-
     interaction.reply({
         content: `Event created Successfully.`,
         ephemeral: true
@@ -145,7 +157,7 @@ const run = async (client, interaction) => {
   } catch (err) {
     console.error(err);
     interaction.reply({
-      content: 'Failed to perform this command',
+      content: `Failed to perform this command. \n${err}`,
       ephemeral: true
     });
   }
