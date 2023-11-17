@@ -142,7 +142,7 @@ const roles6 = [
 ]
 client.on('ready', async (c) => {
     try{
-        const channel = await client.channels.cache.get('673534920966012970');
+        const channel = await client.channels.cache.get('593092717458751542');
         if(!channel) return;
 
         const row = new ActionRowBuilder();
