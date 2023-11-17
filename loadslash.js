@@ -21,6 +21,12 @@ client.slashcommands = new Discord.Collection()
 client.loadSlashCommands= (bot, reload) => require("./handlers/slashcommands")(bot, reload)
 client.loadSlashCommands(bot, false)
 
+client.contextcommands = new Discord.Collection()
+
+
+client.loadContextCommands= (bot, reload) => require("./handlers/contextCommands")(bot, reload)
+client.loadContextCommands(bot, false)
+
 client.on("ready", async () => {
     const guild = client.guilds.cache.get(guildID)
     if(!guild)
@@ -28,9 +34,14 @@ client.on("ready", async () => {
 
     await guild.commands.set([...client.slashcommands.values()])
     console.log(`Successfully loaded in ${client.slashcommands.size} slash commands`)
+
+    await guild.commands.set([...client.contextcommands.values()])
+    console.log(`Successfully loaded in ${client.contextcommands.size} context commands`)
+
     process.exit(0)
 })
 
 
 
-client.login(process.env.DISCORD_TOKEN);
+
+client.login(process.env.NODE_ENV === 'dev' ? process.env.TEST_DISCORD_TOKEN : process.env.DISCORD_TOKEN);
