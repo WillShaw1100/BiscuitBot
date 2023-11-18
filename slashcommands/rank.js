@@ -1,6 +1,7 @@
 const { PermissionsBitField, EmbedBuilder, GuildScheduledEventManager, GuildScheduledEventPrivacyLevel, GuildScheduledEventEntityType } = require("discord.js");
 const moment = require('moment');
 const xpSchema = require("../models/xpSchema");
+const generateRankImage = require("../assets/generateRankCard")
 
 const run = async (client, interaction) => {
     const rankUser = interaction.options.getUser('user')
@@ -22,13 +23,24 @@ const run = async (client, interaction) => {
         }else{
         let member = data.Member;
         let messages = data.Messages
+        let xp = 0
 
-        interaction.reply(`The member ${member} has sent ${messages} messages`)
+        const img = await generateRankImage(member, messages, xp);
+        console.log(img)
+        if (img) {
+          interaction.reply({
+                  content: `<@${member.id}> ${data.Msg}`,
+                  files: [img]
+          });
+        }else{
+          interaction.reply({
+            content: `Failed to generate rank card`,
+            ephemeral: true
+    });
+        }
+      //  interaction.reply(`The member ${member} has sent ${messages} messages`)
         }
     });
-
-
-
 
 
   } catch (err) {
