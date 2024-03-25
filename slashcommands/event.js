@@ -116,7 +116,7 @@ const run = async (client, interaction) => {
     })
 
     //taylor message
-    let channelMessage = `***${eventTitle} - ${eventDate} ${eventTime}***\nIn ${eventChannel}\n\n${eventDescription}`;
+    let channelMessage = `# ${eventTitle} - ${eventDate} ${eventTime} \nIn ${eventChannel}\n\n${eventDescription}`;
 
     // Add event requirements if they are supplied
     if (eventRequirements) {
