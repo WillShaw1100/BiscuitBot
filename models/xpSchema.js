@@ -5,6 +5,7 @@ let xpSchema = new Schema({
     Member: String,
     Messages: Number,
     XP: Number,
+    Rank: String,
 });
 
 module.exports = model("XP", xpSchema);

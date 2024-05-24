@@ -2,7 +2,12 @@ const { PermissionsBitField, EmbedBuilder, GuildScheduledEventManager, GuildSche
 const moment = require('moment');
 const xpSchema = require("../models/xpSchema");
 const generateRankImage = require("../assets/generateRankCard");
-const { devOnly } = require("./eventWIP");
+
+const rankRequirements = {
+  rankNames: ["Starter", "Rank 2"],
+  rankXPRequirements: [0, 500]
+};
+
 
 const run = async (client, interaction) => {
   const rankUser = interaction.options.getUser('user')
@@ -12,7 +17,7 @@ const run = async (client, interaction) => {
 
     const guildID = interaction.guild.id.toString()
     const guild = await client.guilds.fetch(guildID);
-    const memberID = rankUser ? rankUser.id : interaction.member.user.id
+    const memberID = rankUser ? rankUser.id : interaction.member.id
 
     if (!guild)
       return console.log('Guild not found');
@@ -24,13 +29,22 @@ const run = async (client, interaction) => {
       } else {
         let member = data.Member;
         let messages = data.Messages
-        let xp = 0
+        let xp = data.XP
+        //let rank = data.Rank
 
-        const img = await generateRankImage(member, messages, xp);
-        console.log(img)
+        // Before accessing members, fetch the guild
+        const guild = await client.guilds.fetch(guildID);
+        // Check if the guild is valid
+        if (!guild) return console.log('Guild not found');
+
+        // Access members of the guild
+
+        const userFull = guild.members.cache.get(memberID) || await guild.members.fetch(memberID);
+        const img = await generateRankImage(userFull, messages, xp, rankRequirements);
+        //console.log(img)
         if (img) {
           interaction.reply({
-            content: `<@${member.id}> ${data.Msg}`,
+            content: `${userFull.nickname}'s rank`,//${data.Msg}`,
             files: [img]
           });
         } else {

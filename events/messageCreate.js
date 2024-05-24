@@ -1,6 +1,12 @@
 const Discord = require("discord.js")
 const xpSchema = require("../models/xpSchema");
 
+/*const ranks = [
+    { name: "Starter", xpRequirement: 0 },
+    { name: "Rank 2", xpRequirement: 500 },
+    // Add more ranks as needed
+];*/
+
 module.exports = {
     name: "messageCreate",
     run: async function runAll(bot, message) {
@@ -18,10 +24,16 @@ module.exports = {
                         Guild: guildId,
                         Member: member.id,
                         Messages: 1,
-                        XP: 0
+                        XP: 0,
+                        Rank: "Starter"
                     });
                 } else if (data) {
-                    await xpSchema.updateOne({ Messages: data.Messages + 1 });
+                    const xpGain = (Math.random() * (1.2 - 0.2) + 0.2).toFixed(1);
+                    await xpSchema.updateOne({ Messages: data.Messages + 1, XP: (Number(data.XP) + Number(xpGain)).toFixed(2) });
+
+                    // const newRank = ranks.find(rank => (data.XP + xpGain) >= rank.xpRequirement) || { name: "N/A" };
+
+                    //await xpSchema.updateOne({ Rank: newRank.name });
                 }
             })
         } catch (err) {
