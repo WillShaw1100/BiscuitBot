@@ -5,6 +5,7 @@ const os = require("os");
 const logs = require("discord-logs");
 const slashcommands = require("./handlers/slashcommands");
 require('dotenv').config();
+const config = require('./config');
 
 const client = new Discord.Client({
     intents: 3276799,//[Object.keys(Discord.GatewayIntentBits)],
@@ -13,8 +14,8 @@ const client = new Discord.Client({
 
 let bot = {
     client,
-    prefix: process.env.PREFIX,
-    owners: ["206068051295076352", "475462382089535498"] //me, marcus
+    prefix: config.prefix,
+    owners: config.owners
 }
 client.slashcommands = new Discord.Collection();
 client.modals = new Discord.Collection();
@@ -39,7 +40,7 @@ client.loadModals(bot, false)
 
 module.exports = {
     slashcommands: slashcommands,
-    bot: bot
+    bot: bot,
 };
 //Role menu
 /*if(interaction.isStringSelectMenu()){

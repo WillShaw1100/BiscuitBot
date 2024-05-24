@@ -3,7 +3,7 @@ const Discord = require('discord.js');
 
 require('dotenv').config();
 
-const client = new Discord.Client({ 
+const client = new Discord.Client({
     intents: [Object.keys(Discord.GatewayIntentBits)],
     partials: [Object.keys(Discord.Partials)],
 });
@@ -13,12 +13,12 @@ let bot = {
     prefix: process.env.PREFIX,
     owners: ["206068051295076352"]
 }
-const guildID = "470229266072731679" //Your Guild ID here
+const guildID = "589411374657175572" //Your Guild ID here
 
 client.slashcommands = new Discord.Collection()
 
 
-client.loadSlashCommands= (bot, reload) => require("./handlers/slashcommands")(bot, reload)
+client.loadSlashCommands = (bot, reload) => require("./handlers/slashcommands")(bot, reload)
 client.loadSlashCommands(bot, false)
 
 //client.contextcommands = new Discord.Collection()
@@ -29,16 +29,16 @@ client.loadSlashCommands(bot, false)
 
 client.on("ready", async () => {
     const guild = client.guilds.cache.get(guildID)
-    if(!guild)
+    if (!guild)
         return console.error("Target guild not found")
 
     await guild.commands.set([...client.slashcommands.values()])
     console.log(`Successfully loaded in ${client.slashcommands.size} slash commands`)
 
-   // await guild.commands.set([...client.contextcommands.values()])
-   // console.log(`Successfully loaded in ${client.contextcommands.size} context commands`)
+    // await guild.commands.set([...client.contextcommands.values()])
+    // console.log(`Successfully loaded in ${client.contextcommands.size} context commands`)
 
-   // console.log(([...client.slashcommands.values()]))
+    // console.log(([...client.slashcommands.values()]))
 
     process.exit(0)
 })

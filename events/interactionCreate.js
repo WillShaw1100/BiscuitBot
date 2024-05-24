@@ -1,10 +1,10 @@
 const { InteractionType } = require('discord.js');
 const { handleModalSubmit } = require('../handlers/modalHandler');
+const { owners } = require('../config');
 
 module.exports = {
 	name: "interactionCreate",
 	run: async (bot, interaction) => {
-
 		if (interaction.isCommand()) {
 			if (!interaction.inGuild()) return interaction.reply("This Command can only be used in a server")
 			const slashcmd = bot.slashcommands.get(interaction.commandName)
@@ -13,6 +13,9 @@ module.exports = {
 
 			if (slashcmd.perm && !interaction.member.permissions.has(slashcmd.perm))
 				return interaction.reply({ content: "You do not have permission for this command", ephemeral: true })
+
+			if (slashcmd.devOnly && !owners.includes(interaction.member.id))
+				return interaction.reply({ content: "You do not have permission for this command. This command is only available to the Bot Management Team", ephemeral: true })
 
 
 

@@ -99,6 +99,11 @@ const roles4 = [
         emoji: '☄️'
     },
     {
+        id: '1176883493310050415',
+        label: 'Star Trek Bridge Crew',
+        emoji: '💫'
+    },
+    {
         id: '632648604548333588',
         label: 'Mechwarrior',
         emoji: '🤖'
