@@ -6,7 +6,7 @@ const logs = require("discord-logs");
 const slashcommands = require("./handlers/slashcommands");
 require('dotenv').config();
 
-const client = new Discord.Client({ 
+const client = new Discord.Client({
     intents: 3276799,//[Object.keys(Discord.GatewayIntentBits)],
     partials: [Object.keys(Discord.Partials)],
 });
@@ -17,35 +17,38 @@ let bot = {
     owners: ["206068051295076352"]
 }
 client.slashcommands = new Discord.Collection();
+client.modals = new Discord.Collection();
 client.contextcommands = new Discord.Collection();
 client.commands = new Discord.Collection()
 client.events = new Discord.Collection()
 client.logs = new Discord.Collection()
 
 client.loadCommands = (bot, reload) => require("./handlers/commands")(bot, reload)
-client.loadSlashCommands= (bot, reload) => require("./handlers/slashcommands")(bot, reload)
-client.loadContextCommands= (bot, reload) => require("./handlers/contextCommands")(bot, reload)
-client.loadLogs = (bot, reload) => require("./handlers/handleLogs")(bot, reload);
+client.loadSlashCommands = (bot, reload) => require("./handlers/slashcommands")(bot, reload)
+client.loadContextCommands = (bot, reload) => require("./handlers/contextCommands")(bot, reload)
+client.loadLogs = (bot, reload) => require("./handlers/handleLogs")(bot, reload)
 client.loadEvents = (bot, reload) => require("./handlers/events")(bot, reload)
+client.loadModals = (bot, reload) => require("./handlers/modalHandler")(bot, reload)
 
 client.loadCommands(bot, false)
 client.loadSlashCommands(bot, false)
 client.loadContextCommands(bot, false)
 client.loadLogs(bot, false)
 client.loadEvents(bot, false)
+client.loadModals(bot, false)
 
 module.exports = {
-    slashcommands: slashcommands, 
+    slashcommands: slashcommands,
     bot: bot
 };
 //Role menu
 /*if(interaction.isStringSelectMenu()){
-	const {client} = bot
-	if(!interaction.inGuild()) return interaction.reply("This command can only be used in a guild")
-	if (!interaction.isStringSelectMenu() || interaction.customId !== 'auto_roles') {
-		return
-	}
-	try{
+    const {client} = bot
+    if(!interaction.inGuild()) return interaction.reply("This command can only be used in a guild")
+    if (!interaction.isStringSelectMenu() || interaction.customId !== 'auto_roles') {
+        return
+    }
+    try{
 	
     
     //let guild = await client.guilds.fetch(interaction.guild_id)
@@ -54,7 +57,7 @@ module.exports = {
     const roleId = interaction.values[0];
     const role = interaction.guild.roles.cache.get(roleId);
     const memberRoles = interaction.member.roles;
-	const hasRole = memberRoles.cache.has(roleId)
+    const hasRole = memberRoles.cache.has(roleId)
 
     const channel = (interaction.channelId)
     const targetMessage = await interaction.channel.messages.fetch('951292161394081812', {
@@ -70,7 +73,7 @@ module.exports = {
             ephemeral: true,
             defer: true
         })
-	}else{
+    }else{
         memberRoles.add(roleId)
         targetMessage.edit("Please Select Your Role, Only Select **ONE** at a time")
         interaction.reply({
@@ -81,7 +84,7 @@ module.exports = {
     }
 
 }catch(err){
-	if (err){
+    if (err){
         console.error(err)
         return interaction.reply('Failed to perform this command')
     }
