@@ -33,7 +33,7 @@ const run = async (client, interaction) => {
     const googleEndDateTime = moment(googleCreateEndDateTime).format('YYYYMMDDTHHmm00Z');
 
     const googleTitle = eventTitle.replace(/ /g, '+');
-    const googleDecription = eventDescription.replace(/ /g, '+');
+    const googleDecription = "A+Biscuit+Mafia+event.";//eventDescription.replace(/ /g, '+');
     
     //create google event link
     const googleEvent = `https://calendar.google.com/calendar/u/0/r/eventedit?text=${googleTitle}&dates=${googleStartDateTime}/${googleEndDateTime}&details=${googleDecription}`;
@@ -116,7 +116,7 @@ const run = async (client, interaction) => {
     })
 
     //taylor message
-    let channelMessage = `***${eventTitle} - ${eventDate} ${eventTime}***\nIn ${eventChannel}\n\n${eventDescription}`;
+    let channelMessage = `# ${eventTitle} - ${eventDate} ${eventTime} \nIn ${eventChannel}\n\n${eventDescription}`;
 
     // Add event requirements if they are supplied
     if (eventRequirements) {
