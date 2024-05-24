@@ -9,7 +9,7 @@ const run = async (client, interaction, interactionData) => {
     const eventStartTime = interaction.fields.getTextInputValue('eventStartTimeInput')
     const eventDescription = interaction.fields.getTextInputValue('eventDescriptionInput')
     //slash
-    const eventChannel = "589411374657175577"
+    const eventChannel = "541642156394151936" //replace with vc channle id manually for now. Defaults to BM - Main Gaming 1
     //const eventChannel = interaction.options.getChannel('channel')
 
     //optional
