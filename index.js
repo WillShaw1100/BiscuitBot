@@ -14,7 +14,7 @@ const client = new Discord.Client({
 let bot = {
     client,
     prefix: process.env.PREFIX,
-    owners: ["206068051295076352"]
+    owners: ["206068051295076352", "475462382089535498"] //me, marcus
 }
 client.slashcommands = new Discord.Collection();
 client.modals = new Discord.Collection();
