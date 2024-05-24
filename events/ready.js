@@ -31,6 +31,16 @@ module.exports = {
                 type: ActivityType.Playing,
                 text: "PULSAR: Lost Colony",
                 status: "online"
+            },
+            {
+                type: ActivityType.Listening,
+                text: "your mum",
+                status: "online"
+            },
+            {
+                type: ActivityType.Playing,
+                text: "pulsar with the boyyyyys",
+                status: "online"
             }
         ];
 
