@@ -160,7 +160,7 @@ const run = async (client, interaction) => {
                 if (role) {
                     channelMessage += `\nNotify: <@&${role.id}>`
                 }
-                await foundNotifyChannel.send(channelMessage);
+                await foundNotifyChannel.send({ content: channelMessage, components: [row] });
             } else {
                 console.log('Notify Channel not found');
             }
