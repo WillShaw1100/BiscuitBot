@@ -10,37 +10,42 @@ const xpSchema = require("../models/xpSchema");
 module.exports = {
     name: "messageCreate",
     run: async function runAll(bot, message) {
-        const { client, prefix, owners } = bot
-        if (!message.guild) return
+        const { client, prefix, owners } = bot;
+        if (!message.guild) return;
+        if (message.author.bot) return;
 
-        if (message.author.bot) return
-        let member = message.member
+        let member = message.member;
         let guildId = message.guild.id;
 
         try {
-            xpSchema.findOne({ Guild: guildId }, async (err, data) => {
-                if (!data) {
-                    await xpSchema.create({
-                        Guild: guildId,
-                        Member: member.id,
-                        Messages: 1,
-                        XP: 0,
-                        Rank: "Starter"
-                    });
-                } else if (data) {
-                    const xpGain = (Math.random() * (1.2 - 0.2) + 0.2).toFixed(1);
-                    await xpSchema.updateOne({ Messages: data.Messages + 1, XP: (Number(data.XP) + Number(xpGain)).toFixed(2) });
+            let data = await xpSchema.findOne({ Guild: guildId, Member: member.id }).exec();
+            if (!data) {
+                await xpSchema.create({
+                    Guild: guildId,
+                    Member: member.id,
+                    Messages: 1,
+                    XP: 0,
+                    Rank: "Starter"
+                });
+            } else {
+                const xpGain = (Math.random() * (1.2 - 0.2) + 0.2).toFixed(1);
+                const newXP = (Number(data.XP) + Number(xpGain)).toFixed(2);
+                await xpSchema.updateOne(
+                    { Guild: guildId, Member: member.id },
+                    { Messages: data.Messages + 1, XP: newXP }
+                );
 
-                    // const newRank = ranks.find(rank => (data.XP + xpGain) >= rank.xpRequirement) || { name: "N/A" };
-
-                    //await xpSchema.updateOne({ Rank: newRank.name });
-                }
-            })
+                // Uncomment and modify this section if rank update logic is needed
+                // const newRank = ranks.find(rank => newXP >= rank.xpRequirement) || { name: "N/A" };
+                // await xpSchema.updateOne(
+                //     { Guild: guildId, Member: member.id },
+                //     { Rank: newRank.name }
+                // );
+            }
         } catch (err) {
             console.log(err);
-            message.reply("Something went wrong. Please contact the developer.")
+            message.reply("Something went wrong. Please contact the developer.");
         }
-
 
         if (!message.content.startsWith(prefix)) return
 
