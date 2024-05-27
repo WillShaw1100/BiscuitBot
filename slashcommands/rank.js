@@ -42,9 +42,10 @@ const run = async (client, interaction) => {
         const userFull = guild.members.cache.get(memberID) || await guild.members.fetch(memberID);
         const img = await generateRankImage(userFull, messages, xp, rankRequirements);
         //console.log(img)
+        let useName = userFull.nickname ? userFull.nickname : userFull.user.username
         if (img) {
           interaction.reply({
-            content: `${userFull.nickname}'s rank`,//${data.Msg}`,
+            content: `${useName}'s rank`,//${data.Msg}`,
             files: [img]
           });
         } else {

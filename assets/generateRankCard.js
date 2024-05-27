@@ -76,7 +76,8 @@ const generateRankImage = async (userFull, messages, xp, rankRequirements) => {
     ctx.font = '35px sans-serif';
     ctx.textAlign = "left";
     //console.log(userFull)
-    ctx.fillText(userFull.nickname, 325, 125);
+    let useName = userFull.nickname ? userFull.nickname : userFull.user.username
+    ctx.fillText(useName, 325, 125);
 
     ctx.font = '40px sans-serif';
     ctx.fillText("Rank: ", 325, 170);
