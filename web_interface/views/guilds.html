@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Discord Servers</title>
+</head>
+
+<body>
+    <h1>Your Discord Servers</h1>
+    <div id="guilds"></div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            try {
+                const params = new URLSearchParams(window.location.search);
+                const token = params.get("token");
+
+                if (token) {
+                    const response = await fetch(`/guilds?token=${token}`);
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        throw new Error(errorData.error || 'Error fetching guilds');
+                    }
+
+                    const guilds = await response.json();
+
+                    const guildsContainer = document.getElementById('guilds');
+                    guilds.forEach(guild => {
+                        const guildElement = document.createElement('div');
+                        guildElement.textContent = guild.name;
+                        guildsContainer.appendChild(guildElement);
+                    });
+                } else {
+                    document.getElementById('guilds').textContent = 'No token found';
+                }
+            } catch (error) {
+                console.error('Error fetching guilds:', error);
+                document.getElementById('guilds').textContent = `Error fetching guilds: ${error.message}`;
+            }
+        });
+    </script>
+</body>
+
+</html>

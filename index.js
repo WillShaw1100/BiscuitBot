@@ -98,4 +98,20 @@ logs(client, {
     debug: true
 });
 
+//web
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+// Import web interface app
+const webInterfaceApp = require('./web_interface/app.js');
+
+// Mount web interface app at root path
+app.use('/', webInterfaceApp);
+
+app.listen(PORT, () => {
+    console.log(`Web Interface is running on port ${PORT}`);
+});
+
+
+
 client.login(process.env.NODE_ENV === 'dev' ? process.env.TEST_DISCORD_TOKEN : process.env.DISCORD_TOKEN);

@@ -9,15 +9,18 @@
   "author": "William Shaw",
   "license": "ISC",
   "dependencies": {
+    "axios": "^1.7.2",
     "canvas": "^2.9.0",
     "discord-logs": "^2.2.1",
     "discord.js": "^14.7.1",
     "discord.js-commando": "^0.12.3",
     "dotenv": "^16.0.0",
     "express": "^4.17.3",
+    "expressjs": "^1.0.1",
     "fs": "^0.0.1-security",
     "minecraft-server-ping": "^0.0.8",
     "moment": "^2.29.3",
-    "mongoose": "^6.8.1"
+    "mongoose": "^6.8.1",
+    "node-fetch": "^3.3.2"
   }
 }
