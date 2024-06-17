@@ -4,7 +4,7 @@ require('dotenv').config();
 
 const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
-const REDIRECT_URI = 'http://localhost:8080/auth/callback'; // Ensure this matches the URI in Discord Developer Portal
+const REDIRECT_URI = process.env.CALLBACK_URL;
 
 const login = (req, res) => {
     const params = querystring.stringify({
@@ -39,8 +39,11 @@ const callback = async (req, res) => {
         const tokenData = tokenResponse.data;
         const accessToken = tokenData.access_token;
 
-        // Redirect to guilds.html with the access token
-        res.redirect(`/guilds.html?token=${accessToken}`);
+        // Save the access token to sessionStorage
+        req.session.accessToken = accessToken;
+
+        // Redirect to guilds.html
+        res.redirect('/guilds.html');
     } catch (error) {
         console.error('Error during token exchange:', error);
         res.status(500).json({ error: 'Failed to exchange code for access token' });

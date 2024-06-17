@@ -14,30 +14,41 @@
     <script>
         document.addEventListener("DOMContentLoaded", async () => {
             try {
-                const params = new URLSearchParams(window.location.search);
-                const token = params.get("token");
+                // Retrieve token from sessionStorage
+                const token = sessionStorage.getItem('accessToken');
 
-                if (token) {
-                    const response = await fetch(`/guilds?token=${token}`);
-                    if (!response.ok) {
-                        const errorData = await response.json();
-                        throw new Error(errorData.error || 'Error fetching guilds');
-                    }
-
-                    const guilds = await response.json();
-
-                    const guildsContainer = document.getElementById('guilds');
-                    guilds.forEach(guild => {
-                        const guildElement = document.createElement('div');
-                        guildElement.textContent = guild.name;
-                        guildsContainer.appendChild(guildElement);
-                    });
-                } else {
-                    document.getElementById('guilds').textContent = 'No token found';
+                if (!token) {
+                    throw new Error('No token found');
                 }
+
+                // Log token for verification
+                console.log('Token:', token);
+
+                // Fetch guilds using token
+                const response = await fetch('/guilds', {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || 'Error fetching guilds');
+                }
+
+                const guilds = await response.json();
+
+                const guildsContainer = document.getElementById('guilds');
+                guildsContainer.innerHTML = ''; // Clear previous content
+                guilds.forEach(guild => {
+                    const guildElement = document.createElement('div');
+                    guildElement.textContent = guild.name;
+                    guildsContainer.appendChild(guildElement);
+                });
             } catch (error) {
-                console.error('Error fetching guilds:', error);
-                document.getElementById('guilds').textContent = `Error fetching guilds: ${error.message}`;
+                console.error('Error fetching guilds:', error.message);
+                const guildsContainer = document.getElementById('guilds');
+                guildsContainer.textContent = `Error fetching guilds: ${error.message}`;
             }
         });
     </script>
