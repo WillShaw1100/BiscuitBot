@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const session = require('express-session');
 const app = express();
 
 // Import route handlers
@@ -13,6 +14,14 @@ app.use(express.json());
 // Serve static files from the 'public' and 'views' directories
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'views')));
+
+// Configure express-session middleware
+app.use(session({
+    secret: 'your-secret-key', // Replace with your own secret key for session
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false } // Adjust as necessary based on your deployment environment
+}));
 
 // Use route handlers
 app.use('/auth', authRoutes);

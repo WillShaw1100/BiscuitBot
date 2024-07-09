@@ -1,10 +1,10 @@
 const axios = require('axios');
 
 const getGuilds = async (req, res) => {
-    const accessToken = req.query.token; // Assuming token is passed in query parameter
+    const accessToken = req.headers.authorization && req.headers.authorization.split(' ')[1];
 
     if (!accessToken) {
-        return res.status(400).json({ error: 'Access token is required' });
+        return res.status(401).json({ error: 'No token found' });
     }
 
     try {
@@ -16,15 +16,14 @@ const getGuilds = async (req, res) => {
         });
 
         const guildsData = guildsResponse.data;
-        console.log(guildsData)
+        console.log(guildsData);
+
         // Filter guilds where the user is an admin
         const adminGuilds = guildsData.filter(guild => {
             // Check if the permissions integer includes the administrator permission (ADMINISTRATOR bit)
             const isAdmin = (guild.permissions & 8) === 8;
             return isAdmin;
         });
-
-
 
         // Send admin guild data to client
         res.json(adminGuilds);
