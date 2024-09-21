@@ -42,6 +42,6 @@ module.exports = {
     type: 1,
     category: 'Moderation',
     description: "Mute all members in the VC except those exempt",
-    perm: PermissionsBitField.Flags.Administrator,
+    perm: PermissionsBitField.Flags.MuteMembers,
     run
 };
