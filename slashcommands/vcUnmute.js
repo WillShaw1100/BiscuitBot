@@ -40,6 +40,6 @@ module.exports = {
     type: 1,
     category: 'Moderation',
     description: "Unmute all members in the VC",
-    perm: PermissionsBitField.Flags.Administrator,
+    perm: PermissionsBitField.Flags.MuteMembers,
     run
 };
