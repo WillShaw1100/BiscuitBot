@@ -1,6 +1,6 @@
 const { PermissionsBitField } = require("discord.js");
 
-const EXEMPT_USER_IDS = ['416673750965026817', '475462382089535498', '206068051295076352']; //max, marcus, will
+const EXEMPT_USER_IDS = ['416673750965026817', '475462382089535498', '206068051295076352', '163506050249523201']; //max, marcus, will, bandit
 
 const run = async (client, interaction) => {
     try {
