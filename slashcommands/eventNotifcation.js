@@ -1,52 +1,61 @@
-const { Channel, Guild, Message, EmbedBuilder, PermissionsBitField } = require("discord.js")
+const { EmbedBuilder, PermissionsBitField } = require("discord.js")
 
 const run = async (client, interaction) => {
-        const role = (interaction.options.getRole('role'))
-        const msgToSend = (interaction.options.getString('msg_to_send'))
-        const eventID = (interaction.options.getString('event_id'))
-
-        const guildID = interaction.guild.id.toString()
-        const eventURL = `https://discord.com/events/${guildID}/${eventID}`
-
-        const guild = await client.guilds.fetch(guildID);
-        let notifyLog = await guild.channels.cache.get('589411374657175574' || '539063180929007627' || '674375603876528130'); //test server || main server || staff server logs
-
-        if(!role)
-            return interaction.reply('Unknown Role')
+        const role = interaction.options.getRole('role');
+        const msgToSend = interaction.options.getString('msg_to_send');
+        const eventID = interaction.options.getString('event_id');
         
-            if(role.id == interaction.guild.id) { //disable @ everyone notifcations
-                return interaction.reply({content: 'You can not send a notifcation to everyone, please select roles that apply to the event.',
+        if(!role) {
+            return interaction.reply('Unknown Role')
+        }
+        
+        if(role.id == interaction.guild.id) { //disable @ everyone notifcations
+            return interaction.reply({content: 'You can not send a notifcation to everyone, please select roles that apply to the event.',
                 ephemeral: true
             })
         }
-        
-        try{
-            interaction.guild.members.cache.forEach(member => {
-                if(member.user.bot) return;
 
-            const notifcationEmbed = new EmbedBuilder()
-            .setTitle(`${member.guild.name}  Notifcation`)
-            .setDescription(`This notifcation was sent by the ${member.guild.name} Staff Team`)
-            .setThumbnail(member.guild.iconURL())
+        const guild = interaction.guild;
+        const eventURL = eventID ? `https://discord.com/events/${guild.id}/${eventID}` : null;
+
+        const notifyLog = guild.channels.cache.get('589411374657175574') || guild.channels.cache.get('539063180929007627') || guild.channels.cache.get('674375603876528130'); //test server || main server || staff server logs
+
+        //pre-filter members
+        const members = guild.members.cache.filter(member => member.roles.cache.has(role.id) && !member.user.bot);
+        
+        const embed = new EmbedBuilder()
+            .setTitle(`📢 ${guild.name} Notification`)
+            .setDescription(`You're receiving this because you have the **${role.name}** role.`)
+            .setThumbnail(guild.iconURL({ dynamic: true }))
             .addFields(
-                { name: '\u200B', value: msgToSend },
-                { name: '\u200B', value: '\u200B' },
-                { name: '\u200B', value: `Notifcation sent by ${interaction?.member?.user.username}`},
-                { name: 'Notes', value: 'Please do not reply here! Instead reply in the main Discord Server!'},
+                { name: "📌 Announcement", value: msgToSend },
+                { name: "👤 Sent By", value: interaction?.member?.user.tag ?? "Unknown", inline: true },
+                { name: "🏷️ Server", value: guild.name, inline: true }
             )
-            .setColor("Purple")
+            .setFooter({ text: "Do not reply to this message. Use the server instead." })
+            .setColor(0x9b59b6)
             .setTimestamp();
 
-                if (member.roles.cache.has(role.id)) member.send({embeds: [notifcationEmbed]});
-                if (eventID == null) return;
-                if (member.roles.cache.has(role.id)) member.send({content: eventURL}); //has to be seperate due to how discord handles content and embeds.
-            })
-            interaction.reply({
+        try{
+            for (const member of members.values()) {
+                try {
+                    await member.send({ embeds: [embed] });
+
+                    if (eventURL) {
+                        await member.send(`Event Link: ${eventURL}`);
+                    }
+                } catch (dmErr) {
+                    console.error(`Failed to send notification to ${member.user.tag}:`, dmErr);
+                }
+            }
+
+            await interaction.reply({
                 content: `Users with the role: ${role} have been notified!`,
                 ephemeral: true
             })
 
-            if(notifyLog) notifyLog.send(`A notifcation was sent to users with the role: ${role.name} by ${interaction?.member?.user.username}`);
+            if(notifyLog) notifyLog.send(`A notification was sent to users with the role: ${role.name} by ${interaction?.member?.user.tag ?? "Unknown"}. Message: ${msgToSend}${eventURL ? ` Event Link: ${eventURL}` : ''}`);
+        
 
     }catch(err){
     if (err){
