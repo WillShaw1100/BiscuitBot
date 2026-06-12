@@ -11,8 +11,11 @@ module.exports = {
     name: "messageCreate",
     run: async function runAll(bot, message) {
         const { client, prefix, owners } = bot;
-        if (!message.guild) return;
         if (message.author.bot) return;
+        if (!message.guild) {
+            await message.author.send("Messages sent directly to the bot are not supported. Please join our server: https://discord.gg/P4NGsry");
+            return;
+        }
 
         let member = message.member;
         let guildId = message.guild.id;
