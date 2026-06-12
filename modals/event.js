@@ -31,7 +31,7 @@ const run = async (client, interaction, interactionData) => {
     if (!dateMoment.isValid() || !timeMoment.isValid()) {
         return interaction.reply({
             content: 'Invalid date or time format. Please use the format "DD/MM/YYYY" for date and "HH:mm" for time.',
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         });
     }
 
@@ -58,7 +58,7 @@ const run = async (client, interaction, interactionData) => {
         if (combinedDateTime <= currentTime) {
             interaction.reply({
                 content: 'The event start time is in the past or right now. Please choose a future time.',
-                ephemeral: true
+                flags: MessageFlags.Ephemeral
             });
             return;
         }
@@ -69,7 +69,7 @@ const run = async (client, interaction, interactionData) => {
         if (combinedDateTime > fiveYearsFromNow) {
             interaction.reply({
                 content: 'The event start time is more than 5 years away. Please choose a date and time within the next 5 years.',
-                ephemeral: true
+                flags: MessageFlags.Ephemeral
             });
             return;
         }
@@ -81,7 +81,7 @@ const run = async (client, interaction, interactionData) => {
             if (role.id == interaction.guild.id) { //disable @ everyone notifcations
                 return interaction.reply({
                     content: 'You can not send a notifcation to everyone, please select roles that apply to the event.',
-                    ephemeral: true
+                    flags: MessageFlags.Ephemeral
                 })
             }
 
@@ -89,11 +89,10 @@ const run = async (client, interaction, interactionData) => {
         const guild = await client.guilds.fetch(guildID);
 
         //get_Event_MASTER_Notifcation_Channel
-        eventChannelMainSchema.findOne({ Guild: guildID }, async (err, data) => {
-            if (!data) return;
+        const data = await eventChannelMainSchema.findOne({ Guild: guildID });
+        if (!data) return;
 
             eventMainChannel = interaction.guild.channels.cache.get(data.Channel);
-        });
 
         if (!guild)
             return console.log('Guild not found');
@@ -125,7 +124,7 @@ const run = async (client, interaction, interactionData) => {
         if (eventMainChannel == null) {
             return interaction.reply({
                 content: `Event Created, but No event channel exists, please ask an Administrator to set this up to start sending event messages.`,
-                ephemeral: true
+                flags: MessageFlags.Ephemeral
             })
         }
         await eventMainChannel.send(channelMessage);
@@ -146,7 +145,7 @@ const run = async (client, interaction, interactionData) => {
 
         interaction.reply({
             content: `Event created Successfully.`,
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         })
 
         //scheduledEndTime: null,
@@ -155,7 +154,7 @@ const run = async (client, interaction, interactionData) => {
         console.error(err);
         interaction.reply({
             content: `Failed to perform this command. \n${err}`,
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         });
     }
 

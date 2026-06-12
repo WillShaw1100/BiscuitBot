@@ -1,4 +1,4 @@
-const { Channel, Message, EmbedBuilder, PermissionsBitField } = require("discord.js")
+const { Channel, Message, EmbedBuilder, PermissionsBitField, MessageFlags } = require("discord.js")
 
 const run = async (client, interaction) => {
 
@@ -13,14 +13,14 @@ const run = async (client, interaction) => {
     if (!member) return interaction.reply("Invalid member")
     if(member.user.id === client.user.id)return interaction.reply({
         content: "You can't warn this person.",
-        ephemeral: true
+        flags: MessageFlags.Ephemeral
     })
     const roleId = "523834204610494475" //Staff Role
 	const memberRoles = member.roles;
 	const isStaff = memberRoles.cache.has(roleId)
     if(isStaff)return interaction.reply({
         content: "You can't warn this person.",
-        ephemeral: true
+        flags: MessageFlags.Ephemeral
     })
 
     try {
@@ -50,7 +50,7 @@ const run = async (client, interaction) => {
             console.error(err)
             return interaction.reply({
                 content: `Failed to warn ${member.user.tag}`,
-                ephemeral: true
+                flags: MessageFlags.Ephemeral
             })
         }
     }

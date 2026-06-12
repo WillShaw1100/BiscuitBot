@@ -1,4 +1,4 @@
-const { PermissionsBitField, EmbedBuilder, GuildScheduledEventManager, GuildScheduledEventPrivacyLevel, GuildScheduledEventEntityType } = require("discord.js");
+const { PermissionsBitField, EmbedBuilder, GuildScheduledEventManager, GuildScheduledEventPrivacyLevel, GuildScheduledEventEntityType, MessageFlags } = require("discord.js");
 const moment = require('moment');
 const xpSchema = require("../models/xpSchema");
 const generateRankImage = require("../assets/generateRankCard");
@@ -23,12 +23,15 @@ const run = async (client, interaction) => {
       return console.log('Guild not found');
 
     //get_XP
-    xpSchema.findOne({ Guild: guildID, Member: memberID }, async (err, data) => {
-      if (!data) {
-        interaction.reply("This user has sent no messages or something went wrong.");
-      } else {
-        let member = data.Member;
-        let messages = data.Messages
+    const data = await xpSchema.findOne({ Guild: guildID, Member: memberID });
+    if (!data) {
+      interaction.reply({
+        content: "This user has sent no messages or something went wrong.",
+        flags: MessageFlags.Ephemeral
+      });
+    } else {
+      let member = data.Member;
+      let messages = data.Messages
         let xp = data.XP
         //let rank = data.Rank
 
@@ -51,19 +54,18 @@ const run = async (client, interaction) => {
         } else {
           interaction.reply({
             content: `Failed to generate rank card`,
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
           });
         }
         //  interaction.reply(`The member ${member} has sent ${messages} messages`)
-      }
-    });
+      };
 
 
   } catch (err) {
     console.error(err);
     interaction.reply({
       content: `Failed to perform this command. \n${err}`,
-      ephemeral: true
+      flags: MessageFlags.Ephemeral
     });
   }
 }

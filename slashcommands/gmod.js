@@ -1,4 +1,4 @@
-const { EmbedBuilder } = require("discord.js");
+const { EmbedBuilder, MessageFlags } = require("discord.js");
 const gmodSchema = require("../models/gmodSchema");
 
 const ITEMS_PER_PAGE = 10; // Adjust as needed
@@ -16,7 +16,7 @@ const run = async (client, interaction) => {
         if (!data || data.length === 0) {
             return interaction.reply({
                 content: 'No Garry\'s Mod stats found for this user.',
-                ephemeral: true
+                flags: MessageFlags.Ephemeral
             });
         }
 
@@ -43,7 +43,7 @@ const run = async (client, interaction) => {
         console.error(err);
         interaction.reply({
             content: `Failed to perform this command. \n${err}`,
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         });
     }
 };

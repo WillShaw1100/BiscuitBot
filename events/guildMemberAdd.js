@@ -5,11 +5,11 @@ const welcomeSchema = require("../models/welcomeSchema");
 module.exports = {
     name: "guildMemberAdd",
     run: async (client, member) => {
-        welcomeSchema.findOne({ Guild: member.guild.id }, async (err, data) => {
-            if(!data) return;
-            let channel = data.Channel;
-            let Msg = data.Msg || " ";
-            let Role = data.Role;
+        const data = await welcomeSchema.findOne({ Guild: member.guild.id });
+        if (!data) return;
+        let channel = data.Channel;
+        let Msg = data.Msg || " ";
+        let Role = data.Role;
 
             const {user, guild} = member;
             const welcomeChannel = member.guild.channels.cache.get(data.Channel);
@@ -29,6 +29,5 @@ module.exports = {
         });
         member.roles.add(data.Role);
 
-    })
-}
+    }
 }

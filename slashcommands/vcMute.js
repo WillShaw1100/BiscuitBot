@@ -1,4 +1,4 @@
-const { PermissionsBitField } = require("discord.js");
+const { PermissionsBitField, MessageFlags } = require("discord.js");
 
 const EXEMPT_USER_IDS = ['416673750965026817', '475462382089535498', '206068051295076352', '163506050249523201']; //max, marcus, will, bandit
 
@@ -10,7 +10,7 @@ const run = async (client, interaction) => {
         if (!member.voice.channel) {
             return interaction.reply({
                 content: 'You need to be in a voice channel to use this command.',
-                ephemeral: true
+                flags: MessageFlags.Ephemeral
             });
         }
 
@@ -32,7 +32,7 @@ const run = async (client, interaction) => {
         console.error(err);
         return interaction.editReply({
             content: 'Failed to perform this command',
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         });
     }
 };

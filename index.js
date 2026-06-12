@@ -71,7 +71,7 @@ module.exports = {
         targetMessage.edit("Please Select Your Role, Only Select **ONE** at a time")
         interaction.reply({
             content: `${role} has been removed`,
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
             defer: true
         })
     }else{
@@ -79,7 +79,7 @@ module.exports = {
         targetMessage.edit("Please Select Your Role, Only Select **ONE** at a time")
         interaction.reply({
             content: `${role} has been added`,
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
             defer: true
         })
     }

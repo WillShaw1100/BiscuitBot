@@ -59,14 +59,14 @@ const run = async (client, interaction) => {
 
         interaction.reply({
             content: 'Scores updated for all players.',
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         });
 
     } catch (err) {
         console.error('Error fetching or storing data:', err);
         interaction.reply({
             content: 'Failed to perform this command.',
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         });
     }
 };

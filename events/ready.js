@@ -4,7 +4,7 @@ require('dotenv').config();
 mongoose.set('strictQuery', true);
 
 module.exports = {
-    name: "ready",
+    name: "clientReady",
     run: async (bot) => {
         const options = [
             {
@@ -46,11 +46,7 @@ module.exports = {
 
         // Connect to MongoDB
         try {
-            await mongoose.connect(process.env.MONGODB || '', {
-                keepAlive: true,
-                useNewUrlParser: true,
-                useUnifiedTopology: true
-            });
+            await mongoose.connect(process.env.MONGODB);
             console.log("MongoDB connection successful.");
         } catch (error) {
             console.error("MongoDB connection error:", error);

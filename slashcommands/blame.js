@@ -1,4 +1,4 @@
-const { Channel, Message } = require("discord.js")
+const { Channel, Message, MessageFlags } = require("discord.js")
 
 const run = async (client, interaction) => {
     try{
@@ -9,7 +9,7 @@ const run = async (client, interaction) => {
         console.error(err)
         return interaction.reply({
             content: 'Failed to perform this command',
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         })
     }
 

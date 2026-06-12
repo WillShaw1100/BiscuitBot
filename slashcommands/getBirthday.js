@@ -13,7 +13,7 @@ const run = async (client, interaction) => {
             if (!data || data.length === 0) {
                 return interaction.reply({
                     content: 'This user has not set a birthday',
-                    ephemeral: true
+                    flags: MessageFlags.Ephemeral
                 });
             } else {
                 const today = new Date();
@@ -33,7 +33,7 @@ const run = async (client, interaction) => {
         console.error(err);
         return interaction.reply({
             content: 'Failed to retrieve the birthday.',
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
         });
     }
 };

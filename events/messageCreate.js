@@ -65,7 +65,7 @@ module.exports = {
             return message.reply("This command is only available to the Bot Management Team")
         }
         if (command.permissions && member.permissions.missing(command.permissions).length !== 0) {
-            return message.reply({ content: "You do not have permission for this command", ephemeral: true })
+            return message.reply({ content: "You do not have permission for this command", flags: MessageFlags.Ephemeral })
         }
 
         try {

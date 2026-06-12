@@ -10,13 +10,12 @@ module.exports = (bot, reload) => {
 
 function send_log(bot, guildId, embed) {
         const {client} = bot
-        logSchema.findOne({ Guild: guildId }, async (err, data) => {
-            if(!data) return;
-            const LogChannel = client.channels.cache.get(data.Channel);
-            embed.setTimestamp();
-            LogChannel.send({ embeds: [embed] });
-        });
-}
+        const data = logSchema.findOne({ Guild: guildId });
+        if (!data) return;
+        const LogChannel = client.channels.cache.get(data.Channel);
+        embed.setTimestamp();
+        LogChannel.send({ embeds: [embed] });
+};
 
 function events(bot){
         const {client} = bot

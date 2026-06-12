@@ -9,7 +9,7 @@ const run = async (client, interaction) => {
         if (!guildId) {
             return interaction.reply({
                 content: 'Guild ID not found',
-                ephemeral: true
+                flags: MessageFlags.Ephemeral
             });
         }
 
@@ -22,12 +22,12 @@ const run = async (client, interaction) => {
 
             interaction.reply({
                 content: `Your birthday has been set to ${date.toDateString()}.`,
-                ephemeral: true
+                flags: MessageFlags.Ephemeral
             });
         } else {
             interaction.reply({
                 content: `Something went wrong.`,
-                ephemeral: true
+                flags: MessageFlags.Ephemeral
             });
         }
 
@@ -35,7 +35,7 @@ const run = async (client, interaction) => {
         console.error(err);
         return interaction.reply({
             content: 'Failed to perform this command.',
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
         });
     }
 };

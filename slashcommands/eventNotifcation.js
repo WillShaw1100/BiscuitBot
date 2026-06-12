@@ -1,4 +1,4 @@
-const { EmbedBuilder, PermissionsBitField } = require("discord.js")
+const { EmbedBuilder, PermissionsBitField, MessageFlags } = require("discord.js")
 
 const run = async (client, interaction) => {
         const role = interaction.options.getRole('role');
@@ -11,7 +11,7 @@ const run = async (client, interaction) => {
         
         if(role.id == interaction.guild.id) { //disable @ everyone notifcations
             return interaction.reply({content: 'You can not send a notifcation to everyone, please select roles that apply to the event.',
-                ephemeral: true
+                flags: MessageFlags.Ephemeral
             })
         }
 
@@ -51,7 +51,7 @@ const run = async (client, interaction) => {
 
             await interaction.reply({
                 content: `Users with the role: ${role} have been notified!`,
-                ephemeral: true
+                flags: MessageFlags.Ephemeral
             })
 
             if(notifyLog) notifyLog.send(`A notification was sent to users with the role: ${role.name} by ${interaction?.member?.user.tag ?? "Unknown"}. Message: ${msgToSend}${eventURL ? ` Event Link: ${eventURL}` : ''}`);
@@ -62,7 +62,7 @@ const run = async (client, interaction) => {
         console.error(err)
         return interaction.reply({
             content:'Failed to perform this command',
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         })
     }
 

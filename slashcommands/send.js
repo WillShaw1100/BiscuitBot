@@ -1,4 +1,4 @@
-const { Channel, Message, ChannelType, PermissionsBitField} = require("discord.js")
+const { Channel, Message, ChannelType, PermissionsBitField, MessageFlags} = require("discord.js")
 
 const run = async (client, interaction) => {
     const args = (interaction.options.getString('text'))
@@ -11,14 +11,14 @@ const run = async (client, interaction) => {
         channel.send(args)
         interaction.reply({
             content: 'Message Sent!',
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         })
     }catch(err){
     if (err){
         console.error(err)
         return interaction.reply({
             content:'Failed to perform this command',
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         })
     }
 }

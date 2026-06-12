@@ -12,6 +12,7 @@ module.exports = (bot, reload) => {
 
     slashcommands.forEach(f => {
         if (reload) delete require.cache[require.resolve(`../slashcommands/${f}`)];
+        console.log(`Loading Slash Command: ${f}`);
         const slashcmd = require(`../slashcommands/${f}`);
         client.slashcommands.set(slashcmd.name, slashcmd);
     });

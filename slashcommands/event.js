@@ -1,4 +1,4 @@
-const { PermissionsBitField, ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, GuildScheduledEventManager, GuildScheduledEventPrivacyLevel, GuildScheduledEventEntityType } = require("discord.js");
+const { PermissionsBitField, ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, GuildScheduledEventManager, GuildScheduledEventPrivacyLevel, GuildScheduledEventEntityType, MessageFlags } = require("discord.js");
 const moment = require('moment');
 const eventChannelMainSchema = require("../models/eventChannelSchema");
 
@@ -19,7 +19,7 @@ const run = async (client, interaction) => {
     if (!dateMoment.isValid() || !timeMoment.isValid()) {
         return interaction.reply({
             content: 'Invalid date or time format. Please use the format "DD/MM/YYYY" for date and "HH:mm" for time.',
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         });
     }
 
@@ -46,7 +46,7 @@ const run = async (client, interaction) => {
         if (combinedDateTime <= currentTime) {
             interaction.reply({
                 content: 'The event start time is in the past or right now. Please choose a future time.',
-                ephemeral: true
+                flags: MessageFlags.Ephemeral
             });
             return;
         }
@@ -57,7 +57,7 @@ const run = async (client, interaction) => {
         if (combinedDateTime > fiveYearsFromNow) {
             interaction.reply({
                 content: 'The event start time is more than 5 years away. Please choose a date and time within the next 5 years.',
-                ephemeral: true
+                flags: MessageFlags.Ephemeral
             });
             return;
         }
@@ -69,27 +69,27 @@ const run = async (client, interaction) => {
             if (role.id == interaction.guild.id) { //disable @ everyone notifcations
                 return interaction.reply({
                     content: 'You can not send a notifcation to everyone, please select roles that apply to the event.',
-                    ephemeral: true
+                    flags: MessageFlags.Ephemeral
                 })
             }
 
         if (eventTitle.length > 99) {
             return interaction.reply({
                 content: 'Event title cannot be more than 99 characters.',
-                ephemeral: true
+                flags: MessageFlags.Ephemeral
             });
         }
         if (eventDescription.length > 600) {
             return interaction.reply({
                 content: 'Event description cannot be more than 600 characters.',
-                ephemeral: true
+                flags: MessageFlags.Ephemeral
             });
         }
         if (eventRequirements) {
             if (eventRequirements.length > 150) {
                 return interaction.reply({
                     content: 'Event requirements cannot be more than 150 characters.',
-                    ephemeral: true
+                    flags: MessageFlags.Ephemeral
                 });
             }
         }
@@ -98,12 +98,10 @@ const run = async (client, interaction) => {
         const guild = await client.guilds.fetch(guildID);
 
         //get_Event_MASTER_Notifcation_Channel
-        eventChannelMainSchema.findOne({ Guild: guildID }, async (err, data) => {
-            if (!data) return;
-            let channel = data.Channel;
-
-            eventMainChannel = interaction.guild.channels.cache.get(data.Channel);
-        });
+        const data = await eventChannelMainSchema.findOne({ Guild: guildID });
+        if (!data) return;
+        let channel = data.Channel;
+        eventMainChannel = interaction.guild.channels.cache.get(data.Channel);
 
         if (!guild)
             return console.log('Guild not found');
@@ -143,7 +141,7 @@ const run = async (client, interaction) => {
         if (eventMainChannel == null) {
             return interaction.reply({
                 content: `Event Created, but No event channel exists, please ask an Administrator to set this up to start sending event messages.`,
-                ephemeral: true
+                flags: MessageFlags.Ephemeral
             })
         }
         await eventMainChannel.send({
@@ -168,7 +166,7 @@ const run = async (client, interaction) => {
 
         interaction.reply({
             content: `Event created Successfully.`,
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         })
 
         //scheduledEndTime: null,
@@ -177,7 +175,7 @@ const run = async (client, interaction) => {
         console.error(err);
         interaction.reply({
             content: `Failed to perform this command. \n${err}`,
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         });
     }
 }

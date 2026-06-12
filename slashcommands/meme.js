@@ -1,4 +1,4 @@
-const { Channel, Message, EmbedBuilder } = require("discord.js")
+const { Channel, Message, EmbedBuilder, MessageFlags } = require("discord.js")
 const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args))
 //workaround to import node-fetch
 
@@ -58,7 +58,7 @@ const run = async (client, interaction) => {
         console.error(err)
         return interaction.reply({
             content: 'Failed to perform this command',
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         })
     }
 

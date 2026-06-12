@@ -5,7 +5,8 @@ const {
     EmbedBuilder,
     ActionRowBuilder,
     StringSelectMenuBuilder,
-    ComponentType
+    ComponentType,
+    MessageFlags
 } = require("discord.js")
 const { readdirSync } = require("fs");
 
@@ -103,7 +104,7 @@ const run = async (client, interaction) => {
             console.error(err)
             return interaction.reply({
                 content: 'Failed to perform this command',
-                ephemeral: true
+                flags: MessageFlags.Ephemeral
             })
         }
 

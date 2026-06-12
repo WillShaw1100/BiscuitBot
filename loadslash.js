@@ -27,7 +27,7 @@ client.loadSlashCommands(bot, false)
 //client.loadContextCommands= (bot, reload) => require("./handlers/contextCommands")(bot, reload)
 //client.loadContextCommands(bot, false)
 
-client.on("ready", async () => {
+client.on("clientReady", async () => {
     const guild = client.guilds.cache.get(guildID)
     if (!guild)
         return console.error("Target guild not found")

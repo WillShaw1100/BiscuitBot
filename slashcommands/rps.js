@@ -1,4 +1,4 @@
-const { Channel, Message } = require("discord.js")
+const { Channel, Message, MessageFlags } = require("discord.js")
 
 const run = async (client, interaction) => {
     let replies = ['rock', 'paper', 'scissors'];
@@ -8,7 +8,7 @@ const run = async (client, interaction) => {
     let guess = arr[0]
     if (!replies.includes(guess)) return interaction.reply({
         content: 'Please select Rock, Paper or Scissors',
-        ephemeral: true
+        flags: MessageFlags.Ephemeral
     })
     try {
         if (replies[result] === guess) {
@@ -28,7 +28,7 @@ const run = async (client, interaction) => {
             console.error(err)
             return interaction.reply({
                 content: 'Failed to perform this command',
-                ephemeral: true
+                flags: MessageFlags.Ephemeral
             })
         }
 

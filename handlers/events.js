@@ -39,8 +39,8 @@ function triggerEventHandler(bot, event, ...args){
 function initEvents(bot){
     const {client} = bot
 
-    client.on("ready", () => {
-        triggerEventHandler(bot, "ready")
+    client.on("clientReady", () => {
+        triggerEventHandler(bot, "clientReady")
         var stat = 'The Biscuit Mafia'
         client.user.setActivity(stat, {type: "WATCHING"});
     })

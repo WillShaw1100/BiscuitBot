@@ -1,4 +1,4 @@
-const { Channel, Message, EmbedBuilder, ChannelType, PermissionsBitField} = require("discord.js")
+const { Channel, Message, EmbedBuilder, ChannelType, PermissionsBitField, MessageFlags} = require("discord.js")
 const logSchema = require("../models/logSchema");
 
 const run = async (client, interaction) => {
@@ -7,12 +7,12 @@ const run = async (client, interaction) => {
     const logEmbed = new EmbedBuilder()
 
     try{
-        logSchema.findOne({ Guild: guildId}, async (err, data) => {
-            if (!data) {
-                await logSchema.create({
-                    Guild: guildId,
-                    Channel: logChannel.id
-                });
+        const data = await logSchema.findOne({ Guild: guildId});
+        if (!data) {
+            await logSchema.create({
+                Guild: guildId,
+                Channel: logChannel.id
+            });
 
                 logEmbed.setDescription("Data was succesfully sent to the database.")
                 .setColor("Green")
@@ -34,14 +34,13 @@ const run = async (client, interaction) => {
                 .setColor("Red")
                 .setTimestamp();
             }
-            return interaction.reply({ embeds: [logEmbed], ephemeral: true });
-        })
+            return interaction.reply({ embeds: [logEmbed], flags: MessageFlags.Ephemeral });
 
     }catch(err){
     if (err){
         return interaction.reply({
             content: 'Failed to perform this command',
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         })
     }
 

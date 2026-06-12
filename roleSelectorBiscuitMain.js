@@ -145,7 +145,7 @@ const roles6 = [
         emoji: '🔵'
     },
 ]
-client.on('ready', async (c) => {
+client.on('clientReady', async (c) => {
     try{
         const channel = await client.channels.cache.get('593092717458751542');
         if(!channel) return;

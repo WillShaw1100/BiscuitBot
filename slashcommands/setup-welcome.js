@@ -1,4 +1,4 @@
-const { Channel, Message, EmbedBuilder, ChannelType, SlashCommandBuilder, PermissionsBitField } = require("discord.js")
+const { Channel, Message, EmbedBuilder, ChannelType, SlashCommandBuilder, PermissionsBitField, MessageFlags } = require("discord.js")
 const welcomeSchema = require("../models/welcomeSchema");
 
 const run = async (client, interaction) => {
@@ -10,12 +10,12 @@ const run = async (client, interaction) => {
     const setupWelcomeEmbed = new EmbedBuilder()
 
     try{
-        welcomeSchema.findOne({ Guild: guildId}, async (err, data) => {
-            if(RoleId == guildId) return interaction.reply({ content: "The role cannot be `@everyone`", ephemeral: true });
-            if (!data) {
-                await welcomeSchema.create({
-                    Guild: guildId,
-                    Channel: welcomeChannel.id,
+        const data = await welcomeSchema.findOne({ Guild: guildId});
+        if(RoleId == guildId) return interaction.reply({ content: "The role cannot be `@everyone`", flags: MessageFlags.Ephemeral });
+        if (!data) {
+            await welcomeSchema.create({
+                Guild: guildId,
+                Channel: welcomeChannel.id,
                     Msg: welcomeMessage,
                     Role: RoleId.id
                 });
@@ -42,14 +42,13 @@ const run = async (client, interaction) => {
                 .setColor("Red")
                 .setTimestamp();
             }
-            return interaction.reply({ embeds: [setupWelcomeEmbed], ephemeral: true });
-        })
+            return interaction.reply({ embeds: [setupWelcomeEmbed], flags: MessageFlags.Ephemeral });
 
     }catch(err){
     if (err){
         return interaction.reply({
             content: 'Failed to perform this command',
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         })
     }
 

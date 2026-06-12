@@ -1,4 +1,4 @@
-const { Channel, Message, PermissionsBitField, EmbedBuilder } = require("discord.js")
+const { Channel, Message, PermissionsBitField, EmbedBuilder, MessageFlags } = require("discord.js")
 
 const run = async (client, interaction) => {
     const {channel, options} = interaction;
@@ -40,7 +40,7 @@ const run = async (client, interaction) => {
         console.error(err)
         return interaction.reply({
             content: 'Failed to perform this command',
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         })
     }
 

@@ -1,4 +1,4 @@
-const { Channel, Message, EmbedBuilder } = require("discord.js")
+const { Channel, Message, EmbedBuilder, MessageFlags } = require("discord.js")
 const moment = require('moment');
 
 const run = async (client, interaction) => {
@@ -44,7 +44,7 @@ const run = async (client, interaction) => {
        interaction.channel.send({ embeds: [embed] });
         interaction.reply({
             content: `Heres the user stats for ${person}`,
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         })
     });
     }catch(err){
@@ -52,7 +52,7 @@ const run = async (client, interaction) => {
         console.error(err)
         return interaction.reply({
             content:'Failed to perform this command',
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         })
     }
 

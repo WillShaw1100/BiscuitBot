@@ -1,4 +1,4 @@
-const { EmbedBuilder, ChannelType, GuildVerificationLevel, GuildExplicitContentFilter, GuildNSFWLevel } = require("discord.js");
+const { EmbedBuilder, ChannelType, GuildVerificationLevel, GuildExplicitContentFilter, GuildNSFWLevel, MessageFlags } = require("discord.js");
 
 const run = async (client, interaction) => {
     const { guild } = interaction;

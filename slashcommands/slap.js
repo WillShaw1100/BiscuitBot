@@ -1,4 +1,4 @@
-const { Channel, Message, AttachmentBuilder } = require("discord.js")
+const { Channel, Message, AttachmentBuilder, MessageFlags } = require("discord.js")
 
 const srando_imgs = [
     'https://i.giphy.com/media/3XlEk2RxPS1m8/giphy.gif',
@@ -28,14 +28,14 @@ const run = async (client, interaction) => {
         interaction.channel.send(srando_imgs[Math.floor(Math.random() * srando_imgs.length)])
         interaction.reply({
             content: 'Message Sent!',
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         })
     }catch(err){
     if (err){
         console.error(err)
         return interaction.reply({
             content: 'Failed to perform this command',
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         })
     }
 

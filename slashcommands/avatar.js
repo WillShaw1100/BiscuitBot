@@ -1,4 +1,4 @@
-const { Channel, Message, EmbedBuilder } = require("discord.js")
+const { Channel, Message, EmbedBuilder, MessageFlags } = require("discord.js")
 
 const run = async (client, interaction) => {
     const avatarUser = interaction.options.getUser('user')
@@ -15,7 +15,7 @@ const run = async (client, interaction) => {
         console.error(err)
         return interaction.reply({
             content:'Failed to perform this command',
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         })
     }
 

@@ -12,10 +12,10 @@ module.exports = {
 			if (!slashcmd) return interaction.reply("Invalid Slash Command")
 
 			if (slashcmd.perm && !interaction.member.permissions.has(slashcmd.perm))
-				return interaction.reply({ content: "You do not have permission for this command", ephemeral: true })
+				return interaction.reply({ content: "You do not have permission for this command", flags: MessageFlags.Ephemeral })
 
 			if (slashcmd.devOnly && !owners.includes(interaction.member.id))
-				return interaction.reply({ content: "You do not have permission for this command. This command is only available to the Bot Management Team", ephemeral: true })
+				return interaction.reply({ content: "You do not have permission for this command. This command is only available to the Bot Management Team", flags: MessageFlags.Ephemeral })
 
 
 
@@ -27,14 +27,14 @@ module.exports = {
 
 			// check permissions
 			if (slashcmd.perms && !interaction.member.permissions.has(slashcmd.perms))
-				return interaction.reply({ content: "You do not have permission for this command", ephemeral: true })
+				return interaction.reply({ content: "You do not have permission for this command", flags: MessageFlags.Ephemeral })
 
 			slashcmd.run(bot, interaction)
 		}
 		if (interaction.isButton()) {
 			try {
 				if (!interaction.inGuild()) return interaction.reply("This can only be used in a server")
-				await interaction.deferReply({ ephemeral: true });
+				await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 				const role = interaction.guild.roles.cache.get(interaction.customId);
 				if (!role) {
 					interaction.editReply('No role found.')
@@ -56,7 +56,7 @@ module.exports = {
 		if (interaction.isUserContextMenuCommand()) {
 			try {
 				if (!interaction.inGuild()) return interaction.reply("This can only be used in a server");
-				await interaction.deferReply({ ephemeral: true });
+				await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 				const command = bot.contextcommands.get(interaction.commandName);
 				if (command) command.run(bot, interaction);
 
@@ -72,7 +72,7 @@ module.exports = {
 		if (interaction.type == InteractionType.ModalSubmit) {
 
 			if (!interaction.inGuild()) return interaction.reply("This can only be used in a server");
-			//await interaction.deferReply({ ephemeral: true });
+			//await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 			const { modals } = bot;
 			const { customId } = interaction;
 			const modal = modals.get(customId);

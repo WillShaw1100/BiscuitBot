@@ -18,13 +18,13 @@ const run = async (client, interaction) => {
         if(!targetMessage)
             return interaction.reply({
                 content: "Unknown Message ID",
-                ephemeral: true
+                flags: MessageFlags.Ephemeral
             })
 
         if(targetMessage.author.id !== client.user?.id){
             return interaction.reply({
                 content: `Please provide a message ID that was sent from <@${client.user?.id}>`,
-                ephemeral: true
+                flags: MessageFlags.Ephemeral
         })
     }
 
@@ -44,7 +44,7 @@ const run = async (client, interaction) => {
             if(o.value === option[0].value){
                 return interaction.reply({
                     content: `<@&${o.value}> is already part of this menu.`,
-                    ephemeral: true,
+                    flags: MessageFlags.Ephemeral,
                     allowedMentions: {
                         roles: []
                     }
@@ -68,7 +68,7 @@ const run = async (client, interaction) => {
     })
     return interaction.reply({
             content: `Added <@&${role.id}> to the auto roles menu.`,
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
             allowedMentions: {
                 roles: []
             }
@@ -77,7 +77,7 @@ const run = async (client, interaction) => {
     }catch(err){
     if (err){
         console.error(err)
-        return interaction.reply({content: 'Failed to perform this command', ephemeral: true})
+        return interaction.reply({content: 'Failed to perform this command', flags: MessageFlags.Ephemeral})
     }
 
 }

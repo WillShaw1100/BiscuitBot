@@ -1,4 +1,4 @@
-const {PermissionsBitField} = require("discord.js")
+const {PermissionsBitField, MessageFlags} = require("discord.js")
 
 const durations = [
 	{ name: "60 seconds", value: 60 * 1000 },
@@ -18,14 +18,14 @@ const run = async (client, interaction) => {
     if (!member) return interaction.reply("Invalid member")
     if(member.user.id === client.user.id)return interaction.reply({
         content: "You can't timeout this person.",
-        ephemeral: true
+        flags: MessageFlags.Ephemeral
     })
     const roleId = "523834204610494475" //Staff Role
 	const memberRoles = member.roles;
 	const isStaff = memberRoles.cache.has(roleId)
     if(isStaff)return interaction.reply({
         content: "You can't timeout this person.",
-        ephemeral: true
+        flags: MessageFlags.Ephemeral
     })
 
     try {
@@ -37,7 +37,7 @@ const run = async (client, interaction) => {
             console.error(err)
             return interaction.reply({
                 content: `Failed to timeout ${member.user.tag}`,
-                ephemeral: true
+                flags: MessageFlags.Ephemeral
             })
         }
     }

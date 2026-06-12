@@ -1,4 +1,4 @@
-const { Channel, Message, EmbedBuilder } = require("discord.js")
+const { Channel, Message, EmbedBuilder, MessageFlags } = require("discord.js")
 
 const run = async (client, interaction) => {
 
@@ -12,7 +12,7 @@ const run = async (client, interaction) => {
         if(suggestlog) suggestlog.send(`${text} \n was suggested by ${interaction.member.user.tag}`);
         interaction.reply({
             content: `${text} has been suggested for addition. Thankyou!`,
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         })
 
     }
@@ -21,7 +21,7 @@ const run = async (client, interaction) => {
             console.error(err)
             return interaction.reply({
                 content: `Something went wrong, if this continues please get in touch with the Staff.`,
-                ephemeral: true
+                flags: MessageFlags.Ephemeral
             })
         }
     }
