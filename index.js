@@ -9,7 +9,7 @@ const config = require('./config');
 
 const client = new Discord.Client({
     intents: 3276799,//[Object.keys(Discord.GatewayIntentBits)],
-    partials: [Object.keys(Discord.Partials)],
+    partials: Object.values(Discord.Partials),
 });
 
 let bot = {
