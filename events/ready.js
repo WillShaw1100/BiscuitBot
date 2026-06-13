@@ -76,5 +76,8 @@ module.exports = {
         setInterval(setRandomPresence, 10 * 1000);
 
         console.log("Logged in as " + bot.client.user.tag + "\nServing " + bot.client.guilds.cache.size + " Servers");
+        const guild  = await bot.client.guilds.fetch(process.env.MAIN_GUILD_ID);
+        await guild.members.fetch();
+        console.log(`Fetched ${guild.members.cache.size} members from the main guild.`);
     }
 };

@@ -1,0 +1,271 @@
+:root {
+    --bg:#0b0b10;
+    --card:#1e1f26;
+    --border:#2b2c36;
+    --primary:#5865F2;
+    --primary-hover:#4752C4;
+    --text:#e5e7eb;
+    --muted:#9ca3af;
+}
+
+body {
+    font-family: Inter, Arial;
+    background: var(--bg);
+    color: var(--text);
+    margin: 0;
+    display: flex;
+}
+
+/* SIDEBAR */
+.sidebar {
+    width: 300px;
+    background: #14141a;
+    border-right: 1px solid var(--border);
+    padding: 20px;
+    height: 100vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.sidebar h2 {
+    margin-top: 0;
+}
+
+.leader-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 12px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.leader-card img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.crown {
+    font-size: 24px;
+}
+
+/* MAIN */
+.main {
+    flex: 1;
+    padding: 30px;
+    overflow-y: auto;
+}
+
+.header {
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-bottom:20px;
+}
+
+.header img {
+    width:60px;
+    height:60px;
+    filter: drop-shadow(0 0 6px rgba(255,255,255,0.3));
+}
+
+input {
+    padding:10px;
+    width:350px;
+    border-radius:6px;
+    border:1px solid var(--border);
+    background:#111827;
+    color:var(--text);
+}
+
+.results {
+    max-width:350px;
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:6px;
+    margin-top:6px;
+    max-height:260px;
+    overflow-y:auto;
+}
+
+.result-item {
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:6px 10px;
+    cursor:pointer;
+    font-size:14px;
+}
+
+.result-item:hover {
+    background:#111827;
+}
+
+.result-item img {
+    width:28px;
+    height:28px;
+    border-radius:50%;
+}
+
+.player {
+    background:var(--card);
+    border:1px solid var(--border);
+    padding:15px;
+    border-radius:10px;
+    margin-bottom:12px;
+    display:flex;
+    gap:15px;
+    align-items:flex-start;
+    cursor:pointer;
+}
+
+.player img {
+    width:42px;
+    height:42px;
+    border-radius:50%;
+}
+
+.small {
+    font-size:12px;
+    color:var(--muted);
+}
+
+.games {
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+}
+
+.game {
+    background:#111827;
+    border:1px solid var(--border);
+    padding:8px;
+    border-radius:6px;
+    width:95px;
+    text-align:center;
+    position:relative;
+    font-size:13px;
+}
+
+.medal {
+    position:absolute;
+    top:4px;
+    right:4px;
+    font-size:22px;
+    filter: drop-shadow(0 0 4px rgba(255,255,255,0.4));
+}
+
+button {
+    padding:8px 12px;
+    border:none;
+    border-radius:6px;
+    background:var(--primary);
+    color:white;
+    cursor:pointer;
+    margin-bottom:10px;
+}
+
+button:hover {
+    background:var(--primary-hover);
+}
+
+/* TABS */
+.tabs {
+    display:flex;
+    gap:10px;
+    margin:20px 0;
+    flex-wrap:wrap;
+}
+
+.tab {
+    padding:8px 14px;
+    background:#1f1f27;
+    border:1px solid var(--border);
+    border-radius:6px;
+    cursor:pointer;
+    font-size:14px;
+}
+
+.tab.active {
+    background:var(--primary);
+}
+
+/* TABLE */
+table {
+    width:100%;
+    border-collapse:collapse;
+    margin-top:10px;
+}
+
+th, td {
+    padding:10px;
+    border-bottom:1px solid var(--border);
+    text-align:left;
+}
+
+/* MODAL */
+.modal-bg {
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.7);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    z-index:50;
+}
+
+.modal {
+    background:var(--card);
+    padding:20px;
+    border-radius:10px;
+    width:520px;
+    max-height:80vh;
+    overflow:auto;
+}
+
+.row {
+    display:grid;
+    grid-template-columns: 40px 40px 1fr 100px;
+    align-items:center;
+    gap:10px;
+    padding:10px 0;
+    border-bottom:1px solid var(--border);
+}
+
+.row img {
+    width:34px;
+    height:34px;
+    border-radius:50%;
+}
+
+.warn {
+    color:#f87171;
+    font-size:13px;
+    margin-bottom:10px;
+}
+
+.na {
+    margin-top:6px;
+    font-size:16px;
+    font-weight:bold;
+    color:#888;
+}
+
+/* PROFILE PANEL */
+#profilePanel {
+    position: fixed;
+    top: 0;
+    right: -420px;
+    width: 400px;
+    height: 100vh;
+    background: #1a1a22;
+    border-left: 1px solid var(--border);
+    padding: 20px;
+    transition: right 0.35s ease;
+    overflow-y: auto;
+    z-index: 100;
+}

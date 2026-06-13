@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TTT Scoreboard Management</title>
+
+    <link rel="icon" href="/assets/TTT_Logo.png">
+    <link rel="stylesheet" href="../style/manage-scoreboard.css">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <h2>Stat Leaders</h2>
+
+        <div id="bestPlayer"></div>
+        <div id="topThree"></div>
+
+        <canvas id="statsChart" height="220"></canvas>
+
+        <div id="heatmap"></div>
+
+        <button onclick="openSeasonReset()" style="margin-top:10px;width:100%;">Reset Season</button>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main">
+
+        <div class="header">
+            <img src="/assets/TTT_Logo.png">
+            <h1>TTT Scoreboard Management</h1>
+        </div>
+
+        <!-- SEARCH -->
+        <input id="search" placeholder="Search users..." oninput="searchUsers()">
+        <div id="results" class="results"></div>
+
+        <!-- ACTION BUTTONS -->
+        <div style="display:flex; gap:10px; margin:20px 0;">
+            <button onclick="openModal()">Add Game</button>
+            <button onclick="exportExcel()">Export</button>
+        </div>
+
+        <!-- SEASON TABS -->
+        <div id="seasonTabs" class="tabs"></div>
+
+        <!-- GAME TABS -->
+        <div id="gameTabs" class="tabs"></div>
+
+        <!-- GAME TABLE -->
+        <div id="gameTable"></div>
+
+        <!-- PLAYER LIST -->
+        <h3>Players</h3>
+        <div id="players"></div>
+
+    </div>
+
+    <!-- ADD GAME MODAL -->
+    <div class="modal-bg" id="modal">
+        <div class="modal">
+            <h3>Add Game</h3>
+
+            <div class="warn">
+                ⚠ Add new players BEFORE selecting participants.
+            </div>
+
+            <div id="modalPlayers"></div>
+
+            <button onclick="submitGame()">Save Game</button>
+            <button onclick="closeModal()">Close</button>
+        </div>
+    </div>
+
+    <!-- SEASON RESET MODAL -->
+    <div id="seasonModal" class="modal-bg">
+        <div class="modal">
+            <h3>Reset Season</h3>
+            <p>This will archive the current season and start fresh.</p>
+            <button onclick="confirmSeasonReset()">Confirm</button>
+            <button onclick="closeSeasonReset()">Cancel</button>
+        </div>
+    </div>
+
+    <!-- PROFILE PANEL -->
+    <div id="profilePanel"></div>
+
+    <!-- MAIN SCRIPT -->
+    <script src="../scripts/manage-scoreboard.js"></script>
+
+</body>
+</html>

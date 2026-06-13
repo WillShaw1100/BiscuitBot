@@ -58,6 +58,10 @@ function initEvents(bot){
         let eventFile = require(`../events/interactionCreate.js`);
         eventFile.run(client, member);
     })
+    client.on("userUpdate", (...args) =>
+        client.events.get("userUpdate").execute(...args)
+);
+
 
     /*client.on('guildMemberLeave', member => {
         let eventFile = require(`../events/guildMemberLeave.js`);

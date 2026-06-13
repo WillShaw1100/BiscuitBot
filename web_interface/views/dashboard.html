@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biscuit Bot Dashboard</title>
+
+    <link rel="stylesheet" href="/style/dashboard.css">
+</head>
+
+<body>
+
+    <div class="card">
+        <img id="avatar" class="avatar" src="" alt="Avatar">
+
+        <h1 id="username">Welcome</h1>
+
+        <div class="info">
+            <div>
+                <strong>ID:</strong>
+                <span id="userid"></span>
+            </div>
+
+            <div id="roleTag" class="tag"></div>
+        </div>
+
+        <a href="/manage-scoreboard" class="btn" id="manageBtn">
+            Manage Scoreboard
+        </a>
+    </div>
+
+    <script>
+        window.user = {
+            username: "{{username}}",
+            id: "{{id}}",
+            avatar: "{{avatar}}",
+            canEdit: "{{canEdit}}"
+        };
+    </script>
+
+    <script src="/scripts/dashboard.js"></script>
+
+</body>
+
+</html>

@@ -1,4 +1,5 @@
 const axios = require('axios');
+const client = require('../../core/client');
 const querystring = require('querystring');
 require('dotenv').config();
 
@@ -27,23 +28,40 @@ const callback = async (req, res) => {
             grant_type: 'authorization_code',
             code,
             redirect_uri: REDIRECT_URI,
-            scope: 'identify guilds guilds.members.read'
         };
 
-        const tokenResponse = await axios.post('https://discord.com/api/oauth2/token', querystring.stringify(tokenParams), {
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            }
-        });
+        const tokenResponse = await axios.post(
+            'https://discord.com/api/oauth2/token',
+            querystring.stringify(tokenParams),
+            { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
+        );
 
-        const tokenData = tokenResponse.data;
-        const accessToken = tokenData.access_token;
+        const accessToken = tokenResponse.data.access_token;
 
-        // Save the access token to sessionStorage
+        // Fetch Discord user
+        const userResponse = await axios.get(
+            'https://discord.com/api/users/@me',
+            { headers: { Authorization: `Bearer ${accessToken}` } }
+        );
+
+        req.session.user = userResponse.data;
         req.session.accessToken = accessToken;
 
-        // Redirect to guilds.html
-        res.redirect('/guilds.html');
+        // Ensure bot is ready
+        if (!client.isReady()) {
+            console.log("Discord client not ready yet");
+            return res.status(503).send("Bot is still starting up");
+        }
+
+        // Fetch guild + member
+        const guild = await client.guilds.fetch(process.env.MAIN_GUILD_ID);
+        const member = await guild.members.fetch(req.session.user.id);
+
+        // Check role
+        req.session.canEdit = member.roles.cache.has(process.env.SCOREBOARD_ROLE);
+
+        res.redirect('/dashboard');
+
     } catch (error) {
         console.error('Error during token exchange:', error);
         res.status(500).json({ error: 'Failed to exchange code for access token' });

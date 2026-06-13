@@ -5,11 +5,71 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Biscuit Bot Discord OAuth2</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #0b0b10;
+            color: #e5e7eb;
+            font-family: Inter, Arial, sans-serif;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            text-align: center;
+            background: #1e1f26;
+            padding: 40px 50px;
+            border-radius: 14px;
+            border: 1px solid #2b2c36;
+            box-shadow: 0 0 25px rgba(0,0,0,0.4);
+        }
+
+        h1 {
+            margin-bottom: 25px;
+            font-size: 28px;
+            font-weight: 600;
+        }
+
+        .discord-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 26px;
+            background: #5865F2;
+            color: white;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: 0.2s;
+        }
+
+        .discord-btn:hover {
+            background: #4752C4;
+        }
+
+        .discord-btn img {
+            width: 28px;
+            height: 28px;
+        }
+    </style>
 </head>
 
 <body>
-    <h1>Welcome to Discord OAuth2</h1>
-    <a href="/auth/login">Login with Discord</a>
+
+    <div class="container">
+        <h1>Welcome to Biscuit Bot</h1>
+
+        <a href="/auth/login" class="discord-btn">
+            <img src="/assets/discord-logo.png" alt="Discord Logo">
+            Login with Discord
+        </a>
+    </div>
+
 </body>
 
 </html>
