@@ -1,5 +1,6 @@
 const { Message, EmbedBuilder } = require("discord.js");
 const logSchema = require("../models/logSchema");
+const client = require("../core/client");
 
 module.exports = (bot, reload) => {
     const {client} = bot
@@ -8,20 +9,25 @@ module.exports = (bot, reload) => {
     events(bot);
 }
 
-function send_log(bot, guildId, embed) {
-        const {client} = bot
-        const data = logSchema.findOne({ Guild: guildId });
-        if (!data) return;
-        const LogChannel = client.channels.cache.get(data.Channel);
-        embed.setTimestamp();
-        LogChannel.send({ embeds: [embed] });
-};
+async function send_log(bot, guildId, embed) {
+    const { client } = bot;
+
+    const data = await logSchema.findOne({ Guild: guildId });
+    if (!data) return;
+
+    const LogChannel = client.channels.cache.get(data.Channel);
+    if (!LogChannel) return;
+
+    embed.setTimestamp();
+    LogChannel.send({ embeds: [embed] });
+}
+
 
 function events(bot){
         const {client} = bot
 
         client.on("messageDelete", function (message) {
-            if (message.author.bot) return;
+            if (!message || !message.author || message.author.bot) return;
     
             const embed = new EmbedBuilder()
                 .setTitle('Message Deleted')
