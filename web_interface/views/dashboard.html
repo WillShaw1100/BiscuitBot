@@ -6,56 +6,92 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Biscuit Bot Dashboard</title>
 
+    <link rel="icon" href="/assets/biscuit_mafia-logo.png">
     <link rel="stylesheet" href="/style/dashboard.css">
 </head>
 
 <body>
 
-    <div class="card">
+<div class="layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
         <img id="avatar" class="avatar" src="" alt="Avatar">
 
-        <h1 id="username">Welcome</h1>
+        <h2 id="username" class="username">Welcome</h2>
+        <p class="userid">ID: <span id="userid"></span></p>
 
-        <div class="info">
-    <div>
-        <strong>ID:</strong>
-        <span id="userid"></span>
-    </div>
+        <!-- Normal Select -->
+        <label><strong>Select Guild:</strong></label>
+        <select id="guildSelect" class="guild-dropdown"></select>
 
-    <div id="roleTag" class="tag"></div>
-    </div>
+        <!-- Permissions -->
+        <div class="perm-section">
+            <h3>Scoreboard</h3>
+            <ul id="permScoreboard" class="perm-list"></ul>
+        </div>
 
-    <ul id="permList" class="perm-list"></ul>
+        <div class="perm-section">
+            <h3>Moderation</h3>
+            <ul id="permModeration" class="perm-list"></ul>
+        </div>
 
-    <label for="guildSelect"><strong>Select Guild:</strong></label>
-    <select id="guildSelect" class="guild-dropdown"></select>
+        <div class="perm-section">
+            <h3>Admin</h3>
+            <ul id="permAdmin" class="perm-list"></ul>
+        </div>
 
-        <a href="/scoreboard/manage-scoreboard" class="btn" id="manageBtn">
-            Manage Scoreboard
-        </a>
-        <a href="/permissions/manage-permissions" class="btn" id="managePermsBtn" style="display:none;">
-        Manage Permissions
-        </a>
-    </div>
+    </aside>
 
-    <script>
-        window.user = {
-            username: "{{username}}",
-            id: "{{id}}",
-            avatar: "{{avatar}}",
-            canViewManage: "{{canViewManage}}",
-            canAddScores: "{{canAddScores}}",
-            canResetSeason: "{{canResetSeason}}",
-            canEditHistorical: "{{canEditHistorical}}",
-            canManagePermissions: "{{canManagePermissions}}",
-            guilds: {{guilds}},
-            selectedGuild: "{{selectedGuild}}"
-        };
-    </script>
+    <!-- MAIN PANEL -->
+    <main class="main-panel">
 
-    <script type="module" src="/scripts/pages/dashboard.js"></script>
+        <h1 class="panel-title">Quick Actions</h1>
 
+        <div class="quick-actions">
+
+            <div class="action-card" id="actionScoreboard" style="display:none;">
+                <div class="action-icon">📊</div>
+                <div class="action-title">Manage Scoreboard</div>
+                <div class="action-desc">Add scores, reset seasons, view stats</div>
+            </div>
+
+            <div class="action-card" id="actionPermissions" style="display:none;">
+                <div class="action-icon">🛡️</div>
+                <div class="action-title">Manage Permissions</div>
+                <div class="action-desc">Control access</div>
+            </div>
+
+            <div class="action-card" id="actionBans" style="display:none;">
+                <div class="action-icon">🔨</div>
+                <div class="action-title">View Bans</div>
+                <div class="action-desc">See banned users</div>
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+<script>
+    window.user = {
+        username: "{{username}}",
+        id: "{{id}}",
+        avatar: "{{avatar}}",
+        canViewManage: "{{canViewManage}}",
+        canAddScores: "{{canAddScores}}",
+        canResetSeason: "{{canResetSeason}}",
+        canEditHistorical: "{{canEditHistorical}}",
+        canManagePermissions: "{{canManagePermissions}}",
+        canViewBans: "{{canViewBans}}",
+        guilds: {{guilds}},
+        selectedGuild: "{{selectedGuild}}"
+    };
+</script>
+
+<script type="module" src="/scripts/pages/dashboard.js"></script>
 
 </body>
-
 </html>

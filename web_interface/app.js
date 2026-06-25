@@ -31,11 +31,13 @@ const authRoutes = require('./routes/auth.routes');
 const dashboardRoutes = require('./routes/dashboard.routes');
 const scoreboardRoutes = require('./routes/scoreboard.routes');
 const permissionsRoutes = require('./routes/permissions.routes');
+const bansRoutes = require('./routes/bans.routes');
 
 app.use('/auth', authRoutes);
 app.use('/dashboard', dashboardRoutes);
 app.use('/scoreboard', scoreboardRoutes);
 app.use('/permissions', permissionsRoutes);
+app.use('/bans', bansRoutes);
 
 // Root → Dashboard if logged in
 app.get('/', (req, res) => {

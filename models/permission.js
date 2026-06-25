@@ -8,6 +8,7 @@ const PermissionSchema = new mongoose.Schema({
     canResetSeason: { type: Boolean, default: false },
     canEditHistorical: { type: Boolean, default: false },
     canManagePermissions: { type: Boolean, default: false },
+    canViewBans: { type: Boolean, default: false }
 }, { timestamps: true });
 
 PermissionSchema.index({ guildId: 1, userId: 1 }, { unique: true });

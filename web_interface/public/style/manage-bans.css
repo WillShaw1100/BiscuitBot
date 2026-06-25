@@ -1,0 +1,41 @@
+@import url('/style/manage-permissions.css');
+
+/* BAN LIST ITEMS */
+.ban-item {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    background: var(--surface-soft);
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(255,255,255,0.06);
+    padding: 14px;
+    margin-bottom: 12px;
+    transition: 0.18s;
+}
+
+.ban-item:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-soft);
+}
+
+.ban-item img {
+    width: 46px;
+    height: 46px;
+    border-radius: 999px;
+    object-fit: cover;
+}
+
+.ban-info {
+    flex: 1;
+}
+
+.ban-info b {
+    display: block;
+    margin-bottom: 4px;
+}
+
+.ban-info .reason {
+    margin-top: 4px;
+    font-size: 13px;
+    color: var(--muted);
+}

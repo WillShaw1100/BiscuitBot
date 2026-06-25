@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Bans</title>
+
+    <link rel="icon" href="/assets/biscuit_mafia-logo.png">
+    <link rel="stylesheet" href="/style/manage-bans.css">
+</head>
+
+<body>
+
+<div class="app-shell">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <img id="guildIcon" class="sidebar-logo" src="">
+            <div>
+                <div class="sidebar-title">Biscuit Mafia</div>
+                <div class="sidebar-subtitle">Ban Manager</div>
+            </div>
+        </div>
+
+    <div class="guild-card">
+        <div class="guild-label">Guild</div>
+        <div style="display:flex; align-items:center; gap:10px;">
+            <div class="guild-name" id="guildName"></div>
+        </div>
+    </div>
+
+
+        <button onclick="window.location='/dashboard'" class="ghost">← Back to Dashboard</button>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+
+        <!-- HERO -->
+        <section class="hero">
+            <div class="hero-left">
+                <div class="hero-title-row">
+                    <h1>Banned Users</h1>
+                </div>
+                <p class="hero-subtitle">View and manage server bans.</p>
+            </div>
+        </section>
+
+        <!-- BAN LIST -->
+        <section class="section-card">
+            <div class="section-header">
+                <h3>Ban List</h3>
+                <span class="section-subtitle">Fetched directly from Discord</span>
+            </div>
+
+            <div id="banList"></div>
+        </section>
+
+    </main>
+
+</div>
+
+<script>
+    window.guilds = {{guilds}};
+    window.selectedGuild = "{{selectedGuild}}";
+</script>
+
+<script type="module" src="/scripts/pages/manage-bans.js"></script>
+
+</body>
+</html>

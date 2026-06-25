@@ -9,7 +9,8 @@ exports.getUserPermissions = async (guildId, userId) => {
         canAddScores: perm?.canAddScores || false,
         canResetSeason: perm?.canResetSeason || false,
         canEditHistorical: perm?.canEditHistorical || false,
-        canManagePermissions: perm?.canManagePermissions || false
+        canManagePermissions: perm?.canManagePermissions || false,
+        canViewBans: perm?.canViewBans || false
     };
 
     // Cannot remove the canManagePermissions permission from owners

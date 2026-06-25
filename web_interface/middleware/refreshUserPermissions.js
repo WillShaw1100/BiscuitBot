@@ -16,7 +16,8 @@ module.exports = asyncHandler(async (req, res, next) => {
         canAddScores: false,
         canResetSeason: false,
         canEditHistorical: false,
-        canManagePermissions: false
+        canManagePermissions: false,
+        canViewBans: false
     };
 
     const merged = { ...defaults, ...(perm?.toObject() || {}) };

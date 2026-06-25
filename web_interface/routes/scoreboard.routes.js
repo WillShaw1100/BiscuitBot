@@ -11,7 +11,7 @@ const scoreboardController = require('../controllers/scoreboard.controller');
 router.use(ensureAuthenticated, refreshUserPermissions);
 
 // Public scoreboard (view only)
-router.get('/', scoreboardController.getScoreboard);
+router.get('/', requirePermission('canViewManage'),scoreboardController.getScoreboard);
 
 // List seasons
 router.get(
@@ -63,7 +63,7 @@ router.get(
 
 
 
-router.get("/manage-scoreboard", (req, res) => {
+router.get("/manage-scoreboard", requirePermission('canViewManage'), (req, res) => {
     const fs = require("fs");
     const path = require("path");
 

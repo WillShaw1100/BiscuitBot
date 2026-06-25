@@ -28,7 +28,8 @@ exports.renderDashboard = asyncHandler(async (req, res) => {
         .replace(/{{canAddScores}}/g, String(req.session.permissions.canAddScores))
         .replace(/{{canResetSeason}}/g, String(req.session.permissions.canResetSeason))
         .replace(/{{canEditHistorical}}/g, String(req.session.permissions.canEditHistorical))
-        .replace(/{{canManagePermissions}}/g, String(req.session.permissions.canManagePermissions));
+        .replace(/{{canManagePermissions}}/g, String(req.session.permissions.canManagePermissions))
+        .replace(/{{canViewBans}}/g, String(req.session.permissions.canViewBans));
 
     res.send(html);
 });

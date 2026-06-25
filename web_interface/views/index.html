@@ -6,12 +6,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Biscuit Bot - Discord</title>
 
+    <link rel="icon" href="/assets/biscuit_mafia-logo.png">
+
     <style>
+        :root {
+            --bg: #0b0d10;
+            --surface: #1a1d25;
+            --surface-alt: #20232e;
+            --border: #2b2f3a;
+            --text: #e5e7eb;
+            --muted: #9ca3af;
+            --primary: #5865F2;
+            --primary-hover: #4752C4;
+            --radius: 14px;
+        }
+
         body {
             margin: 0;
             padding: 0;
-            background: #0b0b10;
-            color: #e5e7eb;
+            background:
+                radial-gradient(circle at top left, #1f2748 0%, transparent 35%),
+                radial-gradient(circle at bottom right, #20263f 0%, transparent 40%),
+                var(--bg);
+            color: var(--text);
             font-family: Inter, Arial, sans-serif;
             height: 100vh;
             display: flex;
@@ -21,54 +38,84 @@
 
         .container {
             text-align: center;
-            background: #1e1f26;
-            padding: 40px 50px;
-            border-radius: 14px;
-            border: 1px solid #2b2c36;
-            box-shadow: 0 0 25px rgba(0,0,0,0.4);
+            background: var(--surface);
+            padding: 45px 55px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            box-shadow: 0 18px 40px rgba(0,0,0,0.45);
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         h1 {
-            margin-bottom: 25px;
-            font-size: 28px;
-            font-weight: 600;
+            margin-bottom: 12px;
+            font-size: 30px;
+            font-weight: 700;
+        }
+
+        p {
+            margin-top: 0;
+            margin-bottom: 28px;
+            color: var(--muted);
+            font-size: 15px;
         }
 
         .discord-btn {
             display: inline-flex;
             align-items: center;
             gap: 12px;
-            padding: 14px 26px;
-            background: #5865F2;
+            padding: 14px 28px;
+            background: var(--primary);
             color: white;
-            border-radius: 8px;
+            border-radius: 10px;
             font-size: 18px;
             font-weight: 600;
             text-decoration: none;
             transition: 0.2s;
+            box-shadow: 0 4px 14px rgba(88,101,242,0.25);
         }
 
         .discord-btn:hover {
-            background: #4752C4;
+            background: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(88,101,242,0.35);
         }
 
         .discord-btn img {
-            width: 28px;
-            height: 28px;
+            width: 60px;
+            height: 60px;
         }
+        .logo {
+            width: 120px;
+            height: 120px;
+            object-fit: contain;
+            margin-bottom: 18px;
+            opacity: 0.95;
+            filter: drop-shadow(0 4px 10px rgba(0,0,0,0.4));
+        }
+
     </style>
 </head>
 
 <body>
 
     <div class="container">
-        <h1>Welcome to Biscuit Bot</h1>
 
-        <a href="/auth/login" class="discord-btn">
-            <img src="/assets/discord-logo.png" alt="Discord Logo">
-            Login with Discord
-        </a>
-    </div>
+    <img src="/assets/biscuit_mafia-logo.png" alt="Biscuit Mafia Logo" class="logo">
+
+    <h1>Biscuit Bot</h1>
+    <p>Contact williamshaw on Discord for more information.</p>
+
+    <a href="/auth/login" class="discord-btn">
+        <img src="/assets/discord-logo.png" alt="Discord Logo">
+        <span>Login with Discord</span>
+    </a>
+</div>
+
 
 </body>
 

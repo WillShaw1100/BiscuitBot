@@ -9,7 +9,7 @@ const permissionsController = require('../controllers/permissions.controller');
 
 router.use(ensureAuthenticated, refreshUserPermissions);
 
-router.get("/manage-permissions", (req, res) => {
+router.get("/manage-permissions", requirePermission('canManagePermissions'), (req, res) => {
     const fs = require("fs");
     const path = require("path");
 
