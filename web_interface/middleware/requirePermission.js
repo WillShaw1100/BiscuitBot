@@ -1,4 +1,4 @@
-const Permission = require('../../models/Permission');
+const Permission = require('../../models/permission');
 const asyncHandler = require('./asyncHandler');
 
 module.exports = permissionKey => asyncHandler(async (req, res, next) => {

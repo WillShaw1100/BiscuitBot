@@ -1,4 +1,4 @@
-const Permission = require('../../models/Permission');
+const Permission = require('../../models/permission');
 const config = require("../../config");
 
 exports.getUserPermissions = async (guildId, userId) => {

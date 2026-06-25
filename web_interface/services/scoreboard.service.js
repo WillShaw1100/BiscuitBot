@@ -1,4 +1,4 @@
-const Scoreboard = require('../../models/Scoreboard');
+const Scoreboard = require('../../models/scoreboard');
 const { recalculatePoints } = require('../utils/points');
 
 exports.getBoard = async (guildId, season = null) => {

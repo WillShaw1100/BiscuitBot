@@ -1,4 +1,4 @@
-const Scoreboard = require("../models/Scoreboard");
+const Scoreboard = require("../models/scoreboard");
 
 module.exports = {
     name: "userUpdate",
