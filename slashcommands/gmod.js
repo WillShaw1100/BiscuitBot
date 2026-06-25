@@ -278,7 +278,7 @@ module.exports = {
     category: "Games",
     description: "View Garry's Mod Scores",
     perm: "",
-    devOnly: true,
+    devOnly: false,
     options: [
         {
             name: "season",
