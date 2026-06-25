@@ -17,4 +17,7 @@ exports.getGuildMember = async (guildId, userId) => {
     return guild.members.fetch(userId);
 };
 
-
+exports.getMutualGuilds = userGuilds => {
+    const botGuildIds = client.guilds.cache.map(g => g.id);
+    return userGuilds.filter(g => botGuildIds.includes(g.id));
+};

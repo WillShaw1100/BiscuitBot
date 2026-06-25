@@ -1,6 +1,10 @@
+const { getMutualGuilds } = require('./discord.service');
+
 exports.setSelectedGuild = (req, guildId) => {
-    if (!req.session.user.guilds.some(g => g.id === guildId)) {
-        const err = new Error("User not in that guild");
+    const mutualGuilds = getMutualGuilds(req.session.user.guilds);
+
+    if (!mutualGuilds.some(g => g.id === guildId)) {
+        const err = new Error("Guild not available (bot not in guild or user not in guild)");
         err.status = 403;
         throw err;
     }
@@ -8,3 +12,4 @@ exports.setSelectedGuild = (req, guildId) => {
     req.session.guildId = guildId;
     return guildId;
 };
+

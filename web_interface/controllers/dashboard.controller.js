@@ -1,6 +1,7 @@
 const asyncHandler = require('../middleware/asyncHandler');
 const path = require('path');
 const fs = require('fs');
+const { getMutualGuilds } = require('../services/discord.service');
 
 exports.renderDashboard = asyncHandler(async (req, res) => {
     const file = path.join(__dirname, '../views/dashboard.html');
@@ -10,12 +11,19 @@ exports.renderDashboard = asyncHandler(async (req, res) => {
         ? `https://cdn.discordapp.com/avatars/${req.session.user.id}/${req.session.user.avatar}.png?size=128`
         : 'https://cdn.discordapp.com/embed/avatars/0.png';
 
+    const mutualGuilds = getMutualGuilds(req.session.user.guilds);
+
+    const selectedGuild =
+        mutualGuilds.find(g => g.id === req.session.guildId)?.id ||
+        mutualGuilds[0]?.id ||
+        "";
+        
     html = html
         .replace(/{{username}}/g, req.session.user.username)
         .replace(/{{id}}/g, req.session.user.id)
         .replace(/{{avatar}}/g, avatarUrl)
-        .replace('{{guilds}}', JSON.stringify(req.session.user.guilds))
-        .replace('{{selectedGuild}}', req.session.guildId)
+        .replace('{{guilds}}', JSON.stringify(mutualGuilds))
+        .replace('{{selectedGuild}}', selectedGuild)
         .replace(/{{canViewManage}}/g, String(req.session.permissions.canViewManage))
         .replace(/{{canAddScores}}/g, String(req.session.permissions.canAddScores))
         .replace(/{{canResetSeason}}/g, String(req.session.permissions.canResetSeason))
