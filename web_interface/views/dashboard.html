@@ -17,16 +17,24 @@
         <h1 id="username">Welcome</h1>
 
         <div class="info">
-            <div>
-                <strong>ID:</strong>
-                <span id="userid"></span>
-            </div>
+    <div>
+        <strong>ID:</strong>
+        <span id="userid"></span>
+    </div>
 
-            <div id="roleTag" class="tag"></div>
-        </div>
+    <div id="roleTag" class="tag"></div>
+    </div>
 
-        <a href="/manage-scoreboard" class="btn" id="manageBtn">
+    <ul id="permList" class="perm-list"></ul>
+
+    <label for="guildSelect"><strong>Select Guild:</strong></label>
+    <select id="guildSelect" class="guild-dropdown"></select>
+
+        <a href="/scoreboard/manage-scoreboard" class="btn" id="manageBtn">
             Manage Scoreboard
+        </a>
+        <a href="/permissions/manage-permissions" class="btn" id="managePermsBtn" style="display:none;">
+        Manage Permissions
         </a>
     </div>
 
@@ -35,11 +43,18 @@
             username: "{{username}}",
             id: "{{id}}",
             avatar: "{{avatar}}",
-            canEdit: "{{canEdit}}"
+            canViewManage: "{{canViewManage}}",
+            canAddScores: "{{canAddScores}}",
+            canResetSeason: "{{canResetSeason}}",
+            canEditHistorical: "{{canEditHistorical}}",
+            canManagePermissions: "{{canManagePermissions}}",
+            guilds: {{guilds}},
+            selectedGuild: "{{selectedGuild}}"
         };
     </script>
 
-    <script src="/scripts/dashboard.js"></script>
+    <script type="module" src="/scripts/pages/dashboard.js"></script>
+
 
 </body>
 

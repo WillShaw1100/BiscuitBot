@@ -5,92 +5,168 @@
     <title>TTT Scoreboard Management</title>
 
     <link rel="icon" href="/assets/TTT_Logo.png">
-    <link rel="stylesheet" href="../style/manage-scoreboard.css">
+    <link rel="stylesheet" href="/style/manage-scoreboard.css">
 
-    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
 
-    <!-- SIDEBAR -->
-    <div class="sidebar">
-        <h2>Stat Leaders</h2>
+    <!-- PROFILE SLIDEOUT -->
+    <div id="profilePanel"></div>
 
-        <div id="bestPlayer"></div>
-        <div id="topThree"></div>
-
-        <canvas id="statsChart" height="220"></canvas>
-
-        <div id="heatmap"></div>
-
-        <button onclick="openSeasonReset()" style="margin-top:10px;width:100%;">Reset Season</button>
-    </div>
-
-    <!-- MAIN CONTENT -->
-    <div class="main">
-
-        <div class="header">
-            <img src="/assets/TTT_Logo.png">
-            <h1>TTT Scoreboard Management</h1>
+    <!-- SEASON RESET MODAL -->
+    <div class="modal-bg" id="seasonModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Reset Season</h3>
+                <button class="icon-btn" id="cancelResetBtn">✕</button>
+            </div>
+            <p>This will archive the current season and start fresh.</p>
+            <div class="modal-footer">
+                <button class="danger" id="confirmResetBtn">Reset Season</button>
+                <button id="cancelResetBtnSecondary">Cancel</button>
+            </div>
         </div>
-
-        <!-- SEARCH -->
-        <input id="search" placeholder="Search users..." oninput="searchUsers()">
-        <div id="results" class="results"></div>
-
-        <!-- ACTION BUTTONS -->
-        <div style="display:flex; gap:10px; margin:20px 0;">
-            <button onclick="openModal()">Add Game</button>
-            <button onclick="exportExcel()">Export</button>
-        </div>
-
-        <!-- SEASON TABS -->
-        <div id="seasonTabs" class="tabs"></div>
-
-        <!-- GAME TABS -->
-        <div id="gameTabs" class="tabs"></div>
-
-        <!-- GAME TABLE -->
-        <div id="gameTable"></div>
-
-        <!-- PLAYER LIST -->
-        <h3>Players</h3>
-        <div id="players"></div>
-
     </div>
 
     <!-- ADD GAME MODAL -->
     <div class="modal-bg" id="modal">
         <div class="modal">
-            <h3>Add Game</h3>
+            <div class="modal-header">
+                <h3>Add Game</h3>
+                <button class="icon-btn" id="closeModalBtn">✕</button>
+            </div>
 
             <div class="warn">
-                ⚠ Add new players BEFORE selecting participants.
+                ⚠ Add new players BEFORE awarding points for a game.
             </div>
 
             <div id="modalPlayers"></div>
 
-            <button onclick="submitGame()">Save Game</button>
-            <button onclick="closeModal()">Close</button>
+            <div class="modal-footer">
+                <button id="saveGameBtn">Save Game</button>
+            </div>
         </div>
     </div>
 
-    <!-- SEASON RESET MODAL -->
-    <div id="seasonModal" class="modal-bg">
-        <div class="modal">
-            <h3>Reset Season</h3>
-            <p>This will archive the current season and start fresh.</p>
-            <button onclick="confirmSeasonReset()">Confirm</button>
-            <button onclick="closeSeasonReset()">Cancel</button>
-        </div>
+    <!-- LAYOUT -->
+    <div class="app-shell">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="/assets/TTT_Logo.png" class="sidebar-logo" alt="TTT Logo">
+                <div>
+                    <div class="sidebar-title">TTT Scoreboard</div>
+                    <div class="sidebar-subtitle">Garrys Mod</div>
+                </div>
+            </div>
+
+            <div class="guild-card">
+                <div class="guild-label">Guild</div>
+                <div class="guild-name" id="guildName"></div>
+            </div>
+
+            <div class="sidebar-section">
+                <button onclick="window.location='/dashboard'">← Back to Dashboard</button>
+            </div>
+
+            <div class="sidebar-section">
+                <h2>Stat Leaders</h2>
+                <div id="bestPlayer"></div>
+                <div id="topThree"></div>
+            </div>
+
+            <div class="sidebar-section">
+                <h2>Score Distribution</h2>
+                <canvas id="statsChart" height="220"></canvas>
+            </div>
+
+            <div class="sidebar-section">
+                <h2>Participation Heatmap</h2>
+                <div id="heatmap"></div>
+            </div>
+
+            <div class="sidebar-footer">
+                <button id="resetSeasonBtn" class="danger-outline">Reset Season</button>
+                <button id="exportBtn" class="ghost">📊 Export CSV</button>
+            </div>
+        </aside>
+
+        <!-- MAIN -->
+        <main class="main">
+
+            <!-- HERO -->
+            <section class="hero">
+                <div class="hero-left">
+                    <div class="hero-title-row">
+                        <h1>Season Scoreboard</h1>
+                        <span class="season-pill" id="seasonLabel">Season 1</span>
+                    </div>
+                    <p class="hero-subtitle">
+                        Track seasons, games, player rankings and attendance.
+                    </p>
+                </div>
+
+                <div class="hero-actions">
+                    <button id="addGameBtn">➕ Add Game</button>
+                    <button id="exportBtnHero" class="ghost">📊 Export</button>
+                </div>
+            </section>
+
+            <!-- SEARCH -->
+            <section class="section-card">
+                <div class="section-header">
+                    <h3>Add Player</h3>
+                </div>
+
+                <div class="search-wrapper">
+                    <div class="search-inner">
+                        <span class="search-icon">🔍</span>
+                        <input id="search" placeholder="Search players by username...">
+                    </div>
+                    <div id="results" class="results"></div>
+                </div>
+            </section>
+
+            <!-- SEASON TABS -->
+            <section class="section-card">
+                <div class="section-header">
+                    <h3>Seasons</h3>
+                </div>
+                <div id="seasonTabs" class="tabs"></div>
+            </section>
+
+            <!-- GAME HISTORY -->
+            <section class="section-card">
+                <div class="section-header">
+                    <h3>Game History</h3>
+                    <span class="section-subtitle">View scores and points per game.</span>
+                </div>
+
+                <div id="gameTabs" class="tabs"></div>
+                <div id="gameTable"></div>
+            </section>
+
+            <!-- PLAYERS -->
+            <section class="section-card">
+                <div class="section-header">
+                    <h3>Players</h3>
+                    <span class="section-subtitle">Click a player to view detailed stats.</span>
+                </div>
+
+                <div id="players"></div>
+            </section>
+
+        </main>
     </div>
 
-    <!-- PROFILE PANEL -->
-    <div id="profilePanel"></div>
+    <script>
+        window.guilds = {{guilds}};
+        window.selectedGuild = "{{selectedGuild}}";
+    </script>
 
-    <!-- MAIN SCRIPT -->
-    <script src="../scripts/manage-scoreboard.js"></script>
-
+    <script type="module" src="/scripts/pages/manage-scoreboard.js"></script>
 </body>
 </html>

@@ -63,3 +63,61 @@ h1 {
 .btn:hover {
     background: #4752C4;
 }
+
+.perm-list {
+    list-style: none;
+    padding: 0;
+    margin-top: 15px;
+    width: 100%;
+}
+
+.perm-list li {
+    padding: 8px 12px;
+    margin-bottom: 6px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.perm-yes {
+    background: #0f3d17;
+    border: 1px solid #1aff4c;
+    color: #1aff4c;
+}
+
+.perm-no {
+    background: #3d0f0f;
+    border: 1px solid #ff4c4c;
+    color: #ff4c4c;
+}
+
+#manageBtn {
+    margin-bottom: 20px;
+}
+
+.guild-dropdown {
+    width: 100%;
+    padding: 8px;
+    margin: 10px 0 20px 0;
+    border-radius: 6px;
+    background: #222;
+    color: #fff;
+    border: 1px solid #444;
+}
+
+.guild-dropdown option {
+    padding: 8px 12px;
+}
+
+.guild-dropdown {
+    width: 100%;
+    padding: 10px;
+    border-radius: 6px;
+    background: #36393f;
+    color: #fff;
+    border: 1px solid #202225;
+}
+

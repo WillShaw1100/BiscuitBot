@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Permissions</title>
+
+    <link rel="icon" href="/assets/TTT_Logo.png">
+    <link rel="stylesheet" href="/style/manage-permissions.css">
+</head>
+
+<body>
+
+<div class="app-shell">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <img src="/assets/TTT_Logo.png" class="sidebar-logo" alt="TTT Logo">
+            <div>
+                <div class="sidebar-title">TTT Scoreboard</div>
+                <div class="sidebar-subtitle">Permissions Manager</div>
+            </div>
+        </div>
+
+        <div class="guild-card">
+            <div class="guild-label">Guild</div>
+            <div class="guild-name" id="guildName"></div>
+        </div>
+
+        <div class="sidebar-section">
+            <button onclick="window.location='/dashboard'">← Back to Dashboard</button>
+        </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+
+        <!-- HERO -->
+        <section class="hero">
+            <div class="hero-left">
+                <div class="hero-title-row">
+                    <h1>Permissions Manager</h1>
+                </div>
+                <p class="hero-subtitle">
+                    Search for a user and edit their scoreboard permissions.
+                </p>
+            </div>
+        </section>
+
+        <!-- SEARCH -->
+        <section class="section-card">
+            <div class="section-header">
+                <h3>Find User</h3>
+            </div>
+
+            <div class="search-wrapper">
+                <div class="search-inner">
+                    <span class="search-icon">🔍</span>
+                    <input id="search" placeholder="Search users by username...">
+                </div>
+                <div id="results" class="results"></div>
+            </div>
+        </section>
+
+        <!-- PERMISSION PANEL -->
+        <section class="section-card">
+            <div class="section-header">
+                <h3>User Permissions</h3>
+                <span class="section-subtitle">Select a user to view and modify permissions.</span>
+            </div>
+
+            <div id="permPanel"></div>
+        </section>
+
+    </main>
+
+</div>
+
+<script>
+    window.guilds = {{guilds}};
+    window.selectedGuild = "{{selectedGuild}}";
+    window.owners = {{owners}};
+</script>
+
+<script type="module" src="/scripts/pages/manage-permissions.js"></script>
+
+</body>
+</html>
