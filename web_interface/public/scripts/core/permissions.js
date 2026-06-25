@@ -15,6 +15,8 @@ export function renderPermissionGroups(containers, user) {
     };
 
     const render = (list, container) => {
+        if (!container) return;
+        
         container.innerHTML = list.map(([key, label]) => {
             const allowed = user[key] === "true" || user[key] === true;
             return `
