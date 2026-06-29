@@ -20,9 +20,9 @@ exports.recalculatePoints = board => {
         let rank = 0;
         let lastScore = null;
 
-        results.forEach((r, i) => {
+        results.forEach((r) => {
             if (r.score !== lastScore) {
-                rank = i + 1;
+                rank++;
                 lastScore = r.score;
             }
 
