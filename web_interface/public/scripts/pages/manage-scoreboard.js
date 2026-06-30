@@ -251,23 +251,44 @@ function renderPlayers() {
 
     $$(".score-input").forEach(el => {
     el.addEventListener("change", () => {
-        let value = Number(el.value);
+    let raw = el.value.trim();
 
-        if (value < 0) value = 0;
+    // EMPTY = N/A
+    if (raw === "") {
+        updateScore(el.dataset.user, Number(el.dataset.index), "");
+        return;
+    }
 
-        el.value = value;
+    let value = Number(raw);
 
-        updateScore(
-            el.dataset.user,
-            Number(el.dataset.index),
-            value
-        );
+    if (Number.isNaN(value) || value < 0) {
+        el.value = "";
+        updateScore(el.dataset.user, Number(el.dataset.index), "");
+        return;
+    }
+
+    el.value = value;
+
+    updateScore(
+        el.dataset.user,
+        Number(el.dataset.index),
+        value
+    );
     });
 });
 
-    $$("#players .player").forEach(el => {
-        el.addEventListener("click", () => openProfile(el.dataset.id));
+$$("#players .player").forEach(el => {
+    el.addEventListener("click", (e) => {
+        const isInteractive =
+            e.target.closest("input") ||
+            e.target.closest("button") ||
+            e.target.closest(".score-input");
+
+        if (isInteractive) return;
+
+        openProfile(el.dataset.id);
     });
+});
 }
 
 // ====================== MEDALS ======================
@@ -550,20 +571,29 @@ function renderChart() {
                 }
             ]
         },
-        options: {
-        responsive: true,
-        indexAxis: "y",
-        plugins: {
-            legend: {
-                display: false
+options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    indexAxis: "y",
+    layout: {
+        padding: 10
+    },
+    plugins: {
+        legend: {
+            display: false
+        }
+    },
+    scales: {
+        y: {
+            ticks: {
+                autoSkip: false
             }
         },
-        scales: {
-            x: {
-                beginAtZero: true
-            }
+        x: {
+            beginAtZero: true
         }
     }
+}
     });
 }
 
@@ -576,6 +606,11 @@ function renderHeatmap() {
 
     const maxGames = Math.max(0, ...data.players.map(p => (p.games || []).length));
 
+    const visibleGames = 5;
+    const startGame = Math.max(0, maxGames - visibleGames);
+    const endGame = maxGames;
+    const gameCount = endGame - startGame;
+
     if (maxGames === 0) {
         html($("#heatmap"), "<p class='small'>No games yet this season.</p>");
         return;
@@ -584,24 +619,19 @@ function renderHeatmap() {
     let out = `
         <div class="heatmap-grid" style="grid-template-columns: 120px repeat(${maxGames}, 24px)">
             <div></div>
-            ${Array.from({ length: maxGames })
-                .map(
-                    (_, i) => `
-                <div class="heatmap-header">G${i + 1}</div>
-            `
-                )
-                .join("")}
+            ${Array.from({ length: gameCount }).map((_, i) => `
+    <div class="heatmap-header">G${startGame + i + 1}</div>
+    `).join("")}
     `;
 
     for (const p of data.players) {
         out += `
             <div class="heatmap-name">${p.username}</div>
-            ${Array.from({ length: maxGames })
-                .map((_, i) => {
-                    const g = (p.games || [])[i];
-                    const attended = g != null;
-                    const cls = attended ? "attended" : "missed";
-                    return `<div class="heatmap-cell ${cls}"></div>`;
+            ${Array.from({ length: gameCount }).map((_, i) => {
+                const g = (p.games || [])[startGame + i];
+                const attended = g != null;
+                const cls = attended ? "attended" : "missed";
+                return `<div class="heatmap-cell ${cls}"></div>`;
                 })
                 .join("")}
         `;
