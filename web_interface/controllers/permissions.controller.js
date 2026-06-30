@@ -66,9 +66,18 @@ exports.getUserPermissions = asyncHandler(async (req, res) => {
     });
 });
 
+// Fields to ignore when diffing old vs new permissions for the audit log
+const PERMISSION_DIFF_IGNORE_KEYS = new Set(['_id', '__v', 'guildId', 'userId', 'updatedAt']);
+
 exports.updateUserPermissions = asyncHandler(async (req, res) => {
     const { guildId } = req.session;
     const { userId } = req.params;
+
+    // Capture the "before" state so we can log a real old -> new diff
+    const before = await permissionService.getUserPermissions(guildId, userId);
+    const beforeObj = typeof before?.toObject === 'function'
+        ? before.toObject()
+        : { ...(before || {}) };
 
     const updated = await permissionService.updateUserPermissions(
         guildId,
@@ -76,13 +85,46 @@ exports.updateUserPermissions = asyncHandler(async (req, res) => {
         req.body
     );
 
+    const afterObj = typeof updated?.toObject === 'function'
+        ? updated.toObject()
+        : { ...updated };
+
+    const changes = Object.keys(afterObj)
+        .filter(key => !PERMISSION_DIFF_IGNORE_KEYS.has(key))
+        .filter(key => beforeObj[key] !== afterObj[key])
+        .map(key => ({
+            key,
+            from: beforeObj[key] ?? false,
+            to: afterObj[key]
+        }));
+
+    // Resolve the target's username from Discord rather than trusting the
+    // client-supplied targetUserName, falling back to it if the lookup fails.
+    let targetUserName = req.body.targetUserName || userId;
+    let guildName = null;
+
+    try {
+        const guild = await discordService.getGuild(guildId);
+        guildName = guild?.name || null;
+
+        const member = guild.members.cache.get(userId)
+            || await guild.members.fetch(userId).catch(() => null);
+
+        if (member) {
+            targetUserName = member.user.username;
+        }
+    } catch (err) {
+        console.warn(`Could not fetch Discord member for ${userId}:`, err.message);
+    }
+
     await logAction('permissions_update', {
         actorId: req.session.user.id,
         actorName: req.session.user.username,
+        guildId,
+        guildName,
         targetUserId: userId,
-        permissions: typeof updated?.toObject === 'function'
-            ? updated.toObject()
-            : updated
+        targetUserName,
+        changes
     });
 
     res.json({ success: true, permissions: updated });

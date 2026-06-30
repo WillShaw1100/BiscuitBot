@@ -38,6 +38,10 @@ document.addEventListener("DOMContentLoaded", () => {
         window.location = "/bans/manage-bans";
     };
 
+    $("#actionAuditLog").onclick = () => {
+        window.location = "/auditlog";
+    }
+
     // Show/hide based on permissions
 
     if (user.canViewManage === "true") {
@@ -50,5 +54,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (user.canViewBans === "true") {
         $("#actionBans").style.display = "flex";
+    }
+
+    if (user.canViewAuditLog === "true") {
+        $("#actionAuditLog").style.display = "flex";
     }
 });

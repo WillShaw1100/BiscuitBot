@@ -1,0 +1,166 @@
+/* ====================== AUDIT LOG ====================== */
+
+.log-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    align-items: end;
+}
+
+.filter-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 160px;
+}
+
+.filter-field label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+}
+
+.filter-actions {
+    min-width: unset;
+}
+
+.filter-actions button {
+    height: 38px;
+}
+
+/* TABLE */
+
+.log-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--surface-soft);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    font-size: 13px;
+    margin-top: 6px;
+}
+
+.log-table th {
+    background: rgba(255, 255, 255, 0.03);
+    color: var(--muted);
+    text-align: left;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.log-table th,
+.log-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+}
+
+.log-row:hover {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.log-when {
+    color: var(--muted);
+    white-space: nowrap;
+}
+
+.log-details-row {
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.log-details-toggle {
+    height: 28px;
+    font-size: 12px;
+    padding: 0 10px;
+}
+
+.log-details-list {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    row-gap: 8px;
+    column-gap: 14px;
+    margin: 0;
+    font-size: 13px;
+}
+
+.log-details-list dt {
+    color: var(--muted);
+    font-weight: 600;
+}
+
+.log-details-list dd {
+    margin: 0;
+    color: var(--text);
+    word-break: break-word;
+}
+
+/* ACTION BADGES — colored by type for quick scanning */
+
+.log-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.log-badge-reset_season {
+    background: var(--danger-soft);
+    color: var(--danger);
+}
+
+.log-badge-add_game {
+    background: rgba(34, 197, 94, 0.14);
+    color: var(--success);
+}
+
+.log-badge-update_game {
+    background: var(--primary-soft);
+    color: var(--primary-hover);
+}
+
+.log-badge-add_user {
+    background: rgba(250, 204, 21, 0.14);
+    color: #facc15;
+}
+
+.log-badge-permissions_update {
+    background: rgba(168, 85, 247, 0.14);
+    color: #c084fc;
+}
+
+/* Fallback for any future logAction type not explicitly styled above */
+.log-badge:not([class*="log-badge-reset_season"]):not([class*="log-badge-add_game"]):not([class*="log-badge-update_game"]):not([class*="log-badge-add_user"]):not([class*="log-badge-permissions_update"]) {
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--muted);
+}
+
+.log-summary {
+    color: var(--text);
+    font-size: 13px;
+}
+
+/* PAGINATION */
+
+.log-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    margin-top: 14px;
+}
+
+.log-pagination button {
+    height: 34px;
+    font-size: 13px;
+}
+
+.log-pagination button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+

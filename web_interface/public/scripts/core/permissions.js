@@ -10,7 +10,8 @@ export function renderPermissionGroups(containers, user) {
             ["canViewBans", "View Bans"]
         ],
         admin: [
-            ["canManagePermissions", "Manage Permissions"]
+            ["canManagePermissions", "Manage Permissions"],
+            ["canViewAuditLog", "View Audit Log"]
         ]
     };
 

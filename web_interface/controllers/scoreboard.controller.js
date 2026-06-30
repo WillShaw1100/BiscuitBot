@@ -22,11 +22,15 @@ exports.listSeasons = asyncHandler(async (req, res) => {
 });
 
 exports.resetSeason = asyncHandler(async (req, res) => {
-    const newBoard = await scoreboardService.resetSeason(req.session.guildId);
+    const guildId = req.session.guildId;
+    const newBoard = await scoreboardService.resetSeason(guildId);
+    const guild = await discordService.getGuild(guildId).catch(() => null);
 
     await logAction('reset_season', {
         actorId: req.session.user.id,
         actorName: req.session.user.username,
+        guildId,
+        guildName: guild?.name || null,
         season: newBoard.season
     });
 
@@ -34,12 +38,16 @@ exports.resetSeason = asyncHandler(async (req, res) => {
 });
 
 exports.addGame = asyncHandler(async (req, res) => {
-    const board = await scoreboardService.getBoard(req.session.guildId);
+    const guildId = req.session.guildId;
+    const board = await scoreboardService.getBoard(guildId);
     const updated = await scoreboardService.addGame(board, req.body.results);
+    const guild = await discordService.getGuild(guildId).catch(() => null);
 
     await logAction('add_game', {
         actorId: req.session.user.id,
         actorName: req.session.user.username,
+        guildId,
+        guildName: guild?.name || null,
         season: updated.season,
         results: req.body.results
     });
@@ -49,15 +57,28 @@ exports.addGame = asyncHandler(async (req, res) => {
 
 exports.updateGame = asyncHandler(async (req, res) => {
     const { userId, gameIndex, value } = req.body;
+    const guildId = req.session.guildId;
+    const member = await discordService.getGuildMember(guildId, req.body.userId);
 
-    const board = await scoreboardService.getBoard(req.session.guildId);
+    const board = await scoreboardService.getBoard(guildId);
+
+    const player = board.players.find(p => p.userId === userId);
+    const oldValue = player?.games?.[gameIndex] ?? null;
+
     await scoreboardService.updateGameScore(board, userId, gameIndex, value);
+
+    const guild = await discordService.getGuild(guildId).catch(() => null);
 
     await logAction('update_game', {
         actorId: req.session.user.id,
         actorName: req.session.user.username,
+        guildId,
+        guildName: guild?.name || null,
+        season: board.season,
         userId,
+        userName: member.user.username,
         gameIndex,
+        oldValue,
         newValue: value
     });
 
@@ -70,10 +91,13 @@ exports.addUser = asyncHandler(async (req, res) => {
 
     const board = await scoreboardService.getBoard(guildId);
     const updated = await scoreboardService.addUserToBoard(board, member);
+    const guild = await discordService.getGuild(guildId).catch(() => null);
 
     await logAction('add_user', {
         actorId: req.session.user.id,
         actorName: req.session.user.username,
+        guildId,
+        guildName: guild?.name || null,
         userId: member.user.id,
         username: member.user.username
     });
@@ -130,4 +154,3 @@ exports.exportScoreboard = asyncHandler(async (req, res) => {
     res.setHeader("Content-Disposition", "attachment; filename=scoreboard.csv");
     res.send(csv);
 });
-

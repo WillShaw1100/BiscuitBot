@@ -17,7 +17,8 @@ module.exports = asyncHandler(async (req, res, next) => {
         canResetSeason: false,
         canEditHistorical: false,
         canManagePermissions: false,
-        canViewBans: false
+        canViewBans: false,
+        canViewAuditLog: false
     };
 
     const merged = { ...defaults, ...(perm?.toObject() || {}) };

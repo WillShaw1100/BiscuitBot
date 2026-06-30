@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TTT Scoreboard — Audit Log</title>
+
+    <link rel="icon" href="/assets/TTT_Logo.png">
+    <link rel="stylesheet" href="/style/manage-scoreboard.css">
+    <link rel="stylesheet" href="/style/auditlog.css">
+</head>
+
+<body>
+
+    <div class="app-shell">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="/assets/TTT_Logo.png" class="sidebar-logo" alt="TTT Logo">
+                <div>
+                    <div class="sidebar-title">TTT Scoreboard</div>
+                    <div class="sidebar-subtitle">Audit Log</div>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <button onclick="window.location='/scoreboard/manage-scoreboard'">← Back to Scoreboard</button>
+            </div>
+        </aside>
+
+        <!-- MAIN -->
+        <main class="main">
+
+            <section class="hero">
+                <div class="hero-left">
+                    <div class="hero-title-row">
+                        <h1>Audit Log</h1>
+                    </div>
+                    <p class="hero-subtitle">
+                        Every season reset, score change, and player addition, in order.
+                    </p>
+                </div>
+            </section>
+
+            <!-- FILTERS -->
+            <section class="section-card">
+                <div class="section-header">
+                    <h3>Filters</h3>
+                </div>
+
+                <div class="log-filters">
+                    <div class="filter-field">
+                        <label for="filterType">Action</label>
+                        <select id="filterType">
+                            <option value="">All actions</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-field">
+                        <label for="filterGuild">Guild</label>
+                        <select id="filterGuild">
+                            <option value="">All guilds</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-field">
+                        <label for="filterActor">Actor</label>
+                        <input id="filterActor" placeholder="Search by username...">
+                    </div>
+
+                    <div class="filter-field">
+                        <label for="filterSubject">Subject</label>
+                        <input id="filterSubject" placeholder="Search by affected user...">
+                    </div>
+
+                    <div class="filter-field">
+                        <label for="filterFrom">From</label>
+                        <input id="filterFrom" type="date">
+                    </div>
+
+                    <div class="filter-field">
+                        <label for="filterTo">To</label>
+                        <input id="filterTo" type="date">
+                    </div>
+
+                    <div class="filter-field filter-actions">
+                        <button id="clearFiltersBtn" class="ghost">Clear</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- LOG TABLE -->
+            <section class="section-card">
+                <div class="section-header">
+                    <h3>Activity</h3>
+                    <span class="section-subtitle" id="resultCount"></span>
+                </div>
+
+                <div id="logTable"></div>
+
+                <div class="log-pagination" id="logPagination"></div>
+            </section>
+
+        </main>
+    </div>
+
+    <script type="module" src="/scripts/pages/auditlog.js"></script>
+</body>
+</html>
