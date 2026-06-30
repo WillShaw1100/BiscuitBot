@@ -7,6 +7,7 @@ let currentSeason = 1;
 let currentGame = 0;
 let allSeasons = [];
 let chartInstance = null;
+let heatmapExpanded = false;
 
 // ====================== INITIAL LOAD ======================
 document.addEventListener("DOMContentLoaded", () => {
@@ -107,38 +108,40 @@ async function switchSeason(season) {
 }
 
 // ====================== GAME TABS ======================
-const maxGames = Math.max(0, ...data.players.map(p => (p.games || []).length));
+function renderGameTabs() {
+    if (!data.players?.length) {
+        html($("#gameTabs"), "");
+        return;
+    }
 
-const visibleGames = 5;
-const startGame = Math.max(0, maxGames - visibleGames);
-const gameCount = maxGames - startGame;
+    const maxGames = Math.max(0, ...data.players.map(p => (p.games || []).length));
 
-let out = `
-    <div class="heatmap-grid" style="grid-template-columns: 120px repeat(${gameCount}, 24px)">
-        <div></div>
-        ${Array.from({ length: gameCount })
-            .map((_, i) => `
-                <div class="heatmap-header">G${startGame + i + 1}</div>
-            `)
-            .join("")}
-`;
+    if (maxGames === 0) {
+        html($("#gameTabs"), "<p class='small'>No games yet.</p>");
+        return;
+    }
 
-for (const p of data.players) {
-    out += `
-        <div class="heatmap-name">${p.username}</div>
-        ${Array.from({ length: gameCount })
-            .map((_, i) => {
-                const gameIndex = startGame + i;
-                const attended = (p.games || [])[gameIndex] != null;
-                return `<div class="heatmap-cell ${attended ? "attended" : "missed"}"></div>`;
-            })
-            .join("")}
-    `;
+    html(
+        $("#gameTabs"),
+        Array.from({ length: maxGames })
+            .map(
+                (_, i) => `
+            <div class="tab ${i === currentGame ? "active" : ""}" data-game="${i}">
+                Game ${i + 1}
+            </div>
+        `
+            )
+            .join("")
+    );
+
+    $$("#gameTabs .tab").forEach(el => {
+        el.addEventListener("click", () => {
+            currentGame = Number(el.dataset.game);
+            renderGameTabs();
+            renderGameTable();
+        });
+    });
 }
-
-out += "</div>";
-
-html($("#heatmap"), out);
 
 // ====================== GAME TABLE ======================
 function renderGameTable() {
@@ -184,10 +187,7 @@ function renderGameTable() {
 
 // ====================== PLAYERS ======================
 function renderPlayers() {
-    const maxGames = Math.max(
-        0,
-        ...data.players.map(p => (p.games || []).length)
-    );
+    const maxGames = Math.max(0, ...data.players.map(p => (p.games || []).length));
 
     html(
         $("#players"),
@@ -199,112 +199,83 @@ function renderPlayers() {
                 const points = (p.points || []).reduce((a, b) => a + (b || 0), 0);
 
                 return `
-                <div class="player" data-id="${p.userId}">
-                    <img src="${p.avatar}">
-                    
-                    <div class="player-info">
-                        <b>${p.username}</b>
-                        <div class="small">
-                            Games Played: ${gamesPlayed} |
-                            Total Score: ${totalScore} |
-                            Avg Score: ${avgScore} |
-                            Points: ${points}
-                        </div>
-                    </div>
-
-                    <div class="games">
-                        ${Array.from({ length: maxGames })
-                            .map((_, i) => {
-                                const g = p.games?.[i];
-                                const medal = getMedal(i, p.userId);
-
-                                return `
-                                <div class="game">
-                                    <div class="medal">${medal}</div>
-                                    Game ${i + 1}
-
-                                    <div class="score-wrapper">
-                                        <input
-                                            type="number"
-                                            min="0"
-                                            step="1"
-                                            value="${g ?? ""}"
-                                            placeholder="N/A"
-                                            data-user="${p.userId}"
-                                            data-index="${i}"
-                                            class="score-input"
-                                        >
-
-                                        <button
-                                            type="button"
-                                            class="clear-score"
-                                            data-user="${p.userId}"
-                                            data-index="${i}"
-                                        >
-                                            ×
-                                        </button>
-                                    </div>
-                                </div>
-                                `;
-                            })
-                            .join("")}
-                    </div>
+        <div class="player" data-id="${p.userId}">
+            <img src="${p.avatar}" class="player-avatar" data-id="${p.userId}" title="View profile">
+            <div class="player-info">
+                <b>${p.username}</b>
+                <div class="small">
+                    Games Played: ${gamesPlayed} |
+                    Total Score: ${totalScore} |
+                    Avg Score: ${avgScore} |
+                    Points: ${points}
                 </div>
-                `;
+            </div>
+
+            <div class="games">
+                ${Array.from({ length: maxGames })
+                    .map((_, i) => {
+                        const g = p.games?.[i];
+                        const medal = getMedal(i, p.userId);
+                        const isNA = g == null;
+
+                        return `
+                    <div class="game" data-user="${p.userId}" data-index="${i}">
+                        <div class="medal">${medal}</div>
+                        Game ${i + 1}
+                        <input
+                            type="number"
+                            min="0"
+                            step="1"
+                            value="${isNA ? "" : g}"
+                            placeholder="N/A"
+                            data-user="${p.userId}"
+                            data-index="${i}"
+                            class="score-input"
+                        >
+                        ${!isNA ? `<button class="na-btn ghost" data-user="${p.userId}" data-index="${i}" title="Set to N/A">✕</button>` : ""}
+                    </div>`;
+                    })
+                    .join("")}
+            </div>
+        </div>`;
             })
             .join("")
     );
 
-    // SCORE INPUTS
+    // Score input: save on blur/enter, treat blank as N/A
     $$(".score-input").forEach(el => {
-        el.addEventListener("change", () => {
-            const raw = String(el.value).trim();
+        el.addEventListener("change", e => {
+            e.stopPropagation();
+            const raw = el.value.trim();
 
             if (raw === "") {
-                updateScore(el.dataset.user, el.dataset.index, "");
-                return;
+                // blank → N/A (null), don't default to 0
+                updateScore(el.dataset.user, Number(el.dataset.index), null);
+            } else {
+                let value = Number(raw);
+                if (value < 0) value = 0;
+                el.value = value;
+                updateScore(el.dataset.user, Number(el.dataset.index), value);
             }
-
-            const value = Number(raw);
-
-            if (Number.isNaN(value) || value < 0) {
-                el.value = "";
-                updateScore(el.dataset.user, el.dataset.index, "");
-                return;
-            }
-
-            updateScore(el.dataset.user, el.dataset.index, value);
         });
+
+        // Prevent clicks on the input from triggering the player card
+        el.addEventListener("click", e => e.stopPropagation());
     });
 
-    // PLAYER CLICK (profile)
-    $$("#players .player").forEach(el => {
-        el.addEventListener("click", (e) => {
-            const blocked = e.target.closest(
-                "input, button, .score-input, .score-wrapper"
-            );
-
-            if (blocked) return;
-
-            openProfile(el.dataset.id);
-        });
-    });
-
-    // CLEAR BUTTONS
-    $$(".clear-score").forEach(btn => {
-        btn.addEventListener("click", (e) => {
+    // N/A toggle buttons
+    $$(".na-btn").forEach(el => {
+        el.addEventListener("click", e => {
             e.stopPropagation();
+            updateScore(el.dataset.user, Number(el.dataset.index), null);
+        });
+    });
 
-            const userId = btn.dataset.user;
-            const index = Number(btn.dataset.index);
-
-            updateScore(userId, index, "");
-
-            const input = $(
-                `.score-input[data-user="${userId}"][data-index="${index}"]`
-            );
-
-            if (input) input.value = "";
+    // Avatar click → open profile (not the whole card)
+    $$(".player-avatar").forEach(el => {
+        el.addEventListener("click", e => {
+            e.stopPropagation();
+            openProfile(el.dataset.id);
         });
     });
 }
@@ -589,29 +560,20 @@ function renderChart() {
                 }
             ]
         },
-options: {
-    responsive: true,
-    maintainAspectRatio: false,
-    indexAxis: "y",
-    layout: {
-        padding: 10
-    },
-    plugins: {
-        legend: {
-            display: false
-        }
-    },
-    scales: {
-        y: {
-            ticks: {
-                autoSkip: false
+        options: {
+            responsive: true,
+            indexAxis: "y",
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+            scales: {
+                x: {
+                    beginAtZero: true
+                }
             }
-        },
-        x: {
-            beginAtZero: true
         }
-    }
-}
     });
 }
 
@@ -622,10 +584,7 @@ function renderHeatmap() {
         return;
     }
 
-    const maxGames = Math.max(
-        0,
-        ...data.players.map(p => (p.games || []).length)
-    );
+    const maxGames = Math.max(0, ...data.players.map(p => (p.games || []).length));
 
     if (maxGames === 0) {
         html($("#heatmap"), "<p class='small'>No games yet this season.</p>");
@@ -633,83 +592,75 @@ function renderHeatmap() {
     }
 
     const visibleGames = 5;
+    const canExpand = maxGames > visibleGames;
+    const startGame = heatmapExpanded ? 0 : Math.max(0, maxGames - visibleGames);
+    const gameCount = maxGames - startGame;
 
-    const startGame = Math.max(0, maxGames - visibleGames);
-    const endGame = maxGames;
-    const gameCount = endGame - startGame;
+    const labelText = heatmapExpanded
+        ? `Showing all ${maxGames} games`
+        : `Showing last ${gameCount} of ${maxGames} games`;
+
+    const btnLabel = heatmapExpanded
+        ? "▲ Show less"
+        : `▼ Show all ${maxGames}`;
 
     let out = `
-        <div class="heatmap-grid" style="grid-template-columns: 120px repeat(${gameCount}, 24px)">
-            <div></div>
-            ${Array.from({ length: gameCount })
-                .map((_, i) => {
-                    const gameIndex = startGame + i;
-                    return `<div class="heatmap-header">G${gameIndex + 1}</div>`;
-                })
-                .join("")}
+        <div class="heatmap-toolbar">
+            <span class="small" style="color: var(--muted)">${labelText}</span>
+            ${canExpand ? `<button class="ghost heatmap-toggle-btn" id="heatmapToggleBtn" style="height:28px;font-size:12px;padding:0 10px">${btnLabel}</button>` : ""}
+        </div>
+        <div class="heatmap-scroll-wrapper${heatmapExpanded ? " expanded" : ""}">
+            <div class="heatmap-grid" style="grid-template-columns: 120px repeat(${gameCount}, 24px)">
+                <div></div>
+                ${Array.from({ length: gameCount })
+                    .map((_, i) => `<div class="heatmap-header">G${startGame + i + 1}</div>`)
+                    .join("")}
     `;
 
     for (const p of data.players) {
-        out += `
-            <div class="heatmap-name">${p.username}</div>
-
-            ${Array.from({ length: gameCount })
-                .map((_, i) => {
-                    const gameIndex = startGame + i;
-                    const g = (p.games || [])[gameIndex];
-
-                    const attended = g != null;
-
-                    return `
-                        <div class="heatmap-cell ${attended ? "attended" : "missed"}"></div>
-                    `;
-                })
-                .join("")}
-        `;
+        out += `<div class="heatmap-name">${p.username}</div>`;
+        out += Array.from({ length: gameCount })
+            .map((_, i) => {
+                const gameIndex = startGame + i;
+                const attended = (p.games || [])[gameIndex] != null;
+                return `<div class="heatmap-cell ${attended ? "attended" : "missed"}" title="G${gameIndex + 1}: ${attended ? "Attended" : "Missed"}"></div>`;
+            })
+            .join("");
     }
 
-    out += `</div>`;
+    out += `</div></div>`;
 
     html($("#heatmap"), out);
+
+    if (canExpand) {
+        $("#heatmapToggleBtn").addEventListener("click", () => {
+            heatmapExpanded = !heatmapExpanded;
+            renderHeatmap();
+        });
+    }
 }
 
-// Close modals when clicking outside (final stable version)
+// ====================== MODAL CLOSE ON OUTSIDE CLICK ======================
 document.addEventListener("mousedown", e => {
     const modalBg = $("#modal");
     const seasonBg = $("#seasonModal");
     const profile = $("#profilePanel");
 
-    // ADD GAME MODAL
-    if (modalBg.style.display === "flex") {
-        const box = modalBg.querySelector(".modal");
-
-        // Only close if clicking the background itself
-        if (e.target === modalBg) {
-            closeModal();
-        }
+    if (modalBg.style.display === "flex" && e.target === modalBg) {
+        closeModal();
     }
 
-    // SEASON RESET MODAL
-    if (seasonBg.style.display === "flex") {
-        const box = seasonBg.querySelector(".modal");
-
-        if (e.target === seasonBg) {
-            closeSeasonReset();
-        }
+    if (seasonBg.style.display === "flex" && e.target === seasonBg) {
+        closeSeasonReset();
     }
 
-    // PROFILE PANEL
-    if (profile.style.right === "0px") {
-        if (!profile.contains(e.target)) {
-            profile.style.right = "-420px";
-        }
+    if (profile.style.right === "0px" && !profile.contains(e.target)) {
+        profile.style.right = "-420px";
     }
 });
-
 
 document.addEventListener("mousedown", e => {
     if (e.target.classList.contains("modal-check")) {
         e.stopPropagation();
     }
 });
-

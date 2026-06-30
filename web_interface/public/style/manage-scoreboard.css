@@ -758,31 +758,59 @@ input:focus {
     }
 }
 
-/* Disable ALL modal animations */
 .modal,
 .modal * {
     transition: none !important;
     animation: none !important;
 }
 
-/* Disable row animations inside modal */
 #modal .row,
 #modal .row * {
     transition: none !important;
     transform: none !important;
 }
 
-/* Disable hover transform on modal rows */
 #modal .row:hover {
     background: rgba(255,255,255,0.03);
     transform: none !important;
 }
 
-/* Disable transform on modal container */
 .modal-bg {
     transition: none !important;
     animation: none !important;
 }
 
 
+.na-btn {
+    display: block;
+    width: 100%;
+    height: 22px;
+    margin-top: 4px;
+    padding: 0;
+    font-size: 11px;
+    color: var(--muted);
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+}
 
+.na-btn:hover {
+    color: var(--danger);
+    border-color: var(--danger);
+    background: var(--danger-soft);
+    transform: none;
+    box-shadow: none;
+}
+
+
+.heatmap-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.heatmap-scroll-wrapper {
+    overflow-x: auto;
+    max-width: 100%;
+}
