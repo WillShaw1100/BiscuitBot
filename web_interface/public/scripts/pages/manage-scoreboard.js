@@ -107,37 +107,38 @@ async function switchSeason(season) {
 }
 
 // ====================== GAME TABS ======================
-function renderGameTabs() {
-    const maxGames = Math.max(0, ...data.players.map(p => (p.games || []).length));
-    currentGame = Math.min(currentGame, maxGames - 1);
+const maxGames = Math.max(0, ...data.players.map(p => (p.games || []).length));
 
-    if (maxGames === 0) {
-        html($("#gameTabs"), "");
-        html($("#gameTable"), "<p>No games yet this season.</p>");
-        return;
-    }
+const visibleGames = 5;
+const startGame = Math.max(0, maxGames - visibleGames);
+const gameCount = maxGames - startGame;
 
-    html(
-        $("#gameTabs"),
-        Array.from({ length: maxGames })
-            .map(
-                (_, i) => `
-        <div class="tab ${i === currentGame ? "active" : ""}" data-index="${i}">
-            Game ${i + 1}
-        </div>
-    `
-            )
-            .join("")
-    );
+let out = `
+    <div class="heatmap-grid" style="grid-template-columns: 120px repeat(${gameCount}, 24px)">
+        <div></div>
+        ${Array.from({ length: gameCount })
+            .map((_, i) => `
+                <div class="heatmap-header">G${startGame + i + 1}</div>
+            `)
+            .join("")}
+`;
 
-    $$("#gameTabs .tab").forEach(el => {
-        el.addEventListener("click", () => {
-            currentGame = Number(el.dataset.index);
-            renderGameTabs();
-            renderGameTable();
-        });
-    });
+for (const p of data.players) {
+    out += `
+        <div class="heatmap-name">${p.username}</div>
+        ${Array.from({ length: gameCount })
+            .map((_, i) => {
+                const gameIndex = startGame + i;
+                const attended = (p.games || [])[gameIndex] != null;
+                return `<div class="heatmap-cell ${attended ? "attended" : "missed"}"></div>`;
+            })
+            .join("")}
+    `;
 }
+
+out += "</div>";
+
+html($("#heatmap"), out);
 
 // ====================== GAME TABLE ======================
 function renderGameTable() {
@@ -498,8 +499,15 @@ function renderTopThree() {
 function renderChart() {
     const ctx = $("#statsChart").getContext("2d");
 
-    const labels = data.players.map(p => p.username);
-    const totals = data.players.map(p => (p.games || []).reduce((a, b) => a + (b || 0), 0));
+    const players = [...data.players]
+        .map(p => ({
+            username: p.username,
+            total: (p.games || []).reduce((a, b) => a + (b || 0), 0)
+        }))
+        .sort((a, b) => b.total - a.total);
+
+    const labels = players.map(p => p.username);
+    const totals = players.map(p => p.total);
 
     if (chartInstance) chartInstance.destroy();
 
@@ -516,10 +524,19 @@ function renderChart() {
             ]
         },
         options: {
-            responsive: true,
-            plugins: { legend: { display: false } },
-            scales: { y: { beginAtZero: true } }
+        responsive: true,
+        indexAxis: "y",
+        plugins: {
+            legend: {
+                display: false
+            }
+        },
+        scales: {
+            x: {
+                beginAtZero: true
+            }
         }
+    }
     });
 }
 
