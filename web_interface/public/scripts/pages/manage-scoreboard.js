@@ -184,7 +184,10 @@ function renderGameTable() {
 
 // ====================== PLAYERS ======================
 function renderPlayers() {
-    const maxGames = Math.max(0, ...data.players.map(p => (p.games || []).length));
+    const maxGames = Math.max(
+        0,
+        ...data.players.map(p => (p.games || []).length)
+    );
 
     html(
         $("#players"),
@@ -196,99 +199,114 @@ function renderPlayers() {
                 const points = (p.points || []).reduce((a, b) => a + (b || 0), 0);
 
                 return `
-        <div class="player" data-id="${p.userId}">
-            <img src="${p.avatar}">
-            <div class="player-info">
-                <b>${p.username}</b>
-                <div class="small">
-                    Games Played: ${gamesPlayed} |
-                    Total Score: ${totalScore} |
-                    Avg Score: ${avgScore} |
-                    Points: ${points}
+                <div class="player" data-id="${p.userId}">
+                    <img src="${p.avatar}">
+                    
+                    <div class="player-info">
+                        <b>${p.username}</b>
+                        <div class="small">
+                            Games Played: ${gamesPlayed} |
+                            Total Score: ${totalScore} |
+                            Avg Score: ${avgScore} |
+                            Points: ${points}
+                        </div>
+                    </div>
+
+                    <div class="games">
+                        ${Array.from({ length: maxGames })
+                            .map((_, i) => {
+                                const g = p.games?.[i];
+                                const medal = getMedal(i, p.userId);
+
+                                return `
+                                <div class="game">
+                                    <div class="medal">${medal}</div>
+                                    Game ${i + 1}
+
+                                    <div class="score-wrapper">
+                                        <input
+                                            type="number"
+                                            min="0"
+                                            step="1"
+                                            value="${g ?? ""}"
+                                            placeholder="N/A"
+                                            data-user="${p.userId}"
+                                            data-index="${i}"
+                                            class="score-input"
+                                        >
+
+                                        <button
+                                            type="button"
+                                            class="clear-score"
+                                            data-user="${p.userId}"
+                                            data-index="${i}"
+                                        >
+                                            ×
+                                        </button>
+                                    </div>
+                                </div>
+                                `;
+                            })
+                            .join("")}
+                    </div>
                 </div>
-            </div>
-
-            <div class="games">
-                ${Array.from({ length: maxGames })
-                    .map((_, i) => {
-                        const g = p.games?.[i];
-                        const medal = getMedal(i, p.userId);
-
-                        return `
-                    <div class="game">
-                        <div class="medal">${medal}</div>
-                        Game ${i + 1}
-                        ${
-                            g == null
-                                ? `<input
-                                    type="number"
-                                    min="0"
-                                    step="1"
-                                    value=""
-                                    placeholder="N/A"
-                                    data-user="${p.userId}"
-                                    data-index="${i}"
-                                    class="score-input"
-                                >`
-                                : `<input
-                                    type="number"
-                                    min="0"
-                                    step="1"
-                                    value="${g}"
-                                    data-user="${p.userId}"
-                                    data-index="${i}"
-                                    class="score-input"
-                                >`
-                        }
-                    </div>`;
-                    })
-                    .join("")}
-            </div>
-        </div>`;
+                `;
             })
             .join("")
     );
 
+    // SCORE INPUTS
     $$(".score-input").forEach(el => {
-    el.addEventListener("change", () => {
-    let raw = el.value.trim();
+        el.addEventListener("change", () => {
+            const raw = String(el.value).trim();
 
-    // EMPTY = N/A
-    if (raw === "") {
-        updateScore(el.dataset.user, Number(el.dataset.index), "");
-        return;
-    }
+            if (raw === "") {
+                updateScore(el.dataset.user, el.dataset.index, "");
+                return;
+            }
 
-    let value = Number(raw);
+            const value = Number(raw);
 
-    if (Number.isNaN(value) || value < 0) {
-        el.value = "";
-        updateScore(el.dataset.user, Number(el.dataset.index), "");
-        return;
-    }
+            if (Number.isNaN(value) || value < 0) {
+                el.value = "";
+                updateScore(el.dataset.user, el.dataset.index, "");
+                return;
+            }
 
-    el.value = value;
-
-    updateScore(
-        el.dataset.user,
-        Number(el.dataset.index),
-        value
-    );
+            updateScore(el.dataset.user, el.dataset.index, value);
+        });
     });
-});
 
-$$("#players .player").forEach(el => {
-    el.addEventListener("click", (e) => {
-        const isInteractive =
-            e.target.closest("input") ||
-            e.target.closest("button") ||
-            e.target.closest(".score-input");
+    // PLAYER CLICK (profile)
+    $$("#players .player").forEach(el => {
+        el.addEventListener("click", (e) => {
+            const blocked = e.target.closest(
+                "input, button, .score-input, .score-wrapper"
+            );
 
-        if (isInteractive) return;
+            if (blocked) return;
 
-        openProfile(el.dataset.id);
+            openProfile(el.dataset.id);
+        });
     });
-});
+
+    // CLEAR BUTTONS
+    $$(".clear-score").forEach(btn => {
+        btn.addEventListener("click", (e) => {
+            e.stopPropagation();
+
+            const userId = btn.dataset.user;
+            const index = Number(btn.dataset.index);
+
+            updateScore(userId, index, "");
+
+            const input = $(
+                `.score-input[data-user="${userId}"][data-index="${index}"]`
+            );
+
+            if (input) input.value = "";
+        });
+    });
 }
 
 // ====================== MEDALS ======================
@@ -604,34 +622,47 @@ function renderHeatmap() {
         return;
     }
 
-    const maxGames = Math.max(0, ...data.players.map(p => (p.games || []).length));
-
-    const visibleGames = 5;
-    const startGame = Math.max(0, maxGames - visibleGames);
-    const endGame = maxGames;
-    const gameCount = endGame - startGame;
+    const maxGames = Math.max(
+        0,
+        ...data.players.map(p => (p.games || []).length)
+    );
 
     if (maxGames === 0) {
         html($("#heatmap"), "<p class='small'>No games yet this season.</p>");
         return;
     }
 
+    const visibleGames = 5;
+
+    const startGame = Math.max(0, maxGames - visibleGames);
+    const endGame = maxGames;
+    const gameCount = endGame - startGame;
+
     let out = `
-        <div class="heatmap-grid" style="grid-template-columns: 120px repeat(${maxGames}, 24px)">
+        <div class="heatmap-grid" style="grid-template-columns: 120px repeat(${gameCount}, 24px)">
             <div></div>
-            ${Array.from({ length: gameCount }).map((_, i) => `
-    <div class="heatmap-header">G${startGame + i + 1}</div>
-    `).join("")}
+            ${Array.from({ length: gameCount })
+                .map((_, i) => {
+                    const gameIndex = startGame + i;
+                    return `<div class="heatmap-header">G${gameIndex + 1}</div>`;
+                })
+                .join("")}
     `;
 
     for (const p of data.players) {
         out += `
             <div class="heatmap-name">${p.username}</div>
-            ${Array.from({ length: gameCount }).map((_, i) => {
-                const g = (p.games || [])[startGame + i];
-                const attended = g != null;
-                const cls = attended ? "attended" : "missed";
-                return `<div class="heatmap-cell ${cls}"></div>`;
+
+            ${Array.from({ length: gameCount })
+                .map((_, i) => {
+                    const gameIndex = startGame + i;
+                    const g = (p.games || [])[gameIndex];
+
+                    const attended = g != null;
+
+                    return `
+                        <div class="heatmap-cell ${attended ? "attended" : "missed"}"></div>
+                    `;
                 })
                 .join("")}
         `;

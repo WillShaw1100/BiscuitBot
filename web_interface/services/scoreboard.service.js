@@ -89,7 +89,12 @@ exports.updateGameScore = async (board, userId, gameIndex, value) => {
         player.games.push(null);
     }
 
-    player.games[gameIndex] = value === "" || value == null ? null : Number(value);
+    const num = Number(value);
+
+    player.games[gameIndex] =
+        value === "" || value == null || Number.isNaN(num)
+            ? null
+            : num;
 
     recalculatePoints(board);
     return board.save();
