@@ -220,8 +220,25 @@ function renderPlayers() {
                         Game ${i + 1}
                         ${
                             g == null
-                                ? `<div class="na">N/A</div>`
-                                : `<input type="number" value="${g}" data-user="${p.userId}" data-index="${i}" class="score-input">`
+                                ? `<input
+                                    type="number"
+                                    min="0"
+                                    step="1"
+                                    value=""
+                                    placeholder="N/A"
+                                    data-user="${p.userId}"
+                                    data-index="${i}"
+                                    class="score-input"
+                                >`
+                                : `<input
+                                    type="number"
+                                    min="0"
+                                    step="1"
+                                    value="${g}"
+                                    data-user="${p.userId}"
+                                    data-index="${i}"
+                                    class="score-input"
+                                >`
                         }
                     </div>`;
                     })
@@ -233,10 +250,20 @@ function renderPlayers() {
     );
 
     $$(".score-input").forEach(el => {
-        el.addEventListener("change", () => {
-            updateScore(el.dataset.user, Number(el.dataset.index), Number(el.value));
-        });
+    el.addEventListener("change", () => {
+        let value = Number(el.value);
+
+        if (value < 0) value = 0;
+
+        el.value = value;
+
+        updateScore(
+            el.dataset.user,
+            Number(el.dataset.index),
+            value
+        );
     });
+});
 
     $$("#players .player").forEach(el => {
         el.addEventListener("click", () => openProfile(el.dataset.id));
