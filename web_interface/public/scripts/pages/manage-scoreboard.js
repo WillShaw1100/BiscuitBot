@@ -8,6 +8,7 @@ let currentGame = 0;
 let allSeasons = [];
 let chartInstance = null;
 let heatmapExpanded = false;
+let winnerMode = "total"; // "total" or "average"
 
 // ====================== INITIAL LOAD ======================
 document.addEventListener("DOMContentLoaded", () => {
@@ -34,6 +35,8 @@ document.addEventListener("DOMContentLoaded", () => {
     $("#cancelResetBtn").addEventListener("click", closeSeasonReset);
     $("#cancelResetBtnSecondary").addEventListener("click", closeSeasonReset);
     $("#confirmResetBtn").addEventListener("click", confirmSeasonReset);
+
+    setupWinnerToggle();
 
     load();
 });
@@ -460,6 +463,67 @@ function openProfile(userId) {
     $("#profilePanel").style.right = "0";
 }
 
+// ====================== WINNER TOGGLE ======================
+function setupWinnerToggle() {
+    const bestPlayer = $("#bestPlayer");
+    if (!bestPlayer || $("#winnerToggle")) return;
+
+    bestPlayer.insertAdjacentHTML(
+        "beforebegin",
+        `
+        <div class="winner-toggle" id="winnerToggle">
+            <button id="totalWinnersBtn" class="active">Total Points</button>
+            <button id="averageWinnersBtn">Average Points</button>
+        </div>
+    `
+    );
+
+    $("#totalWinnersBtn").addEventListener("click", () => {
+        winnerMode = "total";
+        updateWinnerToggleButtons();
+        renderBestPlayer();
+        renderTopThree();
+    });
+
+    $("#averageWinnersBtn").addEventListener("click", () => {
+        winnerMode = "average";
+        updateWinnerToggleButtons();
+        renderBestPlayer();
+        renderTopThree();
+    });
+}
+
+function updateWinnerToggleButtons() {
+    $("#totalWinnersBtn")?.classList.toggle("active", winnerMode === "total");
+    $("#averageWinnersBtn")?.classList.toggle("active", winnerMode === "average");
+}
+
+function getWinnerStats(p) {
+    const totalPoints = (p.points || []).reduce((a, b) => a + (b || 0), 0);
+    const gamesPlayed = (p.games || []).filter(g => g != null).length;
+    const averagePoints = gamesPlayed ? totalPoints / gamesPlayed : 0;
+
+    return {
+        ...p,
+        totalPoints,
+        gamesPlayed,
+        averagePoints
+    };
+}
+
+function getSortedWinners() {
+    return [...data.players]
+        .map(getWinnerStats)
+        .filter(p => winnerMode === "total" || p.gamesPlayed > 0)
+        .sort((a, b) => {
+            if (winnerMode === "average") {
+                return b.averagePoints - a.averagePoints;
+            }
+
+            return b.totalPoints - a.totalPoints;
+        });
+}
+
 // ====================== BEST PLAYER ======================
 function renderBestPlayer() {
     if (!data.players?.length) {
@@ -467,16 +531,12 @@ function renderBestPlayer() {
         return;
     }
 
-    const sorted = [...data.players].sort((a, b) => {
-        const aPoints = (a.points || []).reduce((x, y) => x + (y || 0), 0);
-        const bPoints = (b.points || []).reduce((x, y) => x + (y || 0), 0);
-        return bPoints - aPoints;
-    });
+    const best = getSortedWinners()[0];
 
-    const best = sorted[0];
-
-    const totalPoints = (best.points || []).reduce((a, b) => a + (b || 0), 0);
-    const gamesPlayed = (best.games || []).filter(g => g != null).length;
+    if (!best) {
+        html($("#bestPlayer"), "<p>No players yet.</p>");
+        return;
+    }
 
     html(
         $("#bestPlayer"),
@@ -485,9 +545,17 @@ function renderBestPlayer() {
             <div class="crown">👑</div>
             <img src="${best.avatar}" class="top-player-avatar">
             <h3>${best.username}</h3>
-            <div class="small">Best Overall Player</div>
-            <div class="points">${totalPoints} pts</div>
-            <div class="small">${gamesPlayed} games played</div>
+            <div class="small">
+                ${winnerMode === "average" ? "Best Average Player" : "Best Overall Player"}
+            </div>
+            <div class="points">
+                ${
+                    winnerMode === "average"
+                        ? `${best.averagePoints.toFixed(2)} pts/game`
+                        : `${best.totalPoints} pts`
+                }
+            </div>
+            <div class="small">${best.gamesPlayed} games played</div>
         </div>
     `
     );
@@ -500,12 +568,7 @@ function renderTopThree() {
         return;
     }
 
-    const sorted = [...data.players].sort((a, b) => {
-        const aPoints = (a.points || []).reduce((x, y) => x + (y || 0), 0);
-        const bPoints = (b.points || []).reduce((x, y) => x + (y || 0), 0);
-        return bPoints - aPoints;
-    });
-
+    const sorted = getSortedWinners();
     const medals = ["🥇", "🥈", "🥉"];
 
     html(
@@ -515,14 +578,18 @@ function renderTopThree() {
             ${sorted
                 .slice(0, 3)
                 .map((p, i) => {
-                    const pts = (p.points || []).reduce((a, b) => a + (b || 0), 0);
-
                     return `
                     <div class="top-three-card">
                         <div class="medal-large">${medals[i]}</div>
                         <img src="${p.avatar}" class="top-three-avatar">
                         <div><strong>${p.username}</strong></div>
-                        <div class="small">${pts} pts</div>
+                        <div class="small">
+                            ${
+                                winnerMode === "average"
+                                    ? `${p.averagePoints.toFixed(2)} pts/game`
+                                    : `${p.totalPoints} pts`
+                            }
+                        </div>
                     </div>
                 `;
                 })
