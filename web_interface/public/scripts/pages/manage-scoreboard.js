@@ -514,7 +514,13 @@ function getWinnerStats(p) {
 function getSortedWinners() {
     return [...data.players]
         .map(getWinnerStats)
-        .filter(p => winnerMode === "total" || p.gamesPlayed > 0)
+        .filter(p => {
+            if (winnerMode === "average") {
+                return p.gamesPlayed >= 3; // Must have played at least 3 games
+            }
+
+            return true;
+        })
         .sort((a, b) => {
             if (winnerMode === "average") {
                 return b.averagePoints - a.averagePoints;
