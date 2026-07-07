@@ -73,7 +73,25 @@ const run = async (client, interaction) => {
                     gamesPlayed,
                 };
             })
-            .sort((a, b) => b.totalPoints - a.totalPoints);
+            .sort((a, b) => {
+            // 1. Most points wins
+            if (b.totalPoints !== a.totalPoints) {
+                return b.totalPoints - a.totalPoints;
+            }
+
+            // 2. If points are tied, highest total score wins
+            if (b.totalScore !== a.totalScore) {
+                return b.totalScore - a.totalScore;
+            }
+
+            // 3. If still tied, fewer games played ranks higher
+            if (a.gamesPlayed !== b.gamesPlayed) {
+                return a.gamesPlayed - b.gamesPlayed;
+            }
+
+            // 4. Final fallback: alphabetical username
+            return (a.username || "").localeCompare(b.username || "");
+        });
 
         // -----------------------------
         // HELPERS
