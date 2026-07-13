@@ -1,6 +1,6 @@
 const Canvas = require("canvas")
 const Discord = require("discord.js")
-const background = "https://htmlcolorcodes.com/assets/images/html-color-codes-color-tutorials.jpg"
+const background = "https://unblast.com/wp-content/uploads/2021/01/Space-Background-Images.jpg"
 
 const dim = {
     height: 675,
